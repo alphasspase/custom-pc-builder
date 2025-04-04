@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -6,7 +7,7 @@ import NavLink from './NavLink'
 
 const MobileNav = () => {
     return (
-        <div className="lg:hidden">
+        <div className="md:hidden">
             <Sheet >
                 <SheetTrigger>
                     <Menu className="h-5 w-5" />
