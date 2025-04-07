@@ -41,6 +41,22 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+}
+
+@theme {
+  --color-primary-gray-100: #FFFFFF;
+  /* lightest */
+  --color-primary-gray-200: #FCFCFC;
+  --color-primary-gray-300: #F9F9F9;
+  --color-primary-gray-400: #F8F8F8;
+  --color-primary-gray-500: #F7F7F7;
+  --color-primary-gray-600: #F7F8F8;
+  /* your base */
+  --color-primary-gray-700: #EAEAEB;
+  --color-primary-gray-800: #DCDDDD;
+  --color-primary-gray-900: #C9C9C9;
+  /* darkest */
 }
 
 :root {
@@ -116,6 +132,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

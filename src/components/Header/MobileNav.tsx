@@ -3,7 +3,7 @@ import React from 'react'
 import { Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import Logo from './Logo'
-import NavLink from './NavLink'
+import NavLink from './NavbarLink'
 
 const MobileNav = () => {
     return (
