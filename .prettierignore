@@ -5,6 +5,7 @@ node_modules/
 build/
 dist/
 react/
+public/
 
 # Tests
 test-webview
