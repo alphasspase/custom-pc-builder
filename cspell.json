@@ -11,6 +11,7 @@
     "coverage/**",
     ".husky/**",
     "public/**",
-    "package.json"
+    "package.json",
+    ".vscode/**"
   ]
 }
