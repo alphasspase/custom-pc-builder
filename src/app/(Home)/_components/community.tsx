@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import DiscordIcon from "@/icons/discord-icon";
+} from '@/components/ui/card';
+import DiscordIcon from '@/icons/discord-icon';
 
 export const CommunitySection = () => {
   return (

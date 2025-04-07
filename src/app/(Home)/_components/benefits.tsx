@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Icon } from './Icon';
 // import { Icon } from "@/components/ui/icon";
 // import { icons } from "lucide-react";
 
@@ -10,28 +11,28 @@ interface BenefitsProps {
 
 const benefitList: BenefitsProps[] = [
   {
-    icon: "Blocks",
-    title: "Build Brand Trust",
+    icon: 'Blocks',
+    title: 'Build Brand Trust',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.',
   },
   {
-    icon: "LineChart",
-    title: "More Leads",
+    icon: 'LineChart',
+    title: 'More Leads',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, natus consectetur.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, natus consectetur.',
   },
   {
-    icon: "Wallet",
-    title: "Higher Conversions",
+    icon: 'Wallet',
+    title: 'Higher Conversions',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus consectetur. A odio velit cum aliquam",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus consectetur. A odio velit cum aliquam',
   },
   {
-    icon: "Sparkle",
-    title: "Test Marketing Ideas",
+    icon: 'Sparkle',
+    title: 'Test Marketing Ideas',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.',
   },
 ];
 
@@ -60,12 +61,12 @@ export const BenefitsSection = () => {
             >
               <CardHeader>
                 <div className="flex justify-between">
-                  {/* <Icon
-                    name={icon as keyof typeof icons}
+                  <Icon
+                    name={icon}
                     size={32}
                     color="hsl(var(--primary))"
                     className="mb-6 text-primary"
-                  /> */}
+                  />
                   <span className="text-5xl text-muted-foreground/15 font-medium transition-all delay-75 group-hover/number:text-muted-foreground/30">
                     0{index + 1}
                   </span>

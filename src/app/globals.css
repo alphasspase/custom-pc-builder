@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,21 +41,20 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
 }
 
 @theme {
-  --color-primary-gray-100: #FFFFFF;
+  --color-primary-gray-100: #ffffff;
   /* lightest */
-  --color-primary-gray-200: #FCFCFC;
-  --color-primary-gray-300: #F9F9F9;
-  --color-primary-gray-400: #F8F8F8;
-  --color-primary-gray-500: #F7F7F7;
-  --color-primary-gray-600: #F7F8F8;
+  --color-primary-gray-200: #fcfcfc;
+  --color-primary-gray-300: #f9f9f9;
+  --color-primary-gray-400: #f8f8f8;
+  --color-primary-gray-500: #f7f7f7;
+  --color-primary-gray-600: #f7f8f8;
   /* your base */
-  --color-primary-gray-700: #EAEAEB;
-  --color-primary-gray-800: #DCDDDD;
-  --color-primary-gray-900: #C9C9C9;
+  --color-primary-gray-700: #eaeaeb;
+  --color-primary-gray-800: #dcdddd;
+  --color-primary-gray-900: #c9c9c9;
   /* darkest */
 }
 

@@ -1,6 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 // import { Icon } from "@/components/ui/icon";
-import { icons } from "lucide-react";
+import { icons } from 'lucide-react';
+import { Icon } from './Icon';
 
 interface FeaturesProps {
   icon: string;
@@ -10,40 +11,40 @@ interface FeaturesProps {
 
 const featureList: FeaturesProps[] = [
   {
-    icon: "TabletSmartphone",
-    title: "Mobile Friendly",
+    icon: 'TabletSmartphone',
+    title: 'Mobile Friendly',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, consectetur.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, consectetur.',
   },
   {
-    icon: "BadgeCheck",
-    title: "Social Proof",
+    icon: 'BadgeCheck',
+    title: 'Social Proof',
     description:
-      "Lorem ipsum dolor sit amet consectetur. Natus consectetur, odio ea accusamus aperiam.",
+      'Lorem ipsum dolor sit amet consectetur. Natus consectetur, odio ea accusamus aperiam.',
   },
   {
-    icon: "Goal",
-    title: "Targeted Content",
+    icon: 'Goal',
+    title: 'Targeted Content',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. odio ea accusamus aperiam.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. odio ea accusamus aperiam.',
   },
   {
-    icon: "PictureInPicture",
-    title: "Strong Visuals",
+    icon: 'PictureInPicture',
+    title: 'Strong Visuals',
     description:
-      "Lorem elit. A odio velit cum aliquam. Natus consectetur dolores, odio ea accusamus aperiam.",
+      'Lorem elit. A odio velit cum aliquam. Natus consectetur dolores, odio ea accusamus aperiam.',
   },
   {
-    icon: "MousePointerClick",
-    title: "Clear CTA",
+    icon: 'MousePointerClick',
+    title: 'Clear CTA',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing. odio ea accusamus consectetur.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing. odio ea accusamus consectetur.',
   },
   {
-    icon: "Newspaper",
-    title: "Clear Headline",
+    icon: 'Newspaper',
+    title: 'Clear Headline',
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur.",
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur.',
   },
 ];
 
@@ -70,12 +71,12 @@ export const FeaturesSection = () => {
             <Card className="h-full bg-background border-0 shadow-none">
               <CardHeader className="flex justify-center items-center">
                 <div className="bg-primary/20 p-2 rounded-full ring-8 ring-primary/10 mb-4">
-                  {/* <Icon
+                  <Icon
                     name={icon as keyof typeof icons}
                     size={24}
                     color="hsl(var(--primary))"
                     className="text-primary"
-                  /> */}
+                  />
                 </div>
 
                 <CardTitle>{title}</CardTitle>
