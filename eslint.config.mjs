@@ -22,7 +22,7 @@ const eslintConfig = [
     'plugin:import/warnings',
     'plugin:prettier/recommended',
   ),
-  // General rules for all filesa
+  // General rules for all files
   {
     rules: {
       // Spacing rules
