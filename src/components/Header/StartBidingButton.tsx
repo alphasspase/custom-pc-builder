@@ -10,7 +10,7 @@ const StartBidingButton = () => {
         href="https://github.com/nobruf/shadcn-landing-page.git"
         target="_blank"
       >
-        Start Biding
+        Start Bidding
       </Link>
     </Button>
   );
