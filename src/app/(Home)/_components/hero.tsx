@@ -7,7 +7,7 @@ import Link from 'next/link';
 export const HeroSection = () => {
   // const { theme } = useTheme();
   return (
-    <section className="w-full h-[calc(100vh-65PX)] flex items-center justify-center p-4">
+    <section className="w-full h-[calc(100vh-65PX)] flex items-center justify-center p-4 bg-primary-gray-600">
       <div className="text-center space-y-8">
         <Badge variant="outline" className="text-sm py-2">
           <span className="mr-2 text-primary">
