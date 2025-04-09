@@ -15,7 +15,6 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Star } from 'lucide-react';
-
 interface ReviewProps {
   image: string;
   name: string;
@@ -26,53 +25,48 @@ interface ReviewProps {
 
 const reviewList: ReviewProps[] = [
   {
-    image: 'https://github.com/shadcn.png',
-    name: 'John Doe',
-    userName: 'Product Manager',
+    image: 'https://via.placeholder.com/150',
+    name: 'Jane Smith',
+    userName: 'UI/UX Designer',
     comment:
-      'Wow NextJs + Shadcn is awesome!. This template lets me change colors, fonts and images to match my brand identity. ',
+      'Absolutely love the design and flexibility of this tool. Highly recommended!',
+    rating: 4.9,
+  },
+  {
+    image: 'https://via.placeholder.com/150',
+    name: 'Mike Brown',
+    userName: 'Software Developer',
+    comment:
+      'Great experience so far. Setup was easy and documentation is clear.',
+    rating: 4.7,
+  },
+  {
+    image: 'https://via.placeholder.com/150',
+    name: 'Emily Davis',
+    userName: 'Product Owner',
+    comment: 'Streamlined our workflow significantly. Definitely a must-have!',
     rating: 5.0,
   },
   {
-    image: 'https://github.com/shadcn.png',
-    name: 'Sophia Collins',
-    userName: 'Cybersecurity Analyst',
-    comment:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. ',
+    image: 'https://via.placeholder.com/150',
+    name: 'David Wilson',
+    userName: 'Backend Engineer',
+    comment: 'The integration options are awesome. Super smooth and powerful.',
     rating: 4.8,
   },
-
   {
-    image: 'https://github.com/shadcn.png',
-    name: 'Adam Johnson',
-    userName: 'Chief Technology Officer',
-    comment:
-      'Lorem ipsum dolor sit amet,exercitation. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+    image: 'https://via.placeholder.com/150',
+    name: 'Laura Martinez',
+    userName: 'QA Specialist',
+    comment: 'Clean UI and really responsive. Found it very user-friendly.',
     rating: 4.9,
   },
   {
-    image: 'https://github.com/shadcn.png',
-    name: 'Ethan Parker',
-    userName: 'Data Scientist',
-    comment:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod labore et dolore magna aliqua. Ut enim ad minim veniam.',
+    image: 'https://via.placeholder.com/150',
+    name: 'Tom Harris',
+    userName: 'Cloud Architect',
+    comment: 'Reliable performance and great support. Loving it so far!',
     rating: 5.0,
-  },
-  {
-    image: 'https://github.com/shadcn.png',
-    name: 'Ava Mitchell',
-    userName: 'IT Project Manager',
-    comment:
-      'Lorem ipsum dolor sit amet, tempor incididunt  aliqua. Ut enim ad minim veniam, quis nostrud incididunt consectetur adipiscing elit.',
-    rating: 5.0,
-  },
-  {
-    image: 'https://github.com/shadcn.png',
-    name: 'Isabella Reed',
-    userName: 'DevOps Engineer',
-    comment:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    rating: 4.9,
   },
 ];
 

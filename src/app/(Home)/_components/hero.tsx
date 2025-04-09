@@ -45,7 +45,7 @@ for your needs.`}
             size={'xl'}
             asChild
             variant="secondary"
-            className="w-5/6 md:w-1/3 font-bold text-base "
+            className="w-5/6 md:w-1/3 font-bold text-base"
           >
             <Link
               href="https://github.com/nobruf/shadcn-landing-page.git"
