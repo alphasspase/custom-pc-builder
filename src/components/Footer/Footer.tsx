@@ -30,7 +30,7 @@ export const FooterSection = () => {
             title="Contact"
             links={[
               {
-                label: 'support@pcbuilder.com1-800-PC-BUILD',
+                label: 'support@pcbuilder.com 1-800-PC-BUILD',
                 href: '#',
               },
             ]}
