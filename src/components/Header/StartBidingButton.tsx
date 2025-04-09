@@ -4,9 +4,9 @@ import Link from 'next/link';
 
 const StartBidingButton = () => {
   return (
-    <Button asChild size="sm" variant="outline" aria-label="View on GitHub">
+    <Button asChild size="sm" variant="outline" aria-label="Start Bidding">
       <Link
-        aria-label="View on GitHub"
+        aria-label="Start Bidding"
         href="https://github.com/nobruf/shadcn-landing-page.git"
         target="_blank"
       >
