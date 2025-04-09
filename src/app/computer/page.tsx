@@ -1,10 +1,11 @@
-import ComingSoon from '@/components/global/ComingSoon';
-import React from 'react';
+import DemandAssessmentQuestions from './_components/DemandAssessmentQuestions';
+import WorkTypeSelection from './_components/WorkTypeSelection';
 
 const computerPage = () => {
   return (
     <div>
-      <ComingSoon />
+      <DemandAssessmentQuestions />
+      <WorkTypeSelection />
     </div>
   );
 };
