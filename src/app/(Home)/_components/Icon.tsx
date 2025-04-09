@@ -17,9 +17,9 @@ export const Icon = ({
   const LucideIcon = icons[name as keyof typeof icons];
 
   if (!LucideIcon) {
-    console.error(`Icon '${name}' does not exist`);
+    console.warn(`Icon '${name}' does not exist`);
 
-    return null;
+    return <></>;
   }
 
   // Return the icon with the appropriate props

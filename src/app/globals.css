@@ -45,17 +45,18 @@
 
 @theme {
   --color-primary-gray-100: #ffffff;
-  /* lightest */
+  /* gray */
   --color-primary-gray-200: #fcfcfc;
   --color-primary-gray-300: #f9f9f9;
   --color-primary-gray-400: #f8f8f8;
   --color-primary-gray-500: #f7f7f7;
   --color-primary-gray-600: #f7f8f8;
-  /* your base */
   --color-primary-gray-700: #eaeaeb;
   --color-primary-gray-800: #dcdddd;
   --color-primary-gray-900: #c9c9c9;
-  /* darkest */
+
+  /* gold */
+  --color-primary: #f8a504;
 }
 
 :root {

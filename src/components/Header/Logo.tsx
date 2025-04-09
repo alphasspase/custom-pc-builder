@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <Link href="/" className="flex items-center space-x-2">
       <Image
-        src="/logo.png"
+        src="/pc_builder.jpeg"
         alt="PC builder"
         width={60}
         height={60}
