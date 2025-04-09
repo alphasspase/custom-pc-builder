@@ -1,6 +1,7 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { URLS } from '@/utils/urls';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -37,22 +38,18 @@ for your needs.`}
             size={'xl'}
             className="w-5/6 md:w-1/3 text-base font-bold group/arrow"
           >
-            Configure with Presets
+            <Link href={URLS.computer}> Configure with Presets</Link>
+
             <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
           </Button>
 
           <Button
             size={'xl'}
             asChild
-            variant="secondary"
+            variant="outline"
             className="w-5/6 md:w-1/3 font-bold text-base"
           >
-            <Link
-              href="https://github.com/nobruf/shadcn-landing-page.git"
-              target="_blank"
-            >
-              Configure Custom PC Now
-            </Link>
+            <Link href={URLS.build}>Configure Custom PC Now</Link>
           </Button>
         </div>
       </div>

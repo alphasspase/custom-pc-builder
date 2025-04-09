@@ -6,7 +6,7 @@ import { URLS } from '@/utils/urls';
 const StartBidingButton = () => {
   return (
     <Button asChild size={'lg'} aria-label="Start Bidding">
-      <Link aria-label="Start Bidding" href={URLS.build}>
+      <Link aria-label="Start Bidding" href={URLS.computer}>
         Start Bidding
       </Link>
     </Button>
