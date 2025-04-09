@@ -28,7 +28,7 @@ const MobileNav = () => {
           />
         </SheetTrigger>
 
-        <SheetContent className="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card border-secondary">
+        <SheetContent className="flex flex-col justify-between rounded-tl-2xl rounded-bl-2xl bg-card border-secondary">
           <div>
             <SheetHeader className="mb-4 ml-4">
               <SheetTitle className="flex items-center">

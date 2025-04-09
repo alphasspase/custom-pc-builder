@@ -1,5 +1,5 @@
-import { FooterSection } from './_components/footer';
 import { HeroSection } from './_components/hero';
+// import { FooterSection } from './_components/footer';
 // import { BenefitsSection } from './_components/benefits';
 // import { CommunitySection } from './_components/community';
 // import { ContactSection } from './_components/contact';
@@ -26,7 +26,7 @@ export default function Home() {
         <PricingSection />
         <ContactSection />
         <FAQSection /> */}
-        <FooterSection />
+        {/* <FooterSection /> */}
       </>
     </div>
   );
