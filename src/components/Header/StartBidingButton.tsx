@@ -4,12 +4,8 @@ import Link from 'next/link';
 
 const StartBidingButton = () => {
   return (
-    <Button asChild size="sm" variant="outline" aria-label="Start Bidding">
-      <Link
-        aria-label="Start Bidding"
-        href="https://github.com/nobruf/shadcn-landing-page.git"
-        target="_blank"
-      >
+    <Button asChild size={'lg'} aria-label="Start Bidding">
+      <Link aria-label="Start Bidding" href="/build">
         Start Bidding
       </Link>
     </Button>

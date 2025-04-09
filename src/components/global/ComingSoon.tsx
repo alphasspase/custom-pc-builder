@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Twitter, Facebook, Github } from 'lucide-react';
+import { FaInstagram, FaTwitter, FaFacebook, FaGithub } from 'react-icons/fa';
 
 export default function ComingSoon() {
   interface Circle {
@@ -56,7 +56,7 @@ export default function ComingSoon() {
           />
         ))}
       </div>
-      {/* Rest of your component remains unchanged */}
+
       <div className="relative z-10 w-full max-w-5xl px-4 py-16 flex flex-col items-center text-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -71,6 +71,8 @@ export default function ComingSoon() {
             for our big launch!
           </p>
         </motion.div>
+
+        {/* Social links */}
         <motion.div
           className="flex space-x-6"
           initial={{ opacity: 0 }}
@@ -78,10 +80,10 @@ export default function ComingSoon() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           {[
-            { icon: Instagram, href: '#' },
-            { icon: Twitter, href: '#' },
-            { icon: Facebook, href: '#' },
-            { icon: Github, href: '#' },
+            { icon: FaInstagram, href: '#' },
+            { icon: FaTwitter, href: '#' },
+            { icon: FaFacebook, href: '#' },
+            { icon: FaGithub, href: '#' },
           ].map((social, index) => (
             <a
               key={index}
