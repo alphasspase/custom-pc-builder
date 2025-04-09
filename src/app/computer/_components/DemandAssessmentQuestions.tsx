@@ -6,7 +6,7 @@ export default function DemandAssessmentQuestions() {
           <h1 className="max-[565px]:flex max-sm:flex-col">
             Demand
             <span className="text-transparent px-2 bg-gradient-to-r from-yellow-300 to-primary bg-clip-text">
-              Assesment
+              Assessment
             </span>
             Questions
           </h1>
