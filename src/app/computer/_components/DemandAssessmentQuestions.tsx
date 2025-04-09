@@ -2,8 +2,8 @@ export default function DemandAssessmentQuestions() {
   return (
     <section className="p-10 py-20 flex items-center justify-center bg-primary-gray-600">
       <div className="text-center space-y-8">
-        <div className="max-w-screen-md mx-auto text-center text-4xl md:text-6xl font-bold">
-          <h1>
+        <div className="d mx-auto text-center text-4xl md:text-6xl font-bold">
+          <h1 className="max-[565px]:flex max-sm:flex-col">
             Demand
             <span className="text-transparent px-2 bg-gradient-to-r from-yellow-300 to-primary bg-clip-text">
               Assesment
