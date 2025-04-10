@@ -1,5 +1,6 @@
 'use client';
 
+import SectionIntro from '@/components/global/SectionIntro';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { URLS } from '@/utils/urls';
@@ -72,10 +73,7 @@ const WorkTypeSelection = () => {
   return (
     <div className="container mx-auto px-5 py-8">
       <section className="text-center mb-8">
-        <div className="text-center mb-12">
-          <h2 className="mb-4">What type of work do you want to do?</h2>
-          <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
-        </div>
+        <SectionIntro title="What type of work do you want to do?" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {options.map((option, index) => (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { FaQuestionCircle, FaCogs, FaCheckCircle } from 'react-icons/fa';
+import SectionIntro from '@/components/global/SectionIntro';
 
 const steps = [
   {
@@ -24,11 +25,7 @@ export default function HowItWorks() {
   return (
     <section className=" py-16 px-6">
       <div className="max-w-6xl mx-auto text-center">
-        <div className="text-center mb-12">
-          <h2 className="mb-4">How It Works</h2>
-          <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
-        </div>
-
+        <SectionIntro title="How It Works" />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
           {steps.map((step, index) => (
             <div key={index}>

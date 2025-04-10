@@ -1,3 +1,4 @@
+import SectionIntro from '@/components/global/SectionIntro';
 import React from 'react';
 import { FaMagic, FaShieldAlt, FaSave, FaLock } from 'react-icons/fa';
 
@@ -30,10 +31,7 @@ export default function WhyChooseUs() {
   return (
     <section className="bg-primary-gray-600 py-16 px-6">
       <div className="max-w-6xl mx-auto text-center">
-        <div className="text-center mb-12">
-          <h2 className="mb-4">Why Choose Our Configurator</h2>
-          <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
-        </div>
+        <SectionIntro title="Why Choose Our Configurator" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-10">
           {features.map((feature, index) => (
