@@ -121,31 +121,31 @@ export default function PCBuilder() {
       name: 'ASUS ROG STRIX X670E',
       price: 299.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/motherboard/motherboard.jpg',
       options: [
         {
           id: 'msib450',
           name: 'MSI B450 Tomahawk',
           price: 129.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/motherboard/motherboard1.jpg',
         },
         {
           id: 'asrockx570',
           name: 'ASRock X570 Phantom Gaming',
           price: 179.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/motherboard/motherboard2.jpg',
         },
         {
           id: 'gigax670',
           name: 'Gigabyte X670 Aorus Elite',
           price: 239.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/motherboard/motherboard3.jpg',
         },
         {
           id: 'asusx670e',
           name: 'ASUS ROG STRIX X670E (Recommended)',
           price: 299.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/motherboard/motherboard4.jpg',
           recommended: true,
         },
       ],
@@ -155,33 +155,33 @@ export default function PCBuilder() {
       name: '64GB DDR5',
       price: 219.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/ram/ram.jpg',
       recommended: true,
       options: [
         {
           id: 'ram16',
           name: '16GB DDR5',
           price: 79.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram1.jpg',
         },
         {
           id: 'ram32',
           name: '32GB DDR5',
           price: 149.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram2.jpg',
         },
         {
           id: 'ram64',
           name: '64GB DDR5 (Recommended)',
           price: 219.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram3.jpg',
           recommended: true,
         },
         {
           id: 'ram128',
           name: '128GB DDR5',
           price: 399.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram4.jpg',
         },
       ],
     },
@@ -190,25 +190,25 @@ export default function PCBuilder() {
       name: '2TB Samsung SSD',
       price: 179.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/storage/storage.png',
       options: [
         {
           id: 'ssd500',
           name: '500GB Samsung SSD',
           price: 69.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/storage/storage1.png',
         },
         {
           id: 'ssd1',
           name: '1TB Samsung SSD',
           price: 109.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/storage/storage2.png',
         },
         {
           id: 'ssd2',
           name: '2TB Samsung SSD (Recommended)',
           price: 179.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/storage/storage3.png',
           recommended: true,
         },
       ],
@@ -218,32 +218,32 @@ export default function PCBuilder() {
       name: 'Corsair RM850x 850W (Recommended)',
       price: 149.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/power-supply/power-supply.png',
       recommended: true,
       options: [
         {
           id: 'psu550',
           name: 'EVGA 550W Bronze',
           price: 59.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/power-supply/power-supply1.png',
         },
         {
           id: 'psu650',
           name: 'Cooler Master 650W Gold',
           price: 89.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/power-supply/power-supply2.png',
         },
         {
           id: 'psu750',
           name: 'Seasonic 750W Platinum',
           price: 119.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/power-supply/power-supply3.png',
         },
         {
           id: 'psu850',
           name: 'Corsair RM850x 850W (Recommended)',
           price: 149.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/power-supply/power-supply4.png',
           recommended: true,
         },
       ],
@@ -274,6 +274,7 @@ export default function PCBuilder() {
               ...component,
               name: selectedOption.name,
               price: selectedOption.price,
+              image: selectedOption.image,
             };
           }
         }
@@ -283,7 +284,7 @@ export default function PCBuilder() {
     );
 
     // Simulate conflict check
-    if (componentId === 'processor' && optionId === 'ryzen9') {
+    if (componentId === 'processor' && optionId === 'ryzen5') {
       setHasConflict(true);
     } else if (componentId === 'processor') {
       setHasConflict(false);
@@ -300,26 +301,6 @@ export default function PCBuilder() {
   const resolveConflicts = () => {
     setHasConflict(false);
     setCompletionPercentage(80);
-  };
-
-  // Helper function to get component label
-  const getComponentLabel = (id: string) => {
-    switch (id) {
-      case 'graphics':
-        return 'Graphic Card';
-      case 'processor':
-        return 'Prozessor';
-      case 'mainboard':
-        return 'Mainboard';
-      case 'ram':
-        return 'RAM';
-      case 'ssd':
-        return 'SSD';
-      case 'psu':
-        return 'Netzteil';
-      default:
-        return id;
-    }
   };
 
   // Helper function to get component icon
@@ -615,8 +596,8 @@ export default function PCBuilder() {
                         >
                           {getComponentIcon(component.id)}
                         </motion.div>
-                        <p className="text-sm font-medium text-gray-500">
-                          {getComponentLabel(component.id)}
+                        <p className="text-sm uppercase font-medium text-gray-500">
+                          {component.id}
                         </p>
                       </div>
                       <p className="font-semibold">{component.name}</p>
