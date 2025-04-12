@@ -1,34 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import {
-  ChevronDown,
-  ChevronUp,
-  Plus,
   AlertCircle,
   Check,
   Cpu,
   Monitor,
   HardDrive,
   Layers,
-  Zap,
   Award,
+  Plug,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -50,7 +43,8 @@ interface Component {
 }
 
 export default function PCBuilder() {
-  const [expanded, setExpanded] = useState<string | null>('processor');
+  const router = useRouter();
+  // const [expanded, setExpanded] = useState<string | null>('processor');
   const [total, setTotal] = useState<number>(2365.0);
   const [hasConflict, setHasConflict] = useState<boolean>(true);
   const [completionPercentage, setCompletionPercentage] = useState<number>(60);
@@ -58,34 +52,34 @@ export default function PCBuilder() {
   const [components, setComponents] = useState<Component[]>([
     {
       id: 'graphics',
-      name: 'Nvidia RTX 5070',
+      name: 'Nvidia RTX 5070 Graphics Card',
       price: 699.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/graphic-card/graphic-card.jpg',
       options: [
         {
-          id: 'ryzen3',
-          name: 'AMD Ryzen 3',
-          price: 100.0,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'rtx3060',
+          name: 'Nvidia RTX 3060',
+          price: 399.99,
+          image: '/graphic-card/graphic-card1.jpg',
         },
         {
-          id: 'ryzen5',
-          name: 'AMD Ryzen 5',
-          price: 80.0,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'rtx4070',
+          name: 'Nvidia RTX 4070',
+          price: 599.99,
+          image: '/graphic-card/graphic-card2.jpg',
         },
         {
-          id: 'ryzen7',
-          name: 'AMD Ryzen 7',
-          price: 40.0,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'rx7800xt',
+          name: 'AMD Radeon RX 7800 XT',
+          price: 549.99,
+          image: '/graphic-card/graphic-card3.jpg',
         },
         {
-          id: 'ryzen9',
-          name: 'AMD Ryzen 9',
-          price: 449.99,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'rtx5070',
+          name: 'Nvidia RTX 5070 (Recommended)',
+          price: 699.99,
+          image: '/graphic-card/graphic-card.jpg',
           recommended: true,
         },
       ],
@@ -95,65 +89,65 @@ export default function PCBuilder() {
       name: 'AMD Ryzen 9',
       price: 449.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/processor/processor.jpg',
       options: [
         {
           id: 'ryzen3',
           name: 'AMD Ryzen 3',
           price: 100.0,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/processor/processor1.jpg',
+          recommended: true,
         },
         {
           id: 'ryzen5',
           name: 'AMD Ryzen 5',
           price: 80.0,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/processor/processor2.jpg',
         },
         {
           id: 'ryzen7',
           name: 'AMD Ryzen 7',
           price: 40.0,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/processor/processor2.jpg',
         },
         {
           id: 'ryzen9',
-          name: 'AMD Ryzen 9',
+          name: 'AMD Ryzen 9 (Recommended)',
           price: 449.99,
-          image: '/placeholder.svg?height=60&width=60',
-          recommended: true,
+          image: '/processor/processor4.jpg',
         },
       ],
     },
     {
       id: 'mainboard',
-      name: 'Super Mainboard',
+      name: 'ASUS ROG STRIX X670E',
       price: 299.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/motherboard/motherboard.jpg',
       options: [
         {
-          id: 'ryzen3',
-          name: 'AMD Ryzen 3',
-          price: 100.0,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'msib450',
+          name: 'MSI B450 Tomahawk',
+          price: 129.99,
+          image: '/motherboard/motherboard1.jpg',
         },
         {
-          id: 'ryzen5',
-          name: 'AMD Ryzen 5',
-          price: 80.0,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'asrockx570',
+          name: 'ASRock X570 Phantom Gaming',
+          price: 179.99,
+          image: '/motherboard/motherboard2.jpg',
         },
         {
-          id: 'ryzen7',
-          name: 'AMD Ryzen 7',
-          price: 40.0,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'gigax670',
+          name: 'Gigabyte X670 Aorus Elite',
+          price: 239.99,
+          image: '/motherboard/motherboard3.jpg',
         },
         {
-          id: 'ryzen9',
-          name: 'AMD Ryzen 9',
-          price: 449.99,
-          image: '/placeholder.svg?height=60&width=60',
+          id: 'asusx670e',
+          name: 'ASUS ROG STRIX X670E (Recommended)',
+          price: 299.99,
+          image: '/motherboard/motherboard4.jpg',
           recommended: true,
         },
       ],
@@ -163,113 +157,108 @@ export default function PCBuilder() {
       name: '64GB DDR5',
       price: 219.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/ram/ram.jpg',
       recommended: true,
       options: [
         {
           id: 'ram16',
           name: '16GB DDR5',
           price: 79.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram1.jpg',
         },
         {
           id: 'ram32',
           name: '32GB DDR5',
           price: 149.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram2.jpg',
         },
         {
           id: 'ram64',
-          name: '64GB DDR5',
+          name: '64GB DDR5 (Recommended)',
           price: 219.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram3.jpg',
           recommended: true,
         },
         {
           id: 'ram128',
           name: '128GB DDR5',
           price: 399.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/ram/ram4.jpg',
         },
       ],
     },
     {
       id: 'ssd',
-      name: '2TB Samsung',
+      name: '2TB Samsung SSD',
       price: 179.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/storage/storage.png',
       options: [
         {
           id: 'ssd500',
-          name: '500GB Samsung',
+          name: '500GB Samsung SSD',
           price: 69.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/storage/storage1.png',
         },
         {
           id: 'ssd1',
-          name: '1TB Samsung',
+          name: '1TB Samsung SSD',
           price: 109.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/storage/storage2.png',
         },
         {
           id: 'ssd2',
-          name: '2TB Samsung',
+          name: '2TB Samsung SSD (Recommended)',
           price: 179.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/storage/storage3.png',
           recommended: true,
-        },
-        {
-          id: 'ssd4',
-          name: '4TB Samsung',
-          price: 349.99,
-          image: '/placeholder.svg?height=60&width=60',
         },
       ],
     },
     {
-      id: 'psu',
-      name: '2000w Diesel Generator',
-      price: 399.99,
+      id: 'power supply',
+      name: 'Corsair RM850x 850W (Recommended)',
+      price: 149.99,
       selected: true,
-      image: '/placeholder.svg?height=80&width=80',
+      image: '/power-supply/power-supply.png',
+      recommended: true,
       options: [
         {
+          id: 'psu550',
+          name: 'EVGA 550W Bronze',
+          price: 59.99,
+          image: '/power-supply/power-supply1.png',
+        },
+        {
           id: 'psu650',
-          name: '650W Gold',
+          name: 'Cooler Master 650W Gold',
           price: 89.99,
-          image: '/placeholder.svg?height=60&width=60',
+          image: '/power-supply/power-supply2.png',
+        },
+        {
+          id: 'psu750',
+          name: 'Seasonic 750W Platinum',
+          price: 119.99,
+          image: '/power-supply/power-supply3.png',
         },
         {
           id: 'psu850',
-          name: '850W Platinum',
-          price: 129.99,
-          image: '/placeholder.svg?height=60&width=60',
-        },
-        {
-          id: 'psu1000',
-          name: '1000W Titanium',
-          price: 199.99,
-          image: '/placeholder.svg?height=60&width=60',
+          name: 'Corsair RM850x 850W (Recommended)',
+          price: 149.99,
+          image: '/power-supply/power-supply4.png',
           recommended: true,
-        },
-        {
-          id: 'psu2000',
-          name: '2000w Diesel Generator',
-          price: 399.99,
-          image: '/placeholder.svg?height=60&width=60',
         },
       ],
     },
   ]);
 
-  const toggleExpand = (id: string) => {
-    if (expanded === id) {
-      setExpanded(null);
-    } else {
-      setExpanded(id);
-    }
-  };
+  // const toggleExpand = (id: string) => {
+  //   if (expanded === id) {
+  //     setExpanded(null);
+  //   } else {
+  //     setExpanded(id);
+  //   }
+  // };
 
   const selectOption = (componentId: string, optionId: string) => {
     // Get current price before update
@@ -287,6 +276,7 @@ export default function PCBuilder() {
               ...component,
               name: selectedOption.name,
               price: selectedOption.price,
+              image: selectedOption.image,
             };
           }
         }
@@ -315,26 +305,6 @@ export default function PCBuilder() {
     setCompletionPercentage(80);
   };
 
-  // Helper function to get component label
-  const getComponentLabel = (id: string) => {
-    switch (id) {
-      case 'graphics':
-        return 'Graphic Card';
-      case 'processor':
-        return 'Prozessor';
-      case 'mainboard':
-        return 'Mainboard';
-      case 'ram':
-        return 'RAM';
-      case 'ssd':
-        return 'SSD';
-      case 'psu':
-        return 'Netzteil';
-      default:
-        return id;
-    }
-  };
-
   // Helper function to get component icon
   const getComponentIcon = (id: string) => {
     switch (id) {
@@ -348,8 +318,8 @@ export default function PCBuilder() {
         return <Layers className="size-5" />;
       case 'ssd':
         return <HardDrive className="size-5" />;
-      case 'psu':
-        return <Zap className="size-5" />;
+      case 'power supply':
+        return <Plug className="size-5" />;
       default:
         return null;
     }
@@ -375,7 +345,7 @@ export default function PCBuilder() {
       </div>
 
       {/* Graphics Card and Processor with custom expansion */}
-      <div className="space-y-4 mb-6">
+      {/* <div className="space-y-4 mb-6">
         {components.slice(0, 3).map((component) => (
           <motion.div
             key={component.id}
@@ -573,11 +543,11 @@ export default function PCBuilder() {
             </Card>
           </motion.div>
         ))}
-      </div>
+      </div> */}
 
       {/* RAM, SSD, and PSU with Accordion */}
       <Accordion type="single" collapsible className="mb-6">
-        {components.slice(3).map((component, index) => (
+        {components.map((component, index) => (
           <motion.div
             key={component.id}
             initial={{ opacity: 0, y: 20 }}
@@ -628,8 +598,8 @@ export default function PCBuilder() {
                         >
                           {getComponentIcon(component.id)}
                         </motion.div>
-                        <p className="text-sm font-medium text-gray-500">
-                          {getComponentLabel(component.id)}
+                        <p className="text-sm uppercase font-medium text-gray-500">
+                          {component.id}
                         </p>
                       </div>
                       <p className="font-semibold">{component.name}</p>
@@ -718,7 +688,7 @@ export default function PCBuilder() {
               <AlertCircle size={20} className="text-amber-500" />
             </motion.div>
             <span className="font-medium text-amber-800">
-              Es gibt Konflikte mit deiner Konfiguration
+              There are conflicts with your configuration
             </span>
           </div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -727,7 +697,7 @@ export default function PCBuilder() {
               variant="outline"
               className="border-amber-300 hover:bg-amber-100 transition-all"
             >
-              Löse die Konflikte
+              Resolve the conflicts
             </Button>
           </motion.div>
         </motion.div>
@@ -740,7 +710,7 @@ export default function PCBuilder() {
         transition={{ delay: 0.5, duration: 0.5 }}
       >
         <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-500">inkl. MwSt. zzgl. Versand</span>
+          <span className="text-gray-500">incl. VAT plus shipping</span>
           <motion.span
             key={total}
             initial={{ scale: 1.2, color: '#4F46E5' }}
@@ -752,10 +722,8 @@ export default function PCBuilder() {
           </motion.span>
         </div>
         <div className="flex justify-between items-center mb-6">
-          <span className="text-sm text-gray-500">35 Tage Lieferzeit</span>
-          <span className="text-sm text-gray-500">
-            inkl. MwSt. zzgl. Versand
-          </span>
+          <span className="text-sm text-gray-500">35 days delivery time</span>
+          <span className="text-sm text-gray-500">incl. VAT plus shipping</span>
         </div>
 
         <div className="flex gap-4">
@@ -764,8 +732,12 @@ export default function PCBuilder() {
             whileTap={{ scale: 0.98 }}
             className="flex-1"
           >
-            <Button variant="outline" className="w-full">
-              Zurück
+            <Button
+              onClick={() => router.back()}
+              variant="outline"
+              className="w-full"
+            >
+              Back
             </Button>
           </motion.div>
           <motion.div
@@ -774,7 +746,7 @@ export default function PCBuilder() {
             className="flex-1"
           >
             <Button className="w-full" disabled={hasConflict}>
-              Weiter
+              Further
             </Button>
           </motion.div>
         </div>
