@@ -2,13 +2,11 @@
 node_modules/
 
 # Production
-build/
+
 dist/
 react/
 public/
 
-# Tests
-test-webview
 
 # Misc
 .DS_Store
@@ -17,10 +15,3 @@ test-webview
 .env.development.local
 .env.test.local
 .env.production.local
-.eslintcache
-coverage/
-temp/
-docs/api-report.md
-
-npm-debug.log*
-yarn-debug.log*
