@@ -14,7 +14,7 @@ export default function HeroHighlightSection({
   return (
     <section className="p-10 py-20 flex items-center justify-center bg-primary-gray-600">
       <div className="text-center space-y-8">
-        <div className="text-4xl md:text-6xl font-bold text-center">
+        <div className="text-4xl md:text-5xl font-bold text-center">
           <h1 className="max-[565px]:flex max-sm:flex-col">
             {
               parts.length > 0
