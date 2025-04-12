@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   AlertCircle,
@@ -9,8 +10,8 @@ import {
   Monitor,
   HardDrive,
   Layers,
-  Zap,
   Award,
+  Plug,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -42,6 +43,7 @@ interface Component {
 }
 
 export default function PCBuilder() {
+  const router = useRouter();
   // const [expanded, setExpanded] = useState<string | null>('processor');
   const [total, setTotal] = useState<number>(2365.0);
   const [hasConflict, setHasConflict] = useState<boolean>(true);
@@ -214,7 +216,7 @@ export default function PCBuilder() {
       ],
     },
     {
-      id: 'power-supply',
+      id: 'power supply',
       name: 'Corsair RM850x 850W (Recommended)',
       price: 149.99,
       selected: true,
@@ -316,8 +318,8 @@ export default function PCBuilder() {
         return <Layers className="size-5" />;
       case 'ssd':
         return <HardDrive className="size-5" />;
-      case 'psu':
-        return <Zap className="size-5" />;
+      case 'power supply':
+        return <Plug className="size-5" />;
       default:
         return null;
     }
@@ -686,7 +688,7 @@ export default function PCBuilder() {
               <AlertCircle size={20} className="text-amber-500" />
             </motion.div>
             <span className="font-medium text-amber-800">
-              Es gibt Konflikte mit deiner Konfiguration
+              There are conflicts with your configuration
             </span>
           </div>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -695,7 +697,7 @@ export default function PCBuilder() {
               variant="outline"
               className="border-amber-300 hover:bg-amber-100 transition-all"
             >
-              Löse die Konflikte
+              Resolve the conflicts
             </Button>
           </motion.div>
         </motion.div>
@@ -708,7 +710,7 @@ export default function PCBuilder() {
         transition={{ delay: 0.5, duration: 0.5 }}
       >
         <div className="flex justify-between items-center mb-2">
-          <span className="text-gray-500">inkl. MwSt. zzgl. Versand</span>
+          <span className="text-gray-500">incl. VAT plus shipping</span>
           <motion.span
             key={total}
             initial={{ scale: 1.2, color: '#4F46E5' }}
@@ -720,10 +722,8 @@ export default function PCBuilder() {
           </motion.span>
         </div>
         <div className="flex justify-between items-center mb-6">
-          <span className="text-sm text-gray-500">35 Tage Lieferzeit</span>
-          <span className="text-sm text-gray-500">
-            inkl. MwSt. zzgl. Versand
-          </span>
+          <span className="text-sm text-gray-500">35 days delivery time</span>
+          <span className="text-sm text-gray-500">incl. VAT plus shipping</span>
         </div>
 
         <div className="flex gap-4">
@@ -732,8 +732,12 @@ export default function PCBuilder() {
             whileTap={{ scale: 0.98 }}
             className="flex-1"
           >
-            <Button variant="outline" className="w-full">
-              Zurück
+            <Button
+              onClick={() => router.back()}
+              variant="outline"
+              className="w-full"
+            >
+              Back
             </Button>
           </motion.div>
           <motion.div
@@ -742,7 +746,7 @@ export default function PCBuilder() {
             className="flex-1"
           >
             <Button className="w-full" disabled={hasConflict}>
-              Weiter
+              Further
             </Button>
           </motion.div>
         </div>
