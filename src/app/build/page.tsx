@@ -4,6 +4,7 @@ import React from 'react';
 import CategoryNavigation from './_components/CategoryNavigation';
 import { GamepadIcon, Laptop, Monitor } from 'lucide-react';
 import { FaComputer } from 'react-icons/fa6';
+import PCBuilder from './_components/PCBuilder';
 
 const categories = [
   {
@@ -47,7 +48,9 @@ for your needs."
         <div>
           <CategoryNavigation categories={categories} />
         </div>
-        <div>b</div>
+        <div>
+          <PCBuilder />
+        </div>
       </div>
     </div>
   );
