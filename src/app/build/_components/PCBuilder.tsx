@@ -286,7 +286,7 @@ export default function PCBuilder() {
     );
 
     // Simulate conflict check
-    if (componentId === 'processor' && optionId === 'ryzen5') {
+    if (componentId === 'processor' && optionId === 'ryzen9') {
       setHasConflict(true);
     } else if (componentId === 'processor') {
       setHasConflict(false);
