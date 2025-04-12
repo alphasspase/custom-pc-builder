@@ -1,7 +1,7 @@
 export enum URLS {
   home = '/',
   build = '/build',
-  component = '/components',
+  component = '/component',
   computer = '/computer',
   support = '/support',
 }
