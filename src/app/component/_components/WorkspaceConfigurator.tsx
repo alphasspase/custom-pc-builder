@@ -84,17 +84,14 @@ export default function WorkspaceConfigurator() {
         </div>
 
         <div className="mt-8 space-y-3">
-          <Button className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 group">
+          <Button className="w-full group">
             Proceed to Checkout
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
           <Button variant="outline" className="w-full">
             Request for Assistance
           </Button>
-          <Button
-            variant="secondary"
-            className="w-full bg-slate-600 text-white hover:bg-slate-700"
-          >
+          <Button variant="secondary" className="w-full">
             Save Configuration
           </Button>
         </div>

@@ -16,7 +16,7 @@ const componentPage = () => {
       />
       <div className=" grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-8 p-5">
         {/* sub grid */}
-        <div className="col-span-2 ">
+        <div className="col-span-2 space-y-5">
           <ProductCarousel
             title="Choose Your Perfect Desk"
             description="Elevate your workspace with our premium desk options designed for
