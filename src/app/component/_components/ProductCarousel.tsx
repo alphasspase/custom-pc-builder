@@ -1,20 +1,12 @@
 'use client';
 
 import type React from 'react';
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Sparkles, Star, ArrowRight, Zap, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Carousel,
@@ -56,9 +48,9 @@ export default function ProductCarousel() {
       price: 599,
       discount: 100,
       rating: 4.9,
-      image: '/placeholder.svg?height=400&width=600',
+      image: '/desk/desk.webp',
       popular: true,
-      color: 'from-violet-500 to-purple-700',
+      color: '',
       icon: <Zap className="h-5 w-5" />,
       features: [
         'Electric height adjustment',
@@ -74,7 +66,7 @@ export default function ProductCarousel() {
       description: 'Sturdy construction with elegant design for your workspace',
       price: 299,
       rating: 4.7,
-      image: '/placeholder.svg?height=400&width=600',
+      image: '/desk/desk1.webp',
       color: 'from-emerald-500 to-teal-700',
       icon: <Shield className="h-5 w-5" />,
       features: [
@@ -91,7 +83,7 @@ export default function ProductCarousel() {
       description: 'Maximize your space with this ergonomic corner design',
       price: 449,
       rating: 4.6,
-      image: '/placeholder.svg?height=400&width=600',
+      image: '/desk/desk2.webp',
       color: 'from-amber-500 to-orange-700',
       icon: <Star className="h-5 w-5" />,
       features: [
@@ -109,7 +101,7 @@ export default function ProductCarousel() {
       price: 499,
       discount: 50,
       rating: 4.8,
-      image: '/placeholder.svg?height=400&width=600',
+      image: '/desk/desk3.webp',
       color: 'from-cyan-500 to-blue-700',
       icon: <Zap className="h-5 w-5" />,
       features: [
@@ -126,7 +118,7 @@ export default function ProductCarousel() {
       description: 'Clean, simple design for a distraction-free workspace',
       price: 249,
       rating: 4.5,
-      image: '/placeholder.svg?height=400&width=600',
+      image: '/desk/desk4.webp',
       color: 'from-rose-500 to-pink-700',
       icon: <Star className="h-5 w-5" />,
       features: [
@@ -156,12 +148,7 @@ export default function ProductCarousel() {
   };
 
   return (
-    <div className="relative overflow-hidden">
-      {/* Background gradient elements */}
-      {/* <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-yellow-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div> */}
-
+    <div className="relative ">
       <div className="relative mx-auto max-w-7xl  ">
         <div className="mb-12 text-center ">
           <motion.div
@@ -169,9 +156,6 @@ export default function ProductCarousel() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            {/* <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium rounded-full bg-gradient-to-r from-yellow-500 to-primary text-white">
-              Premium Collection
-            </span> */}
             <h3 className="">Choose Your Perfect Desk</h3>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Elevate your workspace with our premium desk options designed for
@@ -185,7 +169,7 @@ export default function ProductCarousel() {
             align: 'start',
             loop: true,
           }}
-          className="w-full"
+          className="w-full relative"
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {products.map((product, index) => (
@@ -198,11 +182,11 @@ export default function ProductCarousel() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                   whileHover={{ y: -8 }}
-                  className="h-full"
+                  className="h-full overflow-hidden"
                 >
                   <Card
                     className={cn(
-                      'h-full overflow-hidden transition-all duration-300 cursor-pointer border-2 group',
+                      'h-full overflow-hidden transition-all duration-300 cursor-pointer border-2 group p-0 pb-6',
                       selectedProduct === product.id
                         ? 'border-primary shadow-lg shadow-primary/20'
                         : 'border-border hover:border-primary/50',
@@ -211,9 +195,6 @@ export default function ProductCarousel() {
                   >
                     <div className="relative">
                       <div className="aspect-3/2 overflow-hidden bg-muted">
-                        <div
-                          className={`absolute inset-0 bg-gradient-to-br ${product.color} opacity-80 z-10`}
-                        ></div>
                         <Image
                           fill
                           src={product.image || '/placeholder.svg'}
@@ -258,24 +239,6 @@ export default function ProductCarousel() {
                       )}
                     </div>
 
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div
-                            className={`p-2 rounded-full bg-gradient-to-r ${product.color} text-white`}
-                          >
-                            {product.icon}
-                          </div>
-                          <CardTitle className="text-xl">
-                            {product.title}
-                          </CardTitle>
-                        </div>
-                      </div>
-                      <CardDescription className="text-base mt-2">
-                        {product.description}
-                      </CardDescription>
-                    </CardHeader>
-
                     <CardContent>
                       <div className="flex items-baseline mb-4">
                         <div className="text-3xl font-bold">
@@ -317,7 +280,6 @@ export default function ProductCarousel() {
                             ? 'Selected'
                             : 'Select'}
                         </span>
-                        <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary-light transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0"></span>
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1 relative z-10" />
                       </Button>
                     </CardFooter>
@@ -326,9 +288,9 @@ export default function ProductCarousel() {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <div className="flex items-center justify-center mt-8 gap-2">
-            <CarouselPrevious className="relative static" />
-            <CarouselNext className="relative static" />
+          <div className="absolute top-1/2 left-1/2 bg-amber-300 z-40 transform -translate-x-1/2 w-full flex items-center justify-center gap-2  ">
+            <CarouselPrevious className="ms-3" />
+            <CarouselNext className="me-3" />
           </div>
         </Carousel>
 
