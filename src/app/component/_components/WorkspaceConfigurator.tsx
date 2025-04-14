@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { URLS } from '@/utils/urls';
 
 interface ProductOption {
   id: string;
@@ -84,8 +86,8 @@ export default function WorkspaceConfigurator() {
         </div>
 
         <div className="mt-8 space-y-3">
-          <Button className="w-full group">
-            Proceed to Checkout
+          <Button asChild className="w-full group">
+            <Link href={URLS.checkout}>Proceed to Checkout</Link>
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
           <Button variant="outline" className="w-full">

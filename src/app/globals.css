@@ -145,3 +145,6 @@ h2 {
 h3 {
   @apply text-3xl font-bold;
 }
+h4 {
+  @apply text-2xl font-semibold;
+}
