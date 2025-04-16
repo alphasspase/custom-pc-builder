@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import { URLS } from '@/utils/urls';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 const OrderSummary = () => {
@@ -60,8 +62,8 @@ const OrderSummary = () => {
                 <Button variant="outline">Apply</Button>
               </div>
             </div>
-            <Button size={'lg'} className="w-full ">
-              Place Order
+            <Button asChild size={'lg'} className="w-full ">
+              <Link href={URLS.checkout}>Place Order</Link>
             </Button>
           </div>
         </CardContent>
