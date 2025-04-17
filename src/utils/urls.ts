@@ -4,6 +4,7 @@ export enum URLS {
   component = '/component',
   computer = '/computer',
   support = '/support',
+  placeOrder = '/place-order',
   checkout = '/checkout',
   paymentInformation = '/checkout/payment-information',
 }
