@@ -6,4 +6,5 @@ export enum URLS {
   support = '/support',
   placeOrder = '/place-order',
   checkout = '/checkout',
+  paymentInformation = '/checkout/payment-information',
 }

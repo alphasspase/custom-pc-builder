@@ -63,7 +63,7 @@ const OrderSummary = () => {
               </div>
             </div>
             <Button asChild size={'lg'} className="w-full ">
-              <Link href={URLS.checkout}>Place Order</Link>
+              <Link href={URLS.paymentInformation}>Place Order</Link>
             </Button>
           </div>
         </CardContent>
