@@ -5,4 +5,5 @@ export enum URLS {
   computer = '/computer',
   support = '/support',
   checkout = '/checkout',
+  paymentInformation = '/checkout/payment-information',
 }
