@@ -68,7 +68,6 @@ export default function WorkspaceConfigurator() {
         className="bg-white rounded-lg border p-6 shadow-sm "
       >
         <h2 className="text-xl font-bold mb-6">Configuration Summary</h2>
-
         <div className="space-y-4">
           {Object.entries(selectedProducts).map(([key, product]) => (
             <div key={key} className="flex justify-between items-center">
