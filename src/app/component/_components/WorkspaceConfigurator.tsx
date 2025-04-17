@@ -87,8 +87,10 @@ export default function WorkspaceConfigurator() {
 
         <div className="mt-8 space-y-3">
           <Button asChild className="w-full group">
-            <Link href={URLS.checkout}>Proceed to Checkout</Link>
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <Link href={URLS.placeOrder}>
+              Proceed to Checkout
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
           </Button>
           <Button variant="outline" className="w-full">
             Request for Assistance
