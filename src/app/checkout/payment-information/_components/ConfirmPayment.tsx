@@ -42,7 +42,7 @@ export default function ConfirmPayment() {
       >
         <Card className="relative bg-white rounded-lg border p-6 shadow-sm  overflow-hidden">
           <CardHeader>
-            <Button variant="link" size="icon" className="0">
+            <Button variant="link" size="icon">
               <ChevronLeft className="h-5 w-5" />
               Back
             </Button>
