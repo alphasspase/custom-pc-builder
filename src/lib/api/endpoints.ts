@@ -21,7 +21,9 @@ const endpoints = {
   },
   todo: {
     getTodo: '/todos',
+    createTodo: '/todos/',
     getTodoById: (todoId: string) => `/todos/${todoId}`,
+    updateTodoById: (todoId: string) => `/todos/${todoId}`,
   },
 } as const;
 
