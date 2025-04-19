@@ -18,21 +18,21 @@ export const DeliveryOptionCard = ({
   arrival: string;
 }) => (
   <Card
-    className={`cursor-pointer transition-all ${deliverySpeed === option ? 'ring-2 ring-primary' : ''}`}
+    className={`cursor-pointer transition-all ${deliverySpeed === option ? 'ring-primary ring-2' : ''}`}
     onClick={() => setDeliverySpeed(option)}
   >
-    <CardContent className="p-4 flex items-start">
+    <CardContent className="flex items-start p-4">
       <div
-        className={`rounded-full w-5 h-5 mr-3 mt-0.5 flex items-center justify-center border ${deliverySpeed === option ? 'bg-primary border-primary' : 'border-input'}`}
+        className={`mt-0.5 mr-3 flex h-5 w-5 items-center justify-center rounded-full border ${deliverySpeed === option ? 'bg-primary border-primary' : 'border-input'}`}
       >
         {deliverySpeed === option && (
-          <Check className="h-3 w-3 text-primary-foreground" />
+          <Check className="text-primary-foreground h-3 w-3" />
         )}
       </div>
       <div className="flex-1">
-        <p className="font-bold text-lg">${price}</p>
+        <p className="text-lg font-bold">${price}</p>
         <p className="font-medium">{description}</p>
-        <p className="text-sm text-muted-foreground">Est. arrival: {arrival}</p>
+        <p className="text-muted-foreground text-sm">Est. arrival: {arrival}</p>
       </div>
     </CardContent>
   </Card>

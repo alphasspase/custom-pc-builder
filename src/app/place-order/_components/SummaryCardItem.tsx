@@ -15,7 +15,7 @@ const SummaryCardItem = ({
     <Card>
       <CardContent>
         <div className="flex items-center gap-4 border-b last:border-0">
-          <div className="h-20 w-20 bg-slate-100 dark:bg-slate-800 rounded-md flex items-center justify-center overflow-hidden">
+          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-md bg-slate-100 dark:bg-slate-800">
             <Image
               src={item.image || '/placeholder.svg'}
               alt={item.name}
@@ -49,7 +49,7 @@ const SummaryCardItem = ({
               <Plus className="h-3 w-3" />
             </Button>
           </div>
-          <div className="text-right min-w-[100px]">
+          <div className="min-w-[100px] text-right">
             <div className="font-bold">
               ${(item.price * item.quantity).toFixed(2)}
             </div>

@@ -10,7 +10,7 @@ export const ProductCard = ({
   product: Product;
   onRemove: (id: string) => void;
 }) => (
-  <div className="grid grid-cols-4 gap-4 items-center py-3 border-b">
+  <div className="grid grid-cols-4 items-center gap-4 border-b py-3">
     <div className="col-span-2 flex items-center gap-3">
       <div className="relative h-16 w-16 overflow-hidden rounded-md border">
         <Image
@@ -22,7 +22,7 @@ export const ProductCard = ({
       </div>
       <div>
         <p className="font-medium">{product.name}</p>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Quantity: {product.quantity}
         </p>
       </div>

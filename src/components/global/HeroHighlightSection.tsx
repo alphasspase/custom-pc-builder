@@ -12,9 +12,9 @@ export default function HeroHighlightSection({
   const parts = title ? title.split(new RegExp(`(${highlight})`, 'gi')) : [];
 
   return (
-    <section className="p-10 py-20 flex items-center justify-center bg-primary-gray-600">
-      <div className="text-center space-y-8">
-        <div className="text-4xl md:text-5xl font-bold text-center">
+    <section className="bg-primary-gray-600 flex items-center justify-center p-10 py-20">
+      <div className="space-y-8 text-center">
+        <div className="text-center text-4xl font-bold md:text-5xl">
           <h1 className="max-[565px]:flex max-sm:flex-col">
             {
               parts.length > 0
@@ -22,7 +22,7 @@ export default function HeroHighlightSection({
                     part.toLowerCase() === highlight.toLowerCase() ? (
                       <span
                         key={index}
-                        className="text-transparent px-2 bg-gradient-to-r from-yellow-300 to-primary bg-clip-text"
+                        className="to-primary bg-gradient-to-r from-yellow-300 bg-clip-text px-2 text-transparent"
                       >
                         {part}
                       </span>
@@ -35,7 +35,7 @@ export default function HeroHighlightSection({
           </h1>
         </div>
 
-        <p className="max-w-screen-sm mx-auto text-xl text-muted-foreground">
+        <p className="text-muted-foreground mx-auto max-w-screen-sm text-xl">
           {description}
         </p>
       </div>

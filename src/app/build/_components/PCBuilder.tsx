@@ -326,16 +326,16 @@ export default function PCBuilder() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 bg-gradient-to-b from-white to-gray-50 rounded-lg shadow-lg border border-gray-100">
-      <div className="flex items-center justify-between mb-6">
+    <div className="mx-auto max-w-3xl rounded-lg border border-gray-100 bg-gradient-to-b from-white to-gray-50 p-4 shadow-lg">
+      <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">Build Your PC</h2>
         <div className="flex items-center gap-2">
           <div className="text-sm font-medium text-gray-500">
             {completionPercentage}% Complete
           </div>
-          <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 w-32 overflow-hidden rounded-full bg-gray-200">
             <motion.div
-              className="h-full bg-primary"
+              className="bg-primary h-full"
               initial={{ width: 0 }}
               animate={{ width: `${completionPercentage}%` }}
               transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -557,15 +557,15 @@ export default function PCBuilder() {
             <AccordionItem
               value={component.id}
               className={cn(
-                'border rounded-lg mb-3 overflow-hidden hover:shadow-md transition-shadow',
+                'mb-3 overflow-hidden rounded-lg border transition-shadow hover:shadow-md',
                 'data-[state=open]:border-primary/50 data-[state=open]:shadow-md',
               )}
             >
-              <AccordionTrigger className="px-4 py-3 hover:no-underline group">
-                <div className="flex items-center justify-between w-full">
+              <AccordionTrigger className="group px-4 py-3 hover:no-underline">
+                <div className="flex w-full items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="relative">
-                      <div className="w-12 h-12 bg-gradient-to-br from-gray-50 to-gray-100 rounded-md flex items-center justify-center overflow-hidden border border-gray-200">
+                      <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100">
                         <motion.div
                           whileHover={{ scale: 1.05 }}
                           transition={{
@@ -584,21 +584,21 @@ export default function PCBuilder() {
                         </motion.div>
                       </div>
                       {component.recommended && (
-                        <Badge className="absolute -top-2 -right-2 bg-amber-500 hover:bg-amber-500 scale-75">
-                          <Award className="size-3 mr-1" /> Best
+                        <Badge className="absolute -top-2 -right-2 scale-75 bg-amber-500 hover:bg-amber-500">
+                          <Award className="mr-1 size-3" /> Best
                         </Badge>
                       )}
                     </div>
                     <div className="text-left">
                       <div className="flex items-center gap-2">
                         <motion.div
-                          className="p-1 rounded-full bg-primary/10 text-primary"
+                          className="bg-primary/10 text-primary rounded-full p-1"
                           whileHover={{ rotate: 360 }}
                           transition={{ duration: 0.5 }}
                         >
                           {getComponentIcon(component.id)}
                         </motion.div>
-                        <p className="text-sm uppercase font-medium text-gray-500">
+                        <p className="text-sm font-medium text-gray-500 uppercase">
                           {component.id}
                         </p>
                       </div>
@@ -609,14 +609,14 @@ export default function PCBuilder() {
                     key={component.price}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="font-semibold mr-4"
+                    className="mr-4 font-semibold"
                   >
                     {component.price.toFixed(2)} €
                   </motion.div>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="border-t border-gray-200 bg-gray-50 px-4 pt-4 pb-6 data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up border-t border-gray-200 bg-gray-50 px-4 pt-4 pb-6">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                   {component.options?.map((option) => (
                     <motion.div
                       key={option.id}
@@ -624,13 +624,13 @@ export default function PCBuilder() {
                       whileTap={{ scale: 0.97 }}
                       onClick={() => selectOption(component.id, option.id)}
                       className={cn(
-                        'flex flex-col items-center p-3 rounded-lg cursor-pointer transition-all relative',
+                        'relative flex cursor-pointer flex-col items-center rounded-lg p-3 transition-all',
                         component.name === option.name
-                          ? 'bg-primary/10 border-2 border-primary shadow-[0_0_10px_rgba(79,70,229,0.2)]'
-                          : 'bg-white border-2 border-gray-200 hover:border-gray-300',
+                          ? 'bg-primary/10 border-primary border-2 shadow-[0_0_10px_rgba(79,70,229,0.2)]'
+                          : 'border-2 border-gray-200 bg-white hover:border-gray-300',
                       )}
                     >
-                      <div className="w-16 h-16 bg-white rounded-md flex items-center justify-center mb-2">
+                      <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-md bg-white">
                         <Image
                           src={option.image || '/placeholder.svg'}
                           alt={option.name}
@@ -639,7 +639,7 @@ export default function PCBuilder() {
                           className="object-contain"
                         />
                       </div>
-                      <p className="text-sm font-medium text-center">
+                      <p className="text-center text-sm font-medium">
                         {option.name}
                       </p>
                       <p className="text-sm font-bold">
@@ -647,12 +647,12 @@ export default function PCBuilder() {
                       </p>
                       {option.recommended && (
                         <Badge className="absolute -top-2 -right-2 bg-amber-500 hover:bg-amber-500">
-                          <Award className="size-3 mr-1" /> Best
+                          <Award className="mr-1 size-3" /> Best
                         </Badge>
                       )}
                       {component.name === option.name && (
                         <motion.div
-                          className="absolute top-2 left-2 bg-primary text-white rounded-full p-1"
+                          className="bg-primary absolute top-2 left-2 rounded-full p-1 text-white"
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{
@@ -675,7 +675,7 @@ export default function PCBuilder() {
 
       {hasConflict && (
         <motion.div
-          className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-between"
+          className="mt-6 flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 p-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -695,7 +695,7 @@ export default function PCBuilder() {
             <Button
               onClick={resolveConflicts}
               variant="outline"
-              className="border-amber-300 hover:bg-amber-100 transition-all"
+              className="border-amber-300 transition-all hover:bg-amber-100"
             >
               Resolve the conflicts
             </Button>
@@ -709,7 +709,7 @@ export default function PCBuilder() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
       >
-        <div className="flex justify-between items-center mb-2">
+        <div className="mb-2 flex items-center justify-between">
           <span className="text-gray-500">incl. VAT plus shipping</span>
           <motion.span
             key={total}
@@ -721,7 +721,7 @@ export default function PCBuilder() {
             {total.toFixed(2)} €
           </motion.span>
         </div>
-        <div className="flex justify-between items-center mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <span className="text-sm text-gray-500">35 days delivery time</span>
           <span className="text-sm text-gray-500">incl. VAT plus shipping</span>
         </div>
@@ -751,16 +751,16 @@ export default function PCBuilder() {
           </motion.div>
         </div>
 
-        <div className="flex justify-end mt-4 gap-4">
+        <div className="mt-4 flex justify-end gap-4">
           <motion.div
             whileHover={{ scale: 1.1 }}
-            className="w-12 h-6 bg-gray-200 rounded flex items-center justify-center text-xs font-medium"
+            className="flex h-6 w-12 items-center justify-center rounded bg-gray-200 text-xs font-medium"
           >
             shop
           </motion.div>
           <motion.div
             whileHover={{ scale: 1.1 }}
-            className="w-12 h-6 bg-gray-800 text-white rounded flex items-center justify-center text-xs font-medium"
+            className="flex h-6 w-12 items-center justify-center rounded bg-gray-800 text-xs font-medium text-white"
           >
             VISA
           </motion.div>

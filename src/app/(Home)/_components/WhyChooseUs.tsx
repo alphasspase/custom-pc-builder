@@ -29,17 +29,17 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="bg-primary-gray-600 py-16 px-6">
-      <div className="max-w-6xl mx-auto text-center">
+    <section className="bg-primary-gray-600 px-6 py-16">
+      <div className="mx-auto max-w-6xl text-center">
         <SectionIntro title="Why Choose Our Configurator" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
           {features.map((feature, index) => (
             <div key={index} className="flex items-start gap-4 text-left">
               <div>{feature.icon}</div>
               <div>
-                <h3 className="text-lg font-semibold mb-1">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <h3 className="mb-1 text-lg font-semibold">{feature.title}</h3>
+                <p className="text-sm leading-relaxed text-gray-600">
                   {feature.description}
                 </p>
               </div>

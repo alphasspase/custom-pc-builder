@@ -175,18 +175,18 @@ export const TeamSection = () => {
   };
 
   return (
-    <section id="team" className="container lg:w-[75%] py-24 sm:py-32">
-      <div className="text-center mb-8">
-        <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
+    <section id="team" className="container py-24 sm:py-32 lg:w-[75%]">
+      <div className="mb-8 text-center">
+        <h2 className="text-primary mb-2 text-center text-lg tracking-wider">
           Team
         </h2>
 
-        <h2 className="text-3xl md:text-4xl text-center font-bold">
+        <h2 className="text-center text-3xl font-bold md:text-4xl">
           The Company Dream Team
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {teamList.map(
           (
             { imageUrl, firstName, lastName, positions, socialNetworks },
@@ -194,19 +194,19 @@ export const TeamSection = () => {
           ) => (
             <Card
               key={index}
-              className="bg-muted/60 dark:bg-card flex flex-col h-full overflow-hidden group/hoverimg"
+              className="bg-muted/60 dark:bg-card group/hoverimg flex h-full flex-col overflow-hidden"
             >
-              <CardHeader className="p-0 gap-0">
+              <CardHeader className="gap-0 p-0">
                 <div className="h-full overflow-hidden">
                   <Image
                     src={imageUrl}
                     alt=""
                     width={300}
                     height={300}
-                    className="w-full aspect-square object-cover saturate-0 transition-all duration-200 ease-linear size-full group-hover/hoverimg:saturate-100 group-hover/hoverimg:scale-[1.01]"
+                    className="aspect-square size-full w-full object-cover saturate-0 transition-all duration-200 ease-linear group-hover/hoverimg:scale-[1.01] group-hover/hoverimg:saturate-100"
                   />
                 </div>
-                <CardTitle className="py-6 pb-4 px-6">
+                <CardTitle className="px-6 py-6 pb-4">
                   {firstName}
                   <span className="text-primary ml-2">{lastName}</span>
                 </CardTitle>
@@ -214,7 +214,7 @@ export const TeamSection = () => {
               {positions.map((position, index) => (
                 <CardContent
                   key={index}
-                  className={`pb-0 text-muted-foreground ${
+                  className={`text-muted-foreground pb-0 ${
                     index === positions.length - 1 && 'pb-6'
                   }`}
                 >
@@ -223,13 +223,13 @@ export const TeamSection = () => {
                 </CardContent>
               ))}
 
-              <CardFooter className="space-x-4 mt-auto">
+              <CardFooter className="mt-auto space-x-4">
                 {socialNetworks.map(({ name, url }, index) => (
                   <Link
                     key={index}
                     href={url}
                     target="_blank"
-                    className="hover:opacity-80 transition-all"
+                    className="transition-all hover:opacity-80"
                   >
                     {socialIcon(name)}
                   </Link>

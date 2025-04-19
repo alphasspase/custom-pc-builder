@@ -31,7 +31,7 @@ export default function ComingSoon() {
   }, []); // Empty dependency array ensures this runs once on mount
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-gray-700 via-gray-600 to-gray-500">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-gray-700 via-gray-600 to-gray-500">
       <div className="absolute inset-0 overflow-hidden">
         {circles.map((circle, i) => (
           <motion.div
@@ -57,16 +57,16 @@ export default function ComingSoon() {
         ))}
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl px-4 py-16 flex flex-col items-center text-center">
+      <div className="relative z-10 flex w-full max-w-5xl flex-col items-center px-4 py-16 text-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-5xl md:text-7xl p-5 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300 mb-4">
+          <h1 className="mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text p-5 text-5xl font-extrabold text-transparent md:text-7xl">
             Coming Soon
           </h1>
-          <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-2xl">
+          <p className="mb-12 max-w-2xl text-xl text-gray-200 md:text-2xl">
             We&apos;re working hard to bring you something amazing. Stay tuned
             for our big launch!
           </p>
@@ -88,7 +88,7 @@ export default function ComingSoon() {
             <a
               key={index}
               href={social.href}
-              className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition-colors hover:bg-white/20"
             >
               <social.icon className="h-5 w-5 text-white" />
             </a>

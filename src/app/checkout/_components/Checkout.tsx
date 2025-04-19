@@ -69,11 +69,11 @@ export default function Checkout() {
     setProducts(products.filter((product) => product.id !== id));
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+    <div className="container mx-auto max-w-7xl px-4 py-8">
+      <h1 className="mb-8 text-3xl font-bold">Checkout</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="space-y-8 lg:col-span-2">
           {/* Order Summary */}
           <Card>
             <CardHeader className="pb-3">
@@ -83,7 +83,7 @@ export default function Checkout() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-4 gap-4 font-medium mb-2 text-sm md:text-base">
+              <div className="mb-2 grid grid-cols-4 gap-4 text-sm font-medium md:text-base">
                 <div className="col-span-2">Name</div>
                 <div className="text-center">Price</div>
                 <div className="text-right">Total</div>
@@ -110,7 +110,7 @@ export default function Checkout() {
             <CardContent>
               <div className="space-y-6">
                 <div>
-                  <Label className="text-base mb-3 block">Operator</Label>
+                  <Label className="mb-3 block text-base">Operator</Label>
                   <RadioGroup
                     defaultValue={deliveryMethod}
                     onValueChange={setDeliveryMethod}
@@ -130,7 +130,7 @@ export default function Checkout() {
                   </RadioGroup>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <DeliveryOptionCard
                     deliverySpeed={deliverySpeed}
                     setDeliverySpeed={setDeliverySpeed}
@@ -161,7 +161,7 @@ export default function Checkout() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full name</Label>
                   <Input id="fullName" defaultValue="Amaya Dunne" />
@@ -179,11 +179,11 @@ export default function Checkout() {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2 mt-4">
+              <div className="mt-4 flex items-center space-x-2">
                 <Checkbox id="saveDefault" defaultChecked />
                 <Label
                   htmlFor="saveDefault"
-                  className="text-sm font-medium leading-none"
+                  className="text-sm leading-none font-medium"
                 >
                   Save as default
                 </Label>
@@ -197,7 +197,7 @@ export default function Checkout() {
                     className="pl-9"
                     defaultValue="Leave at the front door."
                   />
-                  <Info className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Info className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                 </div>
               </div>
             </CardContent>
@@ -216,15 +216,15 @@ export default function Checkout() {
             <CardContent>
               <Button
                 variant="outline"
-                className="w-full justify-start text-muted-foreground mb-4"
+                className="text-muted-foreground mb-4 w-full justify-start"
               >
                 Change payment methods
               </Button>
 
               <Card>
-                <CardContent className="p-4 flex items-center justify-between">
+                <CardContent className="flex items-center justify-between p-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-md bg-muted flex items-center justify-center">
+                    <div className="bg-muted flex h-8 w-8 items-center justify-center rounded-md">
                       <CreditCard className="h-4 w-4" />
                     </div>
                     <div>
@@ -248,7 +248,7 @@ export default function Checkout() {
               </div>
 
               <div className="mt-3">
-                <Badge variant="secondary" className="text-sm py-1.5">
+                <Badge variant="secondary" className="py-1.5 text-sm">
                   $15 Off
                 </Badge>
               </div>
@@ -278,10 +278,10 @@ export default function Checkout() {
               <Separator />
               <div className="flex justify-between">
                 <span className="font-medium">Total</span>
-                <span className="font-bold text-xl">${total}</span>
+                <span className="text-xl font-bold">${total}</span>
               </div>
 
-              <Button className="w-full mt-4" size="lg">
+              <Button className="mt-4 w-full" size="lg">
                 Proceed to payment
               </Button>
             </CardContent>

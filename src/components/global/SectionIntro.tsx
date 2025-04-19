@@ -8,9 +8,9 @@ const SectionIntro = ({
   className?: string;
 }) => {
   return (
-    <div className={cn('text-center mb-12', className)}>
+    <div className={cn('mb-12 text-center', className)}>
       <h2 className="mb-4">{title}</h2>
-      <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
+      <div className="bg-primary mx-auto h-1 w-24 rounded-full"></div>
     </div>
   );
 };

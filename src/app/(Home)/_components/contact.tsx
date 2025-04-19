@@ -59,23 +59,23 @@ export const ContactSection = () => {
 
   return (
     <section id="contact" className="container py-24 sm:py-32">
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <div>
           <div className="mb-4">
-            <h2 className="text-lg text-primary mb-2 tracking-wider">
+            <h2 className="text-primary mb-2 text-lg tracking-wider">
               Contact
             </h2>
 
-            <h2 className="text-3xl md:text-4xl font-bold">Connect With Us</h2>
+            <h2 className="text-3xl font-bold md:text-4xl">Connect With Us</h2>
           </div>
-          <p className="mb-8 text-muted-foreground lg:w-5/6">
+          <p className="text-muted-foreground mb-8 lg:w-5/6">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
             ipsam sint enim exercitationem ex autem corrupti quas tenetur
           </p>
 
           <div className="flex flex-col gap-4">
             <div>
-              <div className="flex gap-2 mb-1">
+              <div className="mb-1 flex gap-2">
                 <Building2 />
                 <div className="font-bold">Find us</div>
               </div>
@@ -84,7 +84,7 @@ export const ContactSection = () => {
             </div>
 
             <div>
-              <div className="flex gap-2 mb-1">
+              <div className="mb-1 flex gap-2">
                 <Phone />
                 <div className="font-bold">Call us</div>
               </div>
@@ -93,7 +93,7 @@ export const ContactSection = () => {
             </div>
 
             <div>
-              <div className="flex gap-2 mb-1">
+              <div className="mb-1 flex gap-2">
                 <Mail />
                 <div className="font-bold">Mail US</div>
               </div>
@@ -123,7 +123,7 @@ export const ContactSection = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="grid w-full gap-4"
               >
-                <div className="flex flex-col md:!flex-row gap-8">
+                <div className="flex flex-col gap-8 md:!flex-row">
                   <FormField
                     control={form.control}
                     name="firstName"

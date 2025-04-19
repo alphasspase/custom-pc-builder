@@ -19,7 +19,7 @@ const MobileNav = () => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <div className="flex items-center ">
+    <div className="flex items-center">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Menu
@@ -28,7 +28,7 @@ const MobileNav = () => {
           />
         </SheetTrigger>
 
-        <SheetContent className="flex flex-col justify-between rounded-tl-2xl rounded-bl-2xl bg-card border-secondary">
+        <SheetContent className="bg-card border-secondary flex flex-col justify-between rounded-tl-2xl rounded-bl-2xl">
           <div>
             <SheetHeader className="mb-4 ml-4">
               <SheetTitle className="flex items-center">
@@ -48,7 +48,7 @@ const MobileNav = () => {
             </div>
           </div>
 
-          <SheetFooter className="flex-col sm:flex-col justify-start items-start">
+          <SheetFooter className="flex-col items-start justify-start sm:flex-col">
             <Separator className="mb-2" />
             <StartBidingButton />
           </SheetFooter>

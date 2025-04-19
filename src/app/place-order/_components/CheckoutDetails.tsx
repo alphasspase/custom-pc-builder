@@ -25,9 +25,9 @@ export default function CheckoutDetails({
   };
 
   return (
-    <div className="relative rounded-lg border p-6 shadow-sm bg-primary-gray-500">
-      <div className="flex items-center gap-3 mb-6">
-        <MonitorCog className="h-10 w-10 text-primary" />
+    <div className="bg-primary-gray-500 relative rounded-lg border p-6 shadow-sm">
+      <div className="mb-6 flex items-center gap-3">
+        <MonitorCog className="text-primary h-10 w-10" />
         <h2>{title}</h2>
       </div>
 

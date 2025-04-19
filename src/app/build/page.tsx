@@ -11,25 +11,25 @@ const categories = [
     id: 'computer',
     name: 'Computer',
     image: '/desktop-pc/pc1.png',
-    icon: <Monitor className="w-5 h-5" />,
+    icon: <Monitor className="h-5 w-5" />,
   },
   {
     id: 'desktop pc',
     name: 'desktop pc',
     image: '/desktop-pc/pc2.png',
-    icon: <FaComputer className="w-5 h-5" />,
+    icon: <FaComputer className="h-5 w-5" />,
   },
   {
     id: 'laptop',
     name: 'laptop',
     image: '/desktop-pc/pc3.png',
-    icon: <Laptop className="w-5 h-5" />,
+    icon: <Laptop className="h-5 w-5" />,
   },
   {
     id: 'gaming pc',
     name: 'gaming pc',
     image: '/desktop-pc/pc4.png',
-    icon: <GamepadIcon className="w-5 h-5" />,
+    icon: <GamepadIcon className="h-5 w-5" />,
   },
 ];
 
@@ -44,7 +44,7 @@ Answer a few questions and let us recommend the best components
 for your needs."
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2  gap-5 p-5">
+      <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
         <div>
           <CategoryNavigation categories={categories} />
         </div>

@@ -20,12 +20,12 @@ const Header = () => {
         <Link
           key={href}
           href={href}
-          className={`text-base font-semibold px-2 relative ${pathname === href ? 'font-extrabold' : 'font-semibold'} hover:text-gray-600 transition-colors`}
+          className={`relative px-2 text-base font-semibold ${pathname === href ? 'font-extrabold' : 'font-semibold'} transition-colors hover:text-gray-600`}
         >
           {label}
           {/* Underline animation */}
           <span
-            className={`absolute  left-0 -bottom-1 w-full h-1 bg-primary transition-all duration-300 ease-in-out ${pathname === href ? 'scale-x-80' : 'scale-x-0'}`}
+            className={`bg-primary absolute -bottom-1 left-0 h-1 w-full transition-all duration-300 ease-in-out ${pathname === href ? 'scale-x-80' : 'scale-x-0'}`}
           ></span>
         </Link>
       ))}
@@ -33,13 +33,13 @@ const Header = () => {
   );
 
   return (
-    <header className="border-b bg-background sticky top-0 z-40 flex h-16 items-center justify-between px-4 md:px-6">
+    <header className="bg-background sticky top-0 z-40 flex h-16 items-center justify-between border-b px-4 md:px-6">
       <Logo />
       {/* <!-- Mobile --> */}
       <MobileNav />
 
       {/* <!-- Desktop --> */}
-      <NavigationMenu className="hidden lg:block mx-auto">
+      <NavigationMenu className="mx-auto hidden lg:block">
         <NavigationMenuList>{renderDesktopLinks()}</NavigationMenuList>
       </NavigationMenu>
 
