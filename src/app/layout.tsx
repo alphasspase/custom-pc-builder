@@ -53,7 +53,7 @@ export default function RootLayout({
   //   title: 'Test Todo',
   // };
 
-  // const a = await apiClient.get<Todo>(endpoints.todo.getTodo, {
+  // const a = await apiClient.get(endpoints.demand_assessment.getFirstQuestion, {
   //   cache: 'no-store',
   //   next: { tags: ['todo'] },
   // });
