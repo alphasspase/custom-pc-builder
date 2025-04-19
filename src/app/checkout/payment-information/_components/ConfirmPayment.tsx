@@ -33,14 +33,14 @@ export default function ConfirmPayment() {
   };
 
   return (
-    <div className="  ">
+    <div className=" ">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         // className="w-full max-w-4xl"
       >
-        <Card className="relative bg-white rounded-lg border p-6 shadow-sm  overflow-hidden">
+        <Card className="relative overflow-hidden rounded-lg border bg-white p-6 shadow-sm">
           <CardHeader>
             <Button variant="link" size="icon">
               <ChevronLeft className="h-5 w-5" />
@@ -48,23 +48,23 @@ export default function ConfirmPayment() {
             </Button>
 
             <CardTitle>
-              <h2 className="text-primary ">Confirm and Pay</h2>
+              <h2 className="text-primary">Confirm and Pay</h2>
             </CardTitle>
           </CardHeader>
 
           <CardContent className="p-0">
-            <div className="col-span-2 p-6 space-y-8">
+            <div className="col-span-2 space-y-8 p-6">
               <div>
-                <h3 className="text-lg font-semibold mb-4">Your trip</h3>
+                <h3 className="mb-4 text-lg font-semibold">Your trip</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="bg-slate-50 p-4 rounded-lg"
+                    className="rounded-lg bg-slate-50 p-4"
                   >
-                    <Label className="text-sm text-muted-foreground">
+                    <Label className="text-muted-foreground text-sm">
                       Dates
                     </Label>
-                    <div className="flex items-center justify-between mt-1">
+                    <div className="mt-1 flex items-center justify-between">
                       <span className="font-medium">July 17 - 21</span>
                       <Button variant="ghost" size="icon" className="h-6 w-6">
                         <ChevronLeft className="h-4 w-4 rotate-180" />
@@ -74,12 +74,12 @@ export default function ConfirmPayment() {
 
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className="bg-slate-50 p-4 rounded-lg"
+                    className="rounded-lg bg-slate-50 p-4"
                   >
-                    <Label className="text-sm text-muted-foreground">
+                    <Label className="text-muted-foreground text-sm">
                       Guests
                     </Label>
-                    <div className="flex items-center justify-between mt-1">
+                    <div className="mt-1 flex items-center justify-between">
                       <span className="font-medium">2 guests</span>
                       <Button variant="ghost" size="icon" className="h-6 w-6">
                         <ChevronLeft className="h-4 w-4 rotate-180" />
@@ -90,37 +90,37 @@ export default function ConfirmPayment() {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold mb-4">Pay with</h3>
+                <h3 className="mb-4 text-lg font-semibold">Pay with</h3>
                 <Tabs
                   defaultValue="card"
                   onValueChange={setPaymentMethod}
                   className="w-full"
                 >
-                  <TabsList className="grid grid-cols-3 mb-6">
+                  <TabsList className="mb-6 grid grid-cols-3">
                     <TabsTrigger
                       value="card"
                       className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                     >
-                      <CreditCard className="h-4 w-4 mr-2" />
+                      <CreditCard className="mr-2 h-4 w-4" />
                       Credit card
                     </TabsTrigger>
                     <TabsTrigger
                       value="paypal"
                       className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                     >
-                      <PaypalIcon className="h-4 w-4 mr-2" />
+                      <PaypalIcon className="mr-2 h-4 w-4" />
                       PayPal
                     </TabsTrigger>
                     <TabsTrigger
                       value="google"
                       className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                     >
-                      <Smartphone className="h-4 w-4 mr-2" />
+                      <Smartphone className="mr-2 h-4 w-4" />
                       Google Pay
                     </TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="card" className="space-y-4 mt-0">
+                  <TabsContent value="card" className="mt-0 space-y-4">
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ export default function ConfirmPayment() {
                             placeholder="1234 5678 9012 3456"
                             className="pl-10"
                           />
-                          <CreditCard className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                          <CreditCard className="text-muted-foreground absolute top-2.5 left-3 h-5 w-5" />
                         </div>
                       </div>
 
@@ -173,7 +173,7 @@ export default function ConfirmPayment() {
                         height={60}
                         className="mb-4"
                       />
-                      <p className="text-center text-muted-foreground">
+                      <p className="text-muted-foreground text-center">
                         You will be redirected to PayPal to complete your
                         payment.
                       </p>
@@ -189,7 +189,7 @@ export default function ConfirmPayment() {
                         height={60}
                         className="mb-4"
                       />
-                      <p className="text-center text-muted-foreground">
+                      <p className="text-muted-foreground text-center">
                         You will be redirected to Google Pay to complete your
                         payment.
                       </p>
@@ -200,8 +200,8 @@ export default function ConfirmPayment() {
             </div>
           </CardContent>
 
-          <CardFooter className="flex flex-col p-6 border-t border-slate-200 space-y-4">
-            <div className="text-xs text-muted-foreground">
+          <CardFooter className="flex flex-col space-y-4 border-t border-slate-200 p-6">
+            <div className="text-muted-foreground text-xs">
               By selecting the button below, I agree to the Property Rules,
               Terms and Conditions, Privacy Policy and COVID-19 Safety
               Requirements.
@@ -209,7 +209,7 @@ export default function ConfirmPayment() {
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
             >
               {isSubmitting ? (
                 <motion.div
@@ -218,7 +218,7 @@ export default function ConfirmPayment() {
                   className="flex items-center"
                 >
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

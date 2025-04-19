@@ -23,7 +23,7 @@ const NavbarLink = ({ href, label, onClick }: NavbarLinkProps) => {
       variant="ghost"
       className={cn(
         'justify-start text-base',
-        pathname === href ? 'font-extrabold text-primary' : 'font-semibold',
+        pathname === href ? 'text-primary font-extrabold' : 'font-semibold',
       )}
     >
       <Link href={href}>{label}</Link>

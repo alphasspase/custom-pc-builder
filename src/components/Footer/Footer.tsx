@@ -7,8 +7,8 @@ import FooterLinkSection from './FooterLinkSection';
 export const FooterSection = () => {
   return (
     <footer id="footer">
-      <div className="p-10 bg-card border border-secondary rounded-2xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-x-12 gap-y-8">
+      <div className="bg-card border-secondary rounded-2xl border p-10">
+        <div className="grid grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-3 xl:grid-cols-6">
           <div className="col-span-full xl:col-span-2">
             <Logo />
             <p className="mt-4 text-xl font-semibold">
@@ -54,7 +54,7 @@ export const FooterSection = () => {
         <section>
           <h3 className="flex items-center justify-center">
             &copy;
-            <p className="text-primary transition-all border-primary hover:border-b-2 ml-1">
+            <p className="text-primary border-primary ml-1 transition-all hover:border-b-2">
               2025 PC Builder. All rights reserved.
             </p>
           </h3>

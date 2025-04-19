@@ -21,11 +21,11 @@ const OrderSummary = () => {
   }, [subtotal, shipping, tax]);
 
   return (
-    <div className="lg:col-span-1 sticky top-20">
+    <div className="sticky top-20 lg:col-span-1">
       <Card>
         <CardContent className="p-6">
-          <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-          <div className="space-y-3 mb-6">
+          <h2 className="mb-4 text-xl font-bold">Order Summary</h2>
+          <div className="mb-6 space-y-3">
             <div className="flex justify-between">
               <span className="text-slate-600 dark:text-slate-400">
                 Subtotal
@@ -43,7 +43,7 @@ const OrderSummary = () => {
               <span>${tax.toFixed(2)}</span>
             </div>
             <Separator />
-            <div className="flex justify-between font-bold text-lg">
+            <div className="flex justify-between text-lg font-bold">
               <span>Total</span>
               <span>${total.toFixed(2)}</span>
             </div>
@@ -51,7 +51,7 @@ const OrderSummary = () => {
 
           <div className="space-y-4">
             <div>
-              <p className="font-medium mb-2">Promo Code</p>
+              <p className="mb-2 font-medium">Promo Code</p>
               <div className="flex gap-2">
                 <Input
                   placeholder="Enter code"
@@ -62,7 +62,7 @@ const OrderSummary = () => {
                 <Button variant="outline">Apply</Button>
               </div>
             </div>
-            <Button asChild size={'lg'} className="w-full ">
+            <Button asChild size={'lg'} className="w-full">
               <Link href={URLS.paymentInformation}>Place Order</Link>
             </Button>
           </div>

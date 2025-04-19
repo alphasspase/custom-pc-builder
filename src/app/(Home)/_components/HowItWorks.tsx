@@ -23,19 +23,19 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className=" py-16 px-6">
-      <div className="max-w-6xl mx-auto text-center">
+    <section className="px-6 py-16">
+      <div className="mx-auto max-w-6xl text-center">
         <SectionIntro title="How It Works" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
           {steps.map((step, index) => (
             <div key={index}>
-              <Card className="shadow-xl rounded-2xl p-6 bg-white hover:shadow-2xl transition">
+              <Card className="rounded-2xl bg-white p-6 shadow-xl transition hover:shadow-2xl">
                 <CardContent className="flex flex-col items-center">
                   <div className="mb-4">{step.icon}</div>
-                  <h3 className="text-xl font-semibold mb-2">
+                  <h3 className="mb-2 text-xl font-semibold">
                     {index + 1}. {step.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">{step.description}</p>
+                  <p className="text-sm text-gray-600">{step.description}</p>
                 </CardContent>
               </Card>
             </div>

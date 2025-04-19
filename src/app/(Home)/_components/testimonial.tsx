@@ -72,13 +72,13 @@ const reviewList: ReviewProps[] = [
 
 export const TestimonialSection = () => {
   return (
-    <section id="testimonials" className=" py-24 sm:py-32">
-      <div className="text-center mb-8">
-        <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
+    <section id="testimonials" className="py-24 sm:py-32">
+      <div className="mb-8 text-center">
+        <h2 className="text-primary mb-2 text-center text-lg tracking-wider">
           Testimonials
         </h2>
 
-        <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
+        <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
           Hear What Our 1000+ Clients Say
         </h2>
       </div>
@@ -87,7 +87,7 @@ export const TestimonialSection = () => {
         opts={{
           align: 'start',
         }}
-        className="relative w-[80%] sm:w-[90%] lg:max-w-screen-xl mx-auto"
+        className="relative mx-auto w-[80%] sm:w-[90%] lg:max-w-screen-xl"
       >
         <CarouselContent>
           {reviewList.map((review) => (
@@ -98,11 +98,11 @@ export const TestimonialSection = () => {
               <Card className="bg-muted/50 dark:bg-card">
                 <CardContent className="pt-6 pb-0">
                   <div className="flex gap-1 pb-6">
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
+                    <Star className="fill-primary text-primary size-4" />
+                    <Star className="fill-primary text-primary size-4" />
+                    <Star className="fill-primary text-primary size-4" />
+                    <Star className="fill-primary text-primary size-4" />
+                    <Star className="fill-primary text-primary size-4" />
                   </div>
                   {`"${review.comment}"`}
                 </CardContent>

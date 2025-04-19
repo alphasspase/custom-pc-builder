@@ -60,18 +60,17 @@ export default function WorkspaceConfigurator() {
   };
 
   return (
-    <div className="lg:col-span-1 sticky top-20">
+    <div className="sticky top-20 lg:col-span-1">
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="bg-white rounded-lg border p-6 shadow-sm "
+        className="rounded-lg border bg-white p-6 shadow-sm"
       >
-        <h2 className="text-xl font-bold mb-6">Configuration Summary</h2>
-
+        <h2 className="mb-6 text-xl font-bold">Configuration Summary</h2>
         <div className="space-y-4">
           {Object.entries(selectedProducts).map(([key, product]) => (
-            <div key={key} className="flex justify-between items-center">
+            <div key={key} className="flex items-center justify-between">
               <span className="font-medium">{product.title}</span>
               <span className="font-bold">${product.price}</span>
             </div>
@@ -79,14 +78,14 @@ export default function WorkspaceConfigurator() {
 
           <Separator className="my-4" />
 
-          <div className="flex justify-between items-center text-lg">
+          <div className="flex items-center justify-between text-lg">
             <span className="font-bold">Total</span>
             <span className="font-bold">${calculateTotal()}</span>
           </div>
         </div>
 
         <div className="mt-8 space-y-3">
-          <Button asChild className="w-full group">
+          <Button asChild className="group w-full">
             <Link href={URLS.checkout}>
               Proceed to Checkout
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

@@ -28,7 +28,7 @@ export default function ProductCarousel({
   }, []);
 
   return (
-    <div className="relative bg-white rounded-lg border p-6 shadow-sm ">
+    <div className="relative rounded-lg border bg-white p-6 shadow-sm">
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-12 text-center">
           <motion.div
@@ -37,7 +37,7 @@ export default function ProductCarousel({
             transition={{ duration: 0.5 }}
           >
             <h3>{title}</h3>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
               {description}
             </p>
           </motion.div>
@@ -45,7 +45,7 @@ export default function ProductCarousel({
 
         <Carousel
           opts={{ align: 'start', loop: true }}
-          className="w-full relative"
+          className="relative w-full"
         >
           <CarouselContent className="-ml-2 md:-ml-4">
             {products.map((product, index) => (
@@ -59,7 +59,7 @@ export default function ProductCarousel({
               />
             ))}
           </CarouselContent>
-          <div className="absolute top-1/2 left-1/2 bg-amber-300 z-40 transform -translate-x-1/2 w-full flex items-center justify-center gap-2">
+          <div className="absolute top-1/2 left-1/2 z-40 flex w-full -translate-x-1/2 transform items-center justify-center gap-2 bg-amber-300">
             <CarouselPrevious className="ms-3" />
             <CarouselNext className="me-3" />
           </div>

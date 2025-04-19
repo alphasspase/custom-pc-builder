@@ -7,10 +7,10 @@ import React from 'react';
 
 const PayDetails = () => {
   return (
-    <div className="lg:col-span-1 sticky top-20">
-      <div className="bg-white rounded-lg border p-6 shadow-sm ">
-        <div className="flex items-start space-x-4 mb-6">
-          <div className="w-24 h-24 bg-slate-100 rounded-lg overflow-hidden relative">
+    <div className="sticky top-20 lg:col-span-1">
+      <div className="rounded-lg border bg-white p-6 shadow-sm">
+        <div className="mb-6 flex items-start space-x-4">
+          <div className="relative h-24 w-24 overflow-hidden rounded-lg bg-slate-100">
             <Image
               src="/desk/desk3.webp"
               alt="Room"
@@ -19,17 +19,17 @@ const PayDetails = () => {
             />
           </div>
           <div>
-            <Badge className="mb-2 bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary">
+            <Badge className="bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary mb-2">
               Hotel room in Grand
             </Badge>
-            <h3 className="font-semibold text-lg">Superior Family Room</h3>
-            <p className="text-sm text-muted-foreground mt-1">
+            <h3 className="text-lg font-semibold">Superior Family Room</h3>
+            <p className="text-muted-foreground mt-1 text-sm">
               4 guests • 4 beds • private bath
             </p>
-            <div className="flex items-center mt-2">
+            <div className="mt-2 flex items-center">
               <div className="flex items-center">
                 <span className="text-sm font-medium">4.4</span>
-                <span className="text-sm text-muted-foreground ml-1">
+                <span className="text-muted-foreground ml-1 text-sm">
                   (324 reviews)
                 </span>
               </div>
@@ -40,20 +40,20 @@ const PayDetails = () => {
         <Separator className="my-6" />
 
         <div>
-          <h3 className="text-lg font-semibold mb-4">Price details</h3>
+          <h3 className="mb-4 text-lg font-semibold">Price details</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
               <span>$88 x 4 nights</span>
               <span>$348</span>
             </div>
-            <div className="flex justify-between text-primary">
+            <div className="text-primary flex justify-between">
               <span>New user discount</span>
               <span>-$87</span>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <span>Service fee</span>
-                <Button variant="ghost" size="icon" className="h-4 w-4 ml-1">
+                <Button variant="ghost" size="icon" className="ml-1 h-4 w-4">
                   <Info className="h-3 w-3" />
                 </Button>
               </div>
@@ -62,14 +62,14 @@ const PayDetails = () => {
 
             <Separator className="my-3" />
 
-            <div className="flex justify-between font-semibold text-lg">
+            <div className="flex justify-between text-lg font-semibold">
               <span>Total (USD)</span>
               <span>$273</span>
             </div>
 
-            <div className="text-sm text-muted-foreground flex items-center">
+            <div className="text-muted-foreground flex items-center text-sm">
               <span>Free cancellation until 3:00 PM on July 15, 2022.</span>
-              <Button variant="link" className="h-auto p-0 ml-1 text-primary">
+              <Button variant="link" className="text-primary ml-1 h-auto p-0">
                 More info
               </Button>
             </div>
