@@ -57,6 +57,15 @@
 
   /* gold */
   --color-primary: #f8a504;
+  --color-primary-100: #fdedcf;
+  --color-primary-200: #fbdca6;
+  --color-primary-300: #fbcc73;
+  --color-primary-400: #faba39;
+  --color-primary-500: #f8a504; /* Original */
+  --color-primary-600: #d38f03;
+  --color-primary-700: #c27e03;
+  --color-primary-800: #825402;
+  --color-primary-900: #412a01;
 }
 
 :root {
