@@ -24,7 +24,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Image from 'next/image';
 
 export default function ConfirmPayment() {
-  const [setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('card');
+
+  console.log('Selected payment method:', paymentMethod); // Example usage
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = () => {
