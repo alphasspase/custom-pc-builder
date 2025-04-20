@@ -44,7 +44,7 @@ export function SupportModal() {
         <DialogContent className="shadow-lg sm:max-w-[425px]">
           <DialogTitle className="text-primary flex items-center gap-2">
             <RiUserVoiceFill size={25} />
-            <h4>Need Proffesional Assistance</h4>
+            <h4>Need Professional Assistance</h4>
           </DialogTitle>
           <DialogDescription>
             Fill out the form below to get help from our team.
