@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { URLS } from '@/utils/urls';
 import { SupportModal } from './support-modal';
+import { QrCodeModal } from './qr-code-modal';
 
 interface ProductOption {
   id: string;
@@ -95,9 +96,7 @@ export default function WorkspaceConfigurator() {
 
           <SupportModal />
 
-          <Button variant="secondary" className="w-full">
-            Save Configuration
-          </Button>
+          <QrCodeModal />
         </div>
       </motion.div>
     </div>
