@@ -73,7 +73,6 @@ function Header() {
       </DialogTitle>
       <DialogDescription>
         Easy and delicious cooking instructions right here. Start exploring now!
-        kkkkuwaggit
       </DialogDescription>
     </>
   );
