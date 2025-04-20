@@ -67,7 +67,7 @@ export function SupportModal() {
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-primary flex items-center">
             <RiUserVoiceFill size={25} />
-            <h4>Need Proffesional Assistance</h4>
+            <h4>Need Professional Assistance</h4>
           </DrawerTitle>
           <DrawerDescription>
             Fill out the form below to get help from our team.
