@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { URLS } from '@/utils/urls';
+import { SupportModal } from './support-modal';
 
 interface ProductOption {
   id: string;
@@ -91,9 +92,9 @@ export default function WorkspaceConfigurator() {
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
-          <Button variant="outline" className="w-full">
-            Request for Assistance
-          </Button>
+
+          <SupportModal />
+
           <Button variant="secondary" className="w-full">
             Save Configuration
           </Button>
