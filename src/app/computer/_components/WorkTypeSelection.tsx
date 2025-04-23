@@ -10,6 +10,7 @@ import { BsPcDisplay } from 'react-icons/bs';
 import { Question } from '../type';
 import { apiClient } from '@/lib/api/apiClient';
 import endpoints from '@/lib/api/endpoints';
+import { motion } from 'framer-motion';
 
 // const options = [
 //   {
@@ -78,29 +79,45 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
   return (
     <div className="container mx-auto px-5 py-8">
       <section className="mb-8 text-center">
-        <SectionIntro title={questionList.question} />
+        <motion.div
+          key={questionList.question} // This ensures that Framer Motion knows when to animate
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <SectionIntro title={questionList.question} />
+        </motion.div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {questionList.options.map((option, index) => (
-            <Card
-              key={index}
-              className={`border-primary transform cursor-pointer rounded-lg border-2 p-6 transition-transform duration-300 ease-in-out hover:scale-105 ${
-                selectedOption === option.id
-                  ? 'bg-primary-200'
-                  : 'hover:bg-gray-100'
-              }`}
-              onClick={() => setSelectedOption(option.id)}
-            >
-              <div className="mb-4 flex items-center justify-center text-gray-800">
-                {option.icon || <BsPcDisplay size={40} />}
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800">
-                {option.option_text}
-              </h3>
-              {/* <p className="mt-2 text-gray-600">{option.description}</p> */}
-            </Card>
-          ))}
-        </div>
+        <motion.div
+          key={questionList.question} // This ensures that Framer Motion knows when to animate
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {questionList.options.map((option, index) => (
+              <Card
+                key={index}
+                className={`border-primary transform cursor-pointer rounded-lg border-2 p-6 transition-transform duration-300 ease-in-out hover:scale-105 ${
+                  selectedOption === option.id
+                    ? 'bg-primary-200'
+                    : 'hover:bg-gray-100'
+                }`}
+                onClick={() => setSelectedOption(option.id)}
+              >
+                <div className="mb-4 flex items-center justify-center text-gray-800">
+                  {option.icon || <BsPcDisplay size={40} />}
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800">
+                  {option.option_text}
+                </h3>
+                {/* <p className="mt-2 text-gray-600">{option.description}</p> */}
+              </Card>
+            ))}
+          </div>
+        </motion.div>
       </section>
 
       <div className="mt-8 flex flex-wrap-reverse items-center justify-center gap-5">
