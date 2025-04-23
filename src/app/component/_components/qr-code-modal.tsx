@@ -99,7 +99,7 @@ function ModalBody({ drawer = false }: ModalContentProps) {
           className="border-primary flex flex-col items-center justify-center rounded-md border border-dashed bg-white shadow-inner"
         >
           <span className="text-muted-foreground text-sm">QR Code</span>
-          <h6 className="text-lg font-semibold">MRCE-934912</h6>
+          <h6 className="text-lg font-semibold">MICE-934912</h6>
         </AspectRatio>
         <AspectRatio
           ratio={1 / 1}

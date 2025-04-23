@@ -38,14 +38,14 @@ export function SupportModal() {
         <DialogTrigger asChild>
           <Button variant="outline" className="w-full">
             <HelpCircle className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-            Request for Assistancee
+            Request for Assistance
           </Button>
         </DialogTrigger>
 
         <DialogContent className="shadow-lg sm:max-w-[425px]">
           <DialogTitle className="text-primary flex items-center gap-2">
             <RiUserVoiceFill size={25} />
-            <h4>Need Proffesional Assistance</h4>
+            <h4>Need Professional Assistance</h4>
           </DialogTitle>
           <DialogDescription>
             Fill out the form below to get help from our team.
@@ -61,14 +61,14 @@ export function SupportModal() {
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-full">
           <HelpCircle className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-          Request for Assistancee
+          Request for Assistance
         </Button>
       </DrawerTrigger>
       <DrawerContent className="border-t-primary-200">
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-primary flex items-center">
             <RiUserVoiceFill size={25} />
-            <h4>Need Proffesional Assistance</h4>
+            <h4>Need Professional Assistance</h4>
           </DrawerTitle>
           <DrawerDescription>
             Fill out the form below to get help from our team.

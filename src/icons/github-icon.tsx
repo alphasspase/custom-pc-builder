@@ -6,7 +6,7 @@ function GithubIcon(props: React.SVGProps<SVGSVGElement> | undefined) {
       width="20px"
       height="20px"
       xmlns="http://www.w3.org/2000/svg"
-      className="ionicon fill-foreground"
+      className="ion icon fill-foreground"
       viewBox="0 0 512 512"
       {...props}
     >

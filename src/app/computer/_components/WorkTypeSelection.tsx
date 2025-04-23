@@ -30,7 +30,7 @@ const options = [
     icon: <FaVideo size={40} />,
   },
   {
-    title: 'Allround',
+    title: 'All round',
     description: 'Choose peripherals and complete your order',
     icon: <FaDesktop size={40} />,
   },

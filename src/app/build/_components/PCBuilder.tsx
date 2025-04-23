@@ -120,32 +120,32 @@ export default function PCBuilder() {
     },
     {
       id: 'mainboard',
-      name: 'ASUS ROG STRIX X670E',
+      name: 'ANUS ROG STRAX X670E',
       price: 299.99,
       selected: true,
       image: '/motherboard/motherboard.jpg',
       options: [
         {
-          id: 'msib450',
+          id: 'msie450',
           name: 'MSI B450 Tomahawk',
           price: 129.99,
           image: '/motherboard/motherboard1.jpg',
         },
         {
-          id: 'asrockx570',
+          id: 'ascx570',
           name: 'ASRock X570 Phantom Gaming',
           price: 179.99,
           image: '/motherboard/motherboard2.jpg',
         },
         {
-          id: 'gigax670',
-          name: 'Gigabyte X670 Aorus Elite',
+          id: 'gigas670',
+          name: 'Gigabyte X670 Horus Elite',
           price: 239.99,
           image: '/motherboard/motherboard3.jpg',
         },
         {
-          id: 'asusx670e',
-          name: 'ASUS ROG STRIX X670E (Recommended)',
+          id: 'assur670e',
+          name: 'ANUS ROG STRAX X670E (Recommended)',
           price: 299.99,
           image: '/motherboard/motherboard4.jpg',
           recommended: true,
@@ -225,7 +225,7 @@ export default function PCBuilder() {
       options: [
         {
           id: 'psu550',
-          name: 'EVGA 550W Bronze',
+          name: 'VEGA 550W Bronze',
           price: 59.99,
           image: '/power-supply/power-supply1.png',
         },
@@ -237,7 +237,7 @@ export default function PCBuilder() {
         },
         {
           id: 'psu750',
-          name: 'Seasonic 750W Platinum',
+          name: 'Seasonal 750W Platinum',
           price: 119.99,
           image: '/power-supply/power-supply3.png',
         },
@@ -536,7 +536,7 @@ export default function PCBuilder() {
                     <AlertCircle size={16} />
                   </motion.div>
                   <span>
-                    Mainboard Socket passt nicht zum ausgewählten Prozessor
+                    Mainboard Socket
                   </span>
                 </motion.div>
               )}
