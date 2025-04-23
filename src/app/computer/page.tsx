@@ -1,7 +1,17 @@
+import { apiClient } from '@/lib/api/apiClient';
 import HeroHighlightSection from '../../components/global/HeroHighlightSection';
 import WorkTypeSelection from './_components/WorkTypeSelection';
+import endpoints from '@/lib/api/endpoints';
+import { Question } from './type';
 
-const computerPage = () => {
+const computerPage = async () => {
+  const question: Question = await apiClient.get(
+    endpoints.demand_assessment.getFirstQuestion,
+    {
+      next: { tags: ['get-first-question'] },
+    },
+  );
+
   return (
     <div>
       <HeroHighlightSection
@@ -10,7 +20,7 @@ const computerPage = () => {
         description={`Unleash the power of our intelligent configurator and craft your perfect PC. Answer a few simple questions, and we’ll tailor a build with the best components to match your needs—whether you’re gaming, streaming, or multitasking.`}
       />
 
-      <WorkTypeSelection />
+      <WorkTypeSelection question={question} />
     </div>
   );
 };

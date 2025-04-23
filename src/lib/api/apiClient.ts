@@ -54,7 +54,14 @@ async function apiRequest<T>(
   method: HttpMethod,
   options: ApiClientOptions = {},
 ): Promise<T> {
-  const { params, bodyData, cache, next, headers, ...rest } = options;
+  const {
+    params,
+    bodyData,
+    cache = 'force-cache',
+    next,
+    headers,
+    ...rest
+  } = options;
 
   const queryString = buildQueryString(params);
   const url = `${API_BASE_URL}${endpoint}${queryString ? `?${queryString}` : ''}`;
