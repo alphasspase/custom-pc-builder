@@ -11,3 +11,9 @@ export interface ProductOption {
   color: string;
   //   icon: React.ReactNode;
 }
+
+export interface ProductCarouselProps {
+  title: string;
+  description: string;
+  products: ProductOption[];
+}

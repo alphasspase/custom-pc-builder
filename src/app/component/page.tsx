@@ -4,6 +4,27 @@ import ProductCarousel from './_components/ProductCarousel';
 import WorkspaceConfigurator from './_components/WorkspaceConfigurator';
 import { chair_products, peripheralProducts, products } from '.';
 
+const productsCardData = [
+  {
+    title: 'Choose Your Perfect Desk',
+    description:
+      'Elevate your workspace with our premium desk options designed for comfort and productivity',
+    products: products,
+  },
+  {
+    title: 'Find Your Ultimate Chair Experience',
+    description:
+      'Discover chairs crafted with precision, offering superior comfort, ergonomic support, and sleek design to elevate your workspace.',
+    products: chair_products,
+  },
+  {
+    title: 'Revolutionize Your Setup with Premium Peripherals',
+    description:
+      'Discover top-tier accessories—from gaming gear to advanced audio solutions—designed to boost productivity and elevate your immersive experience.',
+    products: peripheralProducts,
+  },
+];
+
 const componentPage = () => {
   return (
     <div className="relative">
@@ -17,22 +38,14 @@ const componentPage = () => {
       <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-3 lg:gap-8">
         {/* sub grid */}
         <div className="col-span-2 space-y-5">
-          <ProductCarousel
-            title="Choose Your Perfect Desk"
-            description="Elevate your workspace with our premium desk options designed for
-              comfort and productivity"
-            products={products}
-          />
-          <ProductCarousel
-            title="Find Your Ultimate Chair Experience"
-            description="Discover chairs crafted with precision, offering superior comfort, ergonomic support, and sleek design to elevate your workspace."
-            products={chair_products}
-          />
-          <ProductCarousel
-            title="Revolutionize Your Setup with Premium Peripherals"
-            description="Discover top-tier accessories—from gaming gear to advanced audio solutions—designed to boost productivity and elevate your immersive experience."
-            products={peripheralProducts}
-          />
+          {productsCardData.map((product, index) => (
+            <ProductCarousel
+              key={index}
+              title={product.title}
+              description={product.description}
+              products={product.products}
+            />
+          ))}
         </div>
         {/* sub grid */}
         <div>

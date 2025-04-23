@@ -1,3 +1,5 @@
+import { ProductOption } from './type';
+
 // The product list is defined here so you can later swap it with API data without a fuss.
 export const products: ProductOption[] = [
   {
@@ -190,19 +192,6 @@ export const chair_products: ProductOption[] = [
     color: 'from-indigo-500 to-purple-700',
   },
 ];
-
-interface ProductOption {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  image: string;
-  popular?: boolean;
-  discount?: number;
-  rating?: number;
-  features: string[];
-  color: string;
-}
 
 export const peripheralProducts: ProductOption[] = [
   {
