@@ -206,7 +206,7 @@ export const peripheralProducts: ProductOption[] = [
     rating: 4.8,
     features: [
       'Hot-swappable switches',
-      'RGB backlighting',
+      'RGB backlight',
       'Programmable macro keys',
     ],
     color: 'from-gray-500 to-gray-700',

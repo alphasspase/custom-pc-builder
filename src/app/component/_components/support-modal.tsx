@@ -39,6 +39,7 @@ export function SupportModal() {
           <Button variant="outline" className="w-full">
             <HelpCircle className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
             Request for Assistance
+          </Button>
         </DialogTrigger>
 
         <DialogContent className="shadow-lg sm:max-w-[425px]">
@@ -60,7 +61,7 @@ export function SupportModal() {
       <DrawerTrigger asChild>
         <Button variant="outline" className="w-full">
           <HelpCircle className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
-          Request for Assistancee
+          Request for Assistance
         </Button>
       </DrawerTrigger>
       <DrawerContent className="border-t-primary-200">

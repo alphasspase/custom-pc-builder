@@ -17,7 +17,7 @@ type AssessmentResponse = {
 
 export const DemandAssessmentService = {
   async getFirstQuestion(): Promise<AssessmentResponse> {
-    return apiClient.get<AssessmentResponse>(endpoints.user.getjoke, {
+    return apiClient.get<AssessmentResponse>(endpoints.user.getJoke, {
       headers: {
         accept: 'application/json',
       },

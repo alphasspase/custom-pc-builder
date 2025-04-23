@@ -164,7 +164,7 @@ export default function Checkout() {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full name</Label>
-                  <Input id="fullName" defaultValue="Amaya Dunne" />
+                  <Input id="fullName" defaultValue="Amway Dunne" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber">Phone number</Label>
@@ -174,7 +174,7 @@ export default function Checkout() {
                   <Label htmlFor="address">Address</Label>
                   <Input
                     id="address"
-                    defaultValue="4706 Pooz Street, Bayville, New Jersey(NJ)"
+                    defaultValue="4706  Street, , New Jersey(NJ)"
                   />
                 </div>
               </div>

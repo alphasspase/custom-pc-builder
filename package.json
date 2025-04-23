@@ -12,10 +12,12 @@
   "lint-staged": {
     "**/*.{js,ts,tsx,mjs,cjs}": [
       "prettier --write .",
-      "npx eslint --fix"
+      "npx eslint --fix",
+      "npx cspell"
     ],
     "**/*.{md,json}": [
-      "prettier --write"
+      "prettier --write",
+      "npx cspell"
     ]
   },
   "dependencies": {

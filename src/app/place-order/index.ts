@@ -12,7 +12,7 @@ export const cardsData: CartItemType[] = [
   {
     id: 2,
     name: 'NVIDIA RTX 4080',
-    description: '16GB GDDR6X Graphics Card',
+    description: '16GB GDR6X Graphics Card',
     price: 1199.99,
     quantity: 1,
     image: '/graphic-card/graphic-card2.jpg',

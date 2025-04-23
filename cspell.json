@@ -1,7 +1,15 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": [],
+  "words": [
+    "Embla",
+    "mainboard",
+    "Qrcode",
+    "Radeon",
+    "randomjokese",
+    "Ryzen",
+    "vaul"
+  ],
   "flagWords": [],
   "patterns": [],
   "ignorePaths": [
