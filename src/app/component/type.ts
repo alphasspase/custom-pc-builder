@@ -12,7 +12,7 @@ export interface ProductOption {
   //   icon: React.ReactNode;
 }
 
-export interface ProductCarousalProps {
+export interface ProductCarouselProps {
   title: string;
   description: string;
   products: ProductOption[];

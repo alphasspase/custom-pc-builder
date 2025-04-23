@@ -1,11 +1,11 @@
-import { ProductCarousalProps } from '../type';
+import { ProductCarouselProps } from '../type';
 import ProductBanner from './ProductBanner';
 
 export default function ProductCarousel({
   products,
   title,
   description,
-}: ProductCarousalProps) {
+}: ProductCarouselProps) {
   return (
     <div className="relative rounded-lg border bg-white p-6 shadow-sm">
       <div className="relative mx-auto max-w-7xl">

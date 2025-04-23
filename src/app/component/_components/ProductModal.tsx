@@ -20,13 +20,13 @@ import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FaWhiskeyGlass } from 'react-icons/fa6';
 import { ProductCard } from './ProductCard';
-import { ProductCarousalProps, ProductOption } from '../type';
+import { ProductCarouselProps, ProductOption } from '../type';
 
 export function ProductModal({
   products,
   title,
   description,
-}: ProductCarousalProps) {
+}: ProductCarouselProps) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 

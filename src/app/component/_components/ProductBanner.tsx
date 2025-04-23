@@ -11,7 +11,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import { ProductCarousalProps, ProductOption } from '../type';
+import { ProductCarouselProps, ProductOption } from '../type';
 import { ProductModal } from './ProductModal';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
 
@@ -20,7 +20,7 @@ const AUTO_PLAY_INTERVAL = 5000;
 const DEFAULT_IMAGE = '/placeholder.svg';
 
 // Interfaces
-interface ProductBannerProps extends ProductCarousalProps {
+interface ProductBannerProps extends ProductCarouselProps {
   products: ProductOption[];
 }
 
