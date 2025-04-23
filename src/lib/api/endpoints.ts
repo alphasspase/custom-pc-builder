@@ -1,14 +1,13 @@
 const endpoints = {
   demand_assessment: {
     getFirstQuestion: '/demand_assessment/rest_api/get-first-question/',
-    getNextQuestion: (questionId: string) =>
-      `/demand_assessment/rest_api/get-next-question/${questionId}/`,
+    getNextQuestion: `/demand_assessment/rest_api/get-next-question/`,
   },
   pc_configuration: {
     getProductCategories: '/pc_configuration/rest_api/get-product-categories/',
     submitPcConfiguration:
       '/pc_configuration/rest_api/submit-pc-configuration/',
-    getPcConfigurationById: (id: string) =>
+    getPcConfigurationById: (id: number) =>
       `/pc_configuration/rest_api/get-pc-configuration/${id}/`,
   },
   user: {
