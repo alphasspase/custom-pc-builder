@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import {
   Dialog,
@@ -30,17 +30,75 @@ export function ProductModal({
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
-  const TriggerButton = <Button size={'lg'}>Explore More</Button>;
+  const TriggerButton = <Button size="lg">Explore More</Button>;
 
-  return isDesktop ? (
+  return (
+    <>
+      {isDesktop ? (
+        <DesktopModal
+          open={open}
+          setOpen={setOpen}
+          title={title}
+          description={description}
+          products={products}
+          TriggerButton={TriggerButton}
+        />
+      ) : (
+        <MobileDrawer
+          open={open}
+          setOpen={setOpen}
+          title={title}
+          description={description}
+          products={products}
+          TriggerButton={TriggerButton}
+        />
+      )}
+    </>
+  );
+}
+
+function DesktopModal({
+  open,
+  setOpen,
+  title,
+  description,
+  products,
+  TriggerButton,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  title: string;
+  description: string;
+  products: ProductOption[];
+  TriggerButton: JSX.Element;
+}) {
+  return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
       <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
         <Header title={title} description={description} />
-        <ModalBody products={products} setOpen={setOpen} />
+        <ModalBody products={products} />
       </DialogContent>
     </Dialog>
-  ) : (
+  );
+}
+
+function MobileDrawer({
+  open,
+  setOpen,
+  title,
+  description,
+  products,
+  TriggerButton,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  title: string;
+  description: string;
+  products: ProductOption[];
+  TriggerButton: JSX.Element;
+}) {
+  return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
       <DrawerContent className="border-t-primary-200">
@@ -49,7 +107,7 @@ export function ProductModal({
         </DrawerHeader>
         <div className="px-4 pb-4">
           <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
-            <ModalBody products={products} setOpen={setOpen} drawer />
+            <ModalBody products={products} />
           </ScrollArea>
         </div>
       </DrawerContent>
@@ -77,29 +135,26 @@ function Header({
 
 function ModalBody({ products }: { products: ProductOption[] }) {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-  const [mounted] = useState(false);
 
   return (
     <ScrollArea className="rounded-md border sm:h-[calc(100dvh-170px)]">
-      <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isSelected={selectedProduct === product.id}
-              onSelect={setSelectedProduct}
-              mounted={mounted}
-              index={index}
-            />
-          ))}
-        </motion.div>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
+      >
+        {products.map((product, index) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            isSelected={selectedProduct === product.id}
+            onSelect={setSelectedProduct}
+            mounted={true}
+            index={index}
+          />
+        ))}
+      </motion.div>
     </ScrollArea>
   );
 }
