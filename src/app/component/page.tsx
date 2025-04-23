@@ -23,6 +23,7 @@ const componentPage = () => {
               comfort and productivity"
             products={products}
           />
+
           <ProductCarousel
             title="Find Your Ultimate Chair Experience"
             description="Discover chairs crafted with precision, offering superior comfort, ergonomic support, and sleek design to elevate your workspace."
