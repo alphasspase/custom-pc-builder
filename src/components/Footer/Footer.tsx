@@ -52,12 +52,12 @@ export const FooterSection = () => {
         <Separator className="my-6" />
 
         <section>
-          <h3 className="flex items-center justify-center">
+          <h6 className="flex items-center justify-center">
             &copy;
             <p className="text-primary border-primary ml-1 transition-all hover:border-b-2">
               2025 PC Builder. All rights reserved.
             </p>
-          </h3>
+          </h6>
         </section>
       </div>
     </footer>
