@@ -7,10 +7,9 @@ import { URLS } from '@/utils/urls';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BsPcDisplay } from 'react-icons/bs';
-import { Question } from '../type';
-import { apiClient } from '@/lib/api/apiClient';
-import endpoints from '@/lib/api/endpoints';
 import { motion } from 'framer-motion';
+import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
+import { Question } from '@/services/demand_assessment/type';
 
 // const options = [
 //   {
@@ -66,13 +65,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
   const [questionList, setQuestionList] = useState<Question>(question);
 
   const handleNextQuestion = async (selectedId: number) => {
-    const data = {
-      option_id: selectedId,
-    };
-    const nextQuestion = await apiClient.post<Question>(
-      endpoints.demand_assessment.getNextQuestion,
-      data,
-    );
+    const nextQuestion = await DemandAssessments.getNextQuestion(selectedId);
     setQuestionList(nextQuestion);
   };
 
@@ -80,7 +73,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
     <div className="container mx-auto px-5 py-8">
       <section className="mb-8 text-center">
         <motion.div
-          key={questionList.id} // This ensures that Framer Motion knows when to animate
+          key={questionList.question} // This ensures that Framer Motion knows when to animate
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
