@@ -3,16 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import {
-  AlertCircle,
-  Check,
-  Cpu,
-  Monitor,
-  HardDrive,
-  Layers,
-  Award,
-  Plug,
-} from 'lucide-react';
+import { Check, Cpu, Monitor, HardDrive, Layers, Plug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -21,10 +12,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
-import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { ProductCategory } from '@/lib/api/services/pc_configuration/type';
+import { getBaseUrl } from '@/utils/env';
 
 interface Component {
   id: string;
@@ -42,12 +33,16 @@ interface Component {
   }[];
 }
 
-export default function PCBuilder() {
+export default function PCBuilder({
+  productCategories,
+}: {
+  productCategories: ProductCategory[];
+}) {
+  console.log('productCategories --->', productCategories);
   const router = useRouter();
   // const [expanded, setExpanded] = useState<string | null>('processor');
   const [total, setTotal] = useState<number>(2365.0);
   const [hasConflict, setHasConflict] = useState<boolean>(true);
-  const [completionPercentage, setCompletionPercentage] = useState<number>(60);
 
   const [components, setComponents] = useState<Component[]>([
     {
@@ -262,8 +257,14 @@ export default function PCBuilder() {
 
   const selectOption = (componentId: string, optionId: string) => {
     // Get current price before update
-    const currentComponent = components.find((c) => c.id === componentId);
-    const oldPrice = currentComponent?.price || 0;
+
+    const currentComponent = productCategories
+      .flatMap((categoryComponents) => categoryComponents)
+      .find((component) => component.name === componentId);
+    const oldPrice =
+      currentComponent?.products.find(
+        (component) => component.name === componentId,
+      )?.price || 0;
 
     setComponents(
       components.map((component) => {
@@ -300,11 +301,6 @@ export default function PCBuilder() {
     setTotal((prev) => prev - oldPrice + newPrice);
   };
 
-  const resolveConflicts = () => {
-    setHasConflict(false);
-    setCompletionPercentage(80);
-  };
-
   // Helper function to get component icon
   const getComponentIcon = (id: string) => {
     switch (id) {
@@ -329,7 +325,7 @@ export default function PCBuilder() {
     <div className="mx-auto max-w-3xl rounded-lg border border-gray-100 bg-gradient-to-b from-white to-gray-50 p-4 shadow-lg">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">Build Your PC</h2>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <div className="text-sm font-medium text-gray-500">
             {completionPercentage}% Complete
           </div>
@@ -341,7 +337,7 @@ export default function PCBuilder() {
               transition={{ duration: 0.8, ease: 'easeOut' }}
             />
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Graphics Card and Processor with custom expansion */}
@@ -547,7 +543,7 @@ export default function PCBuilder() {
 
       {/* RAM, SSD, and PSU with Accordion */}
       <Accordion type="single" collapsible className="mb-6">
-        {components.map((component, index) => (
+        {productCategories.map((component, index) => (
           <motion.div
             key={component.id}
             initial={{ opacity: 0, y: 20 }}
@@ -555,7 +551,7 @@ export default function PCBuilder() {
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
             <AccordionItem
-              value={component.id}
+              value={component.name}
               className={cn(
                 'mb-3 overflow-hidden rounded-lg border transition-shadow hover:shadow-md',
                 'data-[state=open]:border-primary/50 data-[state=open]:shadow-md',
@@ -575,7 +571,7 @@ export default function PCBuilder() {
                           }}
                         >
                           <Image
-                            src={component.image || '/placeholder.svg'}
+                            src={components[0].image || '/placeholder.svg'}
                             alt={component.name}
                             width={60}
                             height={60}
@@ -583,11 +579,11 @@ export default function PCBuilder() {
                           />
                         </motion.div>
                       </div>
-                      {component.recommended && (
+                      {/* {component.recommended && (
                         <Badge className="absolute -top-2 -right-2 scale-75 bg-amber-500 hover:bg-amber-500">
                           <Award className="mr-1 size-3" /> Best
                         </Badge>
-                      )}
+                      )} */}
                     </div>
                     <div className="text-left">
                       <div className="flex items-center gap-2">
@@ -596,33 +592,34 @@ export default function PCBuilder() {
                           whileHover={{ rotate: 360 }}
                           transition={{ duration: 0.5 }}
                         >
-                          {getComponentIcon(component.id)}
+                          {getComponentIcon(component.name.toLowerCase())}
                         </motion.div>
                         <p className="text-sm font-medium text-gray-500 uppercase">
-                          {component.id}
+                          {component.name}
                         </p>
                       </div>
-                      <p className="font-semibold">{component.name}</p>
+                      <p className="font-semibold">{component.description}</p>
                     </div>
                   </div>
                   <motion.div
-                    key={component.price}
+                    key={components[0].price}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mr-4 font-semibold"
                   >
-                    {component.price.toFixed(2)} €
+                    {components[0].price.toFixed(2)} €
                   </motion.div>
                 </div>
               </AccordionTrigger>
+
               <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up border-t border-gray-200 bg-gray-50 px-4 pt-4 pb-6">
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                  {component.options?.map((option) => (
+                  {component.products?.map((option) => (
                     <motion.div
                       key={option.id}
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
-                      onClick={() => selectOption(component.id, option.id)}
+                      onClick={() => selectOption(component.name, option.name)}
                       className={cn(
                         'relative flex cursor-pointer flex-col items-center rounded-lg p-3 transition-all',
                         component.name === option.name
@@ -632,7 +629,11 @@ export default function PCBuilder() {
                     >
                       <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-md bg-white">
                         <Image
-                          src={option.image || '/placeholder.svg'}
+                          src={
+                            option.image
+                              ? `${getBaseUrl()}${option.image}`
+                              : '/placeholder.svg'
+                          }
                           alt={option.name}
                           width={60}
                           height={60}
@@ -642,14 +643,12 @@ export default function PCBuilder() {
                       <p className="text-center text-sm font-medium">
                         {option.name}
                       </p>
-                      <p className="text-sm font-bold">
-                        {option.price.toFixed(2)} €
-                      </p>
-                      {option.recommended && (
+                      <p className="text-sm font-bold">{option.price} €</p>
+                      {/* {option.recommended && (
                         <Badge className="absolute -top-2 -right-2 bg-amber-500 hover:bg-amber-500">
                           <Award className="mr-1 size-3" /> Best
                         </Badge>
-                      )}
+                      )} */}
                       {component.name === option.name && (
                         <motion.div
                           className="bg-primary absolute top-2 left-2 rounded-full p-1 text-white"
@@ -673,7 +672,7 @@ export default function PCBuilder() {
         ))}
       </Accordion>
 
-      {hasConflict && (
+      {/* {hasConflict && (
         <motion.div
           className="mt-6 flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 p-4"
           initial={{ opacity: 0, y: 20 }}
@@ -701,7 +700,7 @@ export default function PCBuilder() {
             </Button>
           </motion.div>
         </motion.div>
-      )}
+      )} */}
 
       <motion.div
         className="mt-8 border-t border-gray-200 pt-4"
