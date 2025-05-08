@@ -14,291 +14,449 @@ import {
 } from '@/components/ui/accordion';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { ProductCategory } from '@/lib/api/services/pc_configuration/type';
 import { getBaseUrl } from '@/utils/env';
+import {
+  Product,
+  ProductCategory,
+} from '@/lib/api/services/pc_configuration/type';
 
-interface Component {
-  id: string;
-  name: string;
-  price: number;
-  selected: boolean;
-  image: string;
-  recommended?: boolean;
-  options?: {
-    id: string;
-    name: string;
-    price: number;
-    image: string;
-    recommended?: boolean;
-  }[];
-}
+const productCategories = [
+  {
+    id: 1,
+    name: 'graphics',
+    icon: 'abc',
+    description: 'graphic Detail',
+    products: [
+      {
+        id: 11,
+        category: 'graphics',
+        name: 'Nvidia RTX 5070 Graphics Card',
+        description: 'Nvidia RTX 5070 Graphics Card',
+        price: '55.00',
+        stock: 4,
+        image: '/media/product_image/graphic-card.jpg',
+      },
+      {
+        id: 12,
+        category: 'graphics',
+        name: 'Nvidia RTX 3060',
+        description: 'Nvidia RTX 3060',
+        price: '899.00',
+        stock: 44,
+        image: '/media/product_image/graphic-card1.jpg',
+      },
+      {
+        id: 13,
+        category: 'graphics',
+        name: 'Nvidia RTX 4070',
+        description: 'Nvidia RTX 4070',
+        price: '899.00',
+        stock: 3,
+        image: '/media/product_image/graphic-card2.jpg',
+      },
+      {
+        id: 14,
+        category: 'graphics',
+        name: 'AMD Radeon RX 7800 XT',
+        description: 'AMD Radeon RX 7800 XT',
+        price: '899.00',
+        stock: 4,
+        image: '/media/product_image/graphic-card3.jpg',
+      },
+      {
+        id: 15,
+        category: 'graphics',
+        name: 'Nvidia RTX 5070',
+        description: 'Nvidia RTX 5070',
+        price: '44.00',
+        stock: 3,
+        image: '/media/product_image/graphic-card4.jpg',
+      },
+      {
+        id: 40,
+        category: 'graphics',
+        name: 'N vida',
+        description: 'N vida',
+        price: '25.00',
+        stock: 325,
+        image: null,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'processor',
+    icon: 'processor',
+    description: 'processor',
+    products: [
+      {
+        id: 16,
+        category: 'processor',
+        name: 'AMD Ryzen 9',
+        description: 'AMD Ryzen 9',
+        price: '778.00',
+        stock: 66677,
+        image: null,
+      },
+      {
+        id: 17,
+        category: 'processor',
+        name: 'AMD Ryzen 3',
+        description: 'AMD Ryzen 3',
+        price: '5780.00',
+        stock: 7,
+        image: '/media/product_image/processor1.jpg',
+      },
+      {
+        id: 18,
+        category: 'processor',
+        name: 'AMD Ryzen 5',
+        description: 'AMD Ryzen 5',
+        price: '5678.00',
+        stock: 88,
+        image: '/media/product_image/processor2.jpg',
+      },
+      {
+        id: 19,
+        category: 'processor',
+        name: 'AMD Ryzen 7',
+        description: 'AMD Ryzen 7',
+        price: '8889.00',
+        stock: 6,
+        image: '/media/product_image/processor3.jpg',
+      },
+      {
+        id: 20,
+        category: 'processor',
+        name: 'AMD Ryzen 9',
+        description: 'AMD Ryzen 9',
+        price: '782.00',
+        stock: 4,
+        image: '/media/product_image/processor4.jpg',
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: 'mainboard',
+    icon: 'mainboard',
+    description: 'mainboard',
+    products: [
+      {
+        id: 21,
+        category: 'mainboard',
+        name: 'ANUS ROG STRAX X670E',
+        description: 'ANUS ROG STRAX X670E',
+        price: '6788.00',
+        stock: 2,
+        image: '/media/product_image/motherboard.jpg',
+      },
+      {
+        id: 22,
+        category: 'mainboard',
+        name: 'MSI B450 Tomahawk',
+        description: 'MSI B450 Tomahawk',
+        price: '8778.00',
+        stock: 77,
+        image: '/media/product_image/motherboard1.jpg',
+      },
+      {
+        id: 23,
+        category: 'mainboard',
+        name: 'ASRock X570 Phantom Gaming',
+        description: 'ASRock X570 Phantom Gaming',
+        price: '99.00',
+        stock: 9,
+        image: '/media/product_image/motherboard2.jpg',
+      },
+      {
+        id: 24,
+        category: 'mainboard',
+        name: 'Gigabyte X670 Horus Elite',
+        description: 'Gigabyte X670 Horus Elite',
+        price: '69976.00',
+        stock: 44,
+        image: '/media/product_image/motherboard3.jpg',
+      },
+      {
+        id: 25,
+        category: 'mainboard',
+        name: 'ANUS ROG STRAX X670E',
+        description: 'ANUS ROG STRAX X670E',
+        price: '6785.00',
+        stock: 16,
+        image: '/media/product_image/motherboard4.jpg',
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: 'RAM',
+    icon: 'ram',
+    description: 'ram',
+    products: [
+      {
+        id: 26,
+        category: 'RAM',
+        name: '64GB DDR5',
+        description: '64GB DDR5',
+        price: '788.00',
+        stock: 6,
+        image: '/media/product_image/ram.jpg',
+      },
+      {
+        id: 27,
+        category: 'RAM',
+        name: '16GB DDR32',
+        description: '16GB DDR32',
+        price: '7875.00',
+        stock: 7,
+        image: '/media/product_image/ram1.jpg',
+      },
+      {
+        id: 28,
+        category: 'RAM',
+        name: '32GB DDR5',
+        description: '32GB DDR5',
+        price: '9865.00',
+        stock: 66,
+        image: '/media/product_image/ram2.jpg',
+      },
+      {
+        id: 29,
+        category: 'RAM',
+        name: '64GB DDR2',
+        description: '64GB DDR2',
+        price: '7654.00',
+        stock: 66,
+        image: '/media/product_image/ram4.jpg',
+      },
+      {
+        id: 30,
+        category: 'RAM',
+        name: '128GB DDR5',
+        description: '128GB DDR5',
+        price: '6567.00',
+        stock: 66,
+        image: '/media/product_image/ram5.jpg',
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: 'SSD',
+    icon: 'SSD',
+    description: 'SSD',
+    products: [
+      {
+        id: 31,
+        category: 'SSD',
+        name: '2TB Samsung SSD',
+        description: '2TB Samsung SSD',
+        price: '64467.00',
+        stock: 77,
+        image: '/media/product_image/storage.png',
+      },
+      {
+        id: 32,
+        category: 'SSD',
+        name: '500GB Samsung SSD',
+        description: '500GB Samsung SSD',
+        price: '8545.00',
+        stock: 44,
+        image: '/media/product_image/storage1.png',
+      },
+      {
+        id: 33,
+        category: 'SSD',
+        name: '1TB Samsung SSD',
+        description: '1TB Samsung SSD',
+        price: '7773.00',
+        stock: 33,
+        image: '/media/product_image/storage2.png',
+      },
+      {
+        id: 34,
+        category: 'SSD',
+        name: '2TB Samsung SSD',
+        description: '2TB Samsung SSD',
+        price: '2465.00',
+        stock: 44,
+        image: '/media/product_image/storage3.png',
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: 'power supply',
+    icon: 'power supply',
+    description: 'power supply',
+    products: [
+      {
+        id: 35,
+        category: 'power supply',
+        name: 'Corsair RM850x 850W',
+        description: 'Corsair RM850x 850W',
+        price: '344636.00',
+        stock: 42,
+        image: '/media/product_image/power-supply.png',
+      },
+      {
+        id: 36,
+        category: 'power supply',
+        name: 'VEGA 550W Bronze',
+        description: 'VEGA 550W Bronze',
+        price: '2323.00',
+        stock: 22,
+        image: '/media/product_image/power-supply1.png',
+      },
+      {
+        id: 37,
+        category: 'power supply',
+        name: 'Cooler Master 650W Gold',
+        description: 'Cooler Master 650W Gold',
+        price: '2234.00',
+        stock: 13,
+        image: '/media/product_image/power-supply2.png',
+      },
+      {
+        id: 38,
+        category: 'power supply',
+        name: 'Seasonal 750W Platinum',
+        description: 'Seasonal 750W Platinum',
+        price: '7682.00',
+        stock: 33,
+        image: '/media/product_image/power-supply3.png',
+      },
+      {
+        id: 39,
+        category: 'power supply',
+        name: 'Corsair RM850x 850W',
+        description: 'Corsair RM850x 850W',
+        price: '7685.00',
+        stock: 22,
+        image: '/media/product_image/power-supply4.png',
+      },
+    ],
+  },
+];
 
+const data2 = {
+  id: 1,
+  name: 'configuration',
+  description: 'configuration',
+  total_price: '0.03',
+  is_preset: true,
+  components: [
+    {
+      id: 23,
+      category: 'graphics',
+      name: 'ASRock X570 Phantom Gaming',
+      description: 'ASRock X570 Phantom Gaming',
+      price: '99.00',
+      stock: 9,
+      image: 'http://127.0.0.1:8000/media/product_image/motherboard2.jpg',
+    },
+    {
+      id: 24,
+      category: 'processor',
+      name: 'Gigabyte X670 Horus Elite',
+      description: 'Gigabyte X670 Horus Elite',
+      price: '69976.00',
+      stock: 44,
+      image: 'http://127.0.0.1:8000/media/product_image/motherboard3.jpg',
+    },
+    {
+      id: 25,
+      category: 'mainboard',
+      name: 'ANUS ROG STRAX X670E',
+      description: 'ANUS ROG STRAX X670E',
+      price: '6785.00',
+      stock: 16,
+      image: 'http://127.0.0.1:8000/media/product_image/motherboard4.jpg',
+    },
+    {
+      id: 27,
+      category: 'RAM',
+      name: '16GB DDR32',
+      description: '16GB DDR32',
+      price: '7875.00',
+      stock: 7,
+      image: 'http://127.0.0.1:8000/media/product_image/ram1.jpg',
+    },
+
+    {
+      id: 32,
+      category: 'SSD',
+      name: '500GB Samsung SSD',
+      description: '500GB Samsung SSD',
+      price: '8545.00',
+      stock: 44,
+      image: 'http://127.0.0.1:8000/media/product_image/storage1.png',
+    },
+
+    {
+      id: 35,
+      category: 'power supply',
+      name: 'Corsair RM850x 850W',
+      description: 'Corsair RM850x 850W',
+      price: '344636.00',
+      stock: 42,
+      image: 'http://127.0.0.1:8000/media/product_image/power-supply.png',
+    },
+    {
+      id: 36,
+      category: 'power supply',
+      name: 'VEGA 550W Bronze',
+      description: 'VEGA 550W Bronze',
+      price: '2323.00',
+      stock: 22,
+      image: 'http://127.0.0.1:8000/media/product_image/power-supply1.png',
+    },
+  ],
+};
 export default function PCBuilder({
-  productCategories,
+  productCategories1,
 }: {
-  productCategories: ProductCategory[];
+  productCategories1: ProductCategory[];
 }) {
   console.log('productCategories --->', productCategories);
+  console.log('productCategories --->', productCategories1);
   const router = useRouter();
   // const [expanded, setExpanded] = useState<string | null>('processor');
   const [total, setTotal] = useState<number>(2365.0);
-  const [hasConflict, setHasConflict] = useState<boolean>(true);
 
-  const [components, setComponents] = useState<Component[]>([
-    {
-      id: 'graphics',
-      name: 'Nvidia RTX 5070 Graphics Card',
-      price: 699.99,
-      selected: true,
-      image: '/graphic-card/graphic-card.jpg',
-      options: [
-        {
-          id: 'rtx3060',
-          name: 'Nvidia RTX 3060',
-          price: 399.99,
-          image: '/graphic-card/graphic-card1.jpg',
-        },
-        {
-          id: 'rtx4070',
-          name: 'Nvidia RTX 4070',
-          price: 599.99,
-          image: '/graphic-card/graphic-card2.jpg',
-        },
-        {
-          id: 'rx7800xt',
-          name: 'AMD Radeon RX 7800 XT',
-          price: 549.99,
-          image: '/graphic-card/graphic-card3.jpg',
-        },
-        {
-          id: 'rtx5070',
-          name: 'Nvidia RTX 5070 (Recommended)',
-          price: 699.99,
-          image: '/graphic-card/graphic-card.jpg',
-          recommended: true,
-        },
-      ],
-    },
-    {
-      id: 'processor',
-      name: 'AMD Ryzen 9',
-      price: 449.99,
-      selected: true,
-      image: '/processor/processor.jpg',
-      options: [
-        {
-          id: 'ryzen3',
-          name: 'AMD Ryzen 3',
-          price: 100.0,
-          image: '/processor/processor1.jpg',
-          recommended: true,
-        },
-        {
-          id: 'ryzen5',
-          name: 'AMD Ryzen 5',
-          price: 80.0,
-          image: '/processor/processor2.jpg',
-        },
-        {
-          id: 'ryzen7',
-          name: 'AMD Ryzen 7',
-          price: 40.0,
-          image: '/processor/processor2.jpg',
-        },
-        {
-          id: 'ryzen9',
-          name: 'AMD Ryzen 9 (Recommended)',
-          price: 449.99,
-          image: '/processor/processor4.jpg',
-        },
-      ],
-    },
-    {
-      id: 'mainboard',
-      name: 'ANUS ROG STRAX X670E',
-      price: 299.99,
-      selected: true,
-      image: '/motherboard/motherboard.jpg',
-      options: [
-        {
-          id: 'msie450',
-          name: 'MSI B450 Tomahawk',
-          price: 129.99,
-          image: '/motherboard/motherboard1.jpg',
-        },
-        {
-          id: 'ascx570',
-          name: 'ASRock X570 Phantom Gaming',
-          price: 179.99,
-          image: '/motherboard/motherboard2.jpg',
-        },
-        {
-          id: 'gigas670',
-          name: 'Gigabyte X670 Horus Elite',
-          price: 239.99,
-          image: '/motherboard/motherboard3.jpg',
-        },
-        {
-          id: 'assur670e',
-          name: 'ANUS ROG STRAX X670E (Recommended)',
-          price: 299.99,
-          image: '/motherboard/motherboard4.jpg',
-          recommended: true,
-        },
-      ],
-    },
-    {
-      id: 'ram',
-      name: '64GB DDR5',
-      price: 219.99,
-      selected: true,
-      image: '/ram/ram.jpg',
-      recommended: true,
-      options: [
-        {
-          id: 'ram16',
-          name: '16GB DDR5',
-          price: 79.99,
-          image: '/ram/ram1.jpg',
-        },
-        {
-          id: 'ram32',
-          name: '32GB DDR5',
-          price: 149.99,
-          image: '/ram/ram2.jpg',
-        },
-        {
-          id: 'ram64',
-          name: '64GB DDR5 (Recommended)',
-          price: 219.99,
-          image: '/ram/ram3.jpg',
-          recommended: true,
-        },
-        {
-          id: 'ram128',
-          name: '128GB DDR5',
-          price: 399.99,
-          image: '/ram/ram4.jpg',
-        },
-      ],
-    },
-    {
-      id: 'ssd',
-      name: '2TB Samsung SSD',
-      price: 179.99,
-      selected: true,
-      image: '/storage/storage.png',
-      options: [
-        {
-          id: 'ssd500',
-          name: '500GB Samsung SSD',
-          price: 69.99,
-          image: '/storage/storage1.png',
-        },
-        {
-          id: 'ssd1',
-          name: '1TB Samsung SSD',
-          price: 109.99,
-          image: '/storage/storage2.png',
-        },
-        {
-          id: 'ssd2',
-          name: '2TB Samsung SSD (Recommended)',
-          price: 179.99,
-          image: '/storage/storage3.png',
-          recommended: true,
-        },
-      ],
-    },
-    {
-      id: 'power supply',
-      name: 'Corsair RM850x 850W (Recommended)',
-      price: 149.99,
-      selected: true,
-      image: '/power-supply/power-supply.png',
-      recommended: true,
-      options: [
-        {
-          id: 'psu550',
-          name: 'VEGA 550W Bronze',
-          price: 59.99,
-          image: '/power-supply/power-supply1.png',
-        },
-        {
-          id: 'psu650',
-          name: 'Cooler Master 650W Gold',
-          price: 89.99,
-          image: '/power-supply/power-supply2.png',
-        },
-        {
-          id: 'psu750',
-          name: 'Seasonal 750W Platinum',
-          price: 119.99,
-          image: '/power-supply/power-supply3.png',
-        },
-        {
-          id: 'psu850',
-          name: 'Corsair RM850x 850W (Recommended)',
-          price: 149.99,
-          image: '/power-supply/power-supply4.png',
-          recommended: true,
-        },
-      ],
-    },
-  ]);
+  // const [components, setComponents] = useState<ProductCategory[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>(
+    data2.components,
+  );
 
-  // const toggleExpand = (id: string) => {
-  //   if (expanded === id) {
-  //     setExpanded(null);
-  //   } else {
-  //     setExpanded(id);
-  //   }
-  // };
+  const selectOption = (componentId: string, selectedOption: Product) => {
+    setSelectedProducts((prev) => {
+      // Check if a product with the same category already exists
+      const existingProductIndex = prev.findIndex(
+        (item) => item.category === selectedOption.category,
+      );
 
-  const selectOption = (componentId: string, optionId: string) => {
-    // Get current price before update
+      if (existingProductIndex !== -1) {
+        // Replace the existing product with the new one
+        return [
+          ...prev.slice(0, existingProductIndex),
+          selectedOption,
+          ...prev.slice(existingProductIndex + 1),
+        ];
+      } else {
+        // Add the new product if no product with the same category exists
+        return [...prev, selectedOption];
+      }
+    });
 
-    const currentComponent = productCategories
-      .flatMap((categoryComponents) => categoryComponents)
-      .find((component) => component.name === componentId);
-    const oldPrice =
-      currentComponent?.products.find(
-        (component) => component.name === componentId,
-      )?.price || 0;
+    let price = 0;
+    selectedProducts.map((item) => {
+      price += Number(item.price);
+    });
 
-    setComponents(
-      components.map((component) => {
-        if (component.id === componentId && component.options) {
-          const selectedOption = component.options.find(
-            (option) => option.id === optionId,
-          );
-          if (selectedOption) {
-            return {
-              ...component,
-              name: selectedOption.name,
-              price: selectedOption.price,
-              image: selectedOption.image,
-            };
-          }
-        }
-
-        return component;
-      }),
-    );
-
-    // Simulate conflict check
-    if (componentId === 'processor' && optionId === 'ryzen9') {
-      setHasConflict(true);
-    } else if (componentId === 'processor') {
-      setHasConflict(false);
-    }
-
-    // Update total price
-    const newComponent = components
-      .find((c) => c.id === componentId)
-      ?.options?.find((o) => o.id === optionId);
-    const newPrice = newComponent?.price || 0;
-    setTotal((prev) => prev - oldPrice + newPrice);
+    setTotal(price);
   };
 
   // Helper function to get component icon
@@ -340,207 +498,6 @@ export default function PCBuilder({
         </div> */}
       </div>
 
-      {/* Graphics Card and Processor with custom expansion */}
-      {/* <div className="space-y-4 mb-6">
-        {components.slice(0, 3).map((component) => (
-          <motion.div
-            key={component.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card
-              className={cn(
-                'overflow-hidden transition-all duration-200 hover:shadow-md',
-                hasConflict && component.id === 'mainboard'
-                  ? 'border-red-300 bg-red-50'
-                  : '',
-              )}
-            >
-              <div
-                className="p-4 flex items-center justify-between cursor-pointer"
-                onClick={() =>
-                  component.options?.length ? toggleExpand(component.id) : null
-                }
-              >
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <div className="w-16 h-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-md flex items-center justify-center overflow-hidden border border-gray-200">
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 400,
-                          damping: 10,
-                        }}
-                      >
-                        <Image
-                          src={component.image || '/placeholder.svg'}
-                          alt={component.name}
-                          width={80}
-                          height={80}
-                          className="object-contain"
-                        />
-                      </motion.div>
-                    </div>
-                    {component.recommended && (
-                      <Badge className="absolute -top-2 -right-2 bg-amber-500 hover:bg-amber-500">
-                        <Award className="size-3 mr-1" /> Best
-                      </Badge>
-                    )}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <motion.div
-                        className="p-1 rounded-full bg-primary/10 text-primary"
-                        whileHover={{ rotate: 360 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        {getComponentIcon(component.id)}
-                      </motion.div>
-                      <p className="text-sm font-medium text-gray-500">
-                        {getComponentLabel(component.id)}
-                      </p>
-                    </div>
-                    <p className="font-semibold">{component.name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <motion.div
-                    key={component.price}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="font-semibold"
-                  >
-                    {component.price.toFixed(2)} €
-                  </motion.div>
-                  {component.options?.length ? (
-                    <motion.button
-                      className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors"
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {expanded === component.id ? (
-                        <ChevronUp size={20} />
-                      ) : (
-                        <ChevronDown size={20} />
-                      )}
-                    </motion.button>
-                  ) : (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <motion.button
-                            className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-300 transition-colors"
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Plus size={20} />
-                          </motion.button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Add options</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
-                </div>
-              </div>
-
-              <AnimatePresence>
-                {expanded === component.id && component.options && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="border-t border-gray-200 bg-gray-50 overflow-hidden"
-                  >
-                    <div className="p-4">
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        {component.options.map((option) => (
-                          <motion.div
-                            key={option.id}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            onClick={() =>
-                              selectOption(component.id, option.id)
-                            }
-                            className={cn(
-                              'flex flex-col items-center p-3 rounded-lg cursor-pointer transition-all relative',
-                              component.name === option.name
-                                ? 'bg-primary/10 border-2 border-primary shadow-[0_0_10px_rgba(79,70,229,0.2)]'
-                                : 'bg-white border-2 border-gray-200 hover:border-gray-300',
-                            )}
-                          >
-                            <div className="w-16 h-16 bg-white rounded-md flex items-center justify-center mb-2">
-                              <Image
-                                src={option.image || '/placeholder.svg'}
-                                alt={option.name}
-                                width={60}
-                                height={60}
-                                className="object-contain"
-                              />
-                            </div>
-                            <p className="text-sm font-medium text-center">
-                              {option.name}
-                            </p>
-                            <p className="text-sm font-bold">
-                              {option.price.toFixed(2)} €
-                            </p>
-                            {option.recommended && (
-                              <Badge className="absolute -top-2 -right-2 bg-amber-500 hover:bg-amber-500">
-                                <Award className="size-3 mr-1" /> Best
-                              </Badge>
-                            )}
-                            {component.name === option.name && (
-                              <motion.div
-                                className="absolute top-2 left-2 bg-primary text-white rounded-full p-1"
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{
-                                  type: 'spring',
-                                  stiffness: 500,
-                                  damping: 15,
-                                }}
-                              >
-                                <Check size={14} />
-                              </motion.div>
-                            )}
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {hasConflict && component.id === 'mainboard' && (
-                <motion.div
-                  className="bg-red-50 p-3 flex items-center gap-2 text-red-700 text-sm"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{
-                      repeat: Number.POSITIVE_INFINITY,
-                      duration: 2,
-                    }}
-                  >
-                    <AlertCircle size={16} />
-                  </motion.div>
-                  <span>
-                    Mainboard Socket
-                  </span>
-                </motion.div>
-              )}
-            </Card>
-          </motion.div>
-        ))}
-      </div> */}
-
       {/* RAM, SSD, and PSU with Accordion */}
       <Accordion type="single" collapsible className="mb-6">
         {productCategories.map((component, index) => (
@@ -571,7 +528,11 @@ export default function PCBuilder({
                           }}
                         >
                           <Image
-                            src={components[0].image || '/placeholder.svg'}
+                            src={
+                              selectedProducts.find(
+                                (item) => item.category === component.name,
+                              )?.image || '/noData.jpg'
+                            }
                             alt={component.name}
                             width={60}
                             height={60}
@@ -602,12 +563,18 @@ export default function PCBuilder({
                     </div>
                   </div>
                   <motion.div
-                    key={components[0].price}
+                    key={component.id}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mr-4 font-semibold"
                   >
-                    {components[0].price.toFixed(2)} €
+                    {/* {components[0]?.price.toFixed(2)} € */}
+                    {
+                      selectedProducts.find(
+                        (item) => item.category === component.name,
+                      )?.price
+                    }{' '}
+                    €
                   </motion.div>
                 </div>
               </AccordionTrigger>
@@ -619,10 +586,12 @@ export default function PCBuilder({
                       key={option.id}
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
-                      onClick={() => selectOption(component.name, option.name)}
+                      onClick={() => selectOption(component.name, option)}
                       className={cn(
                         'relative flex cursor-pointer flex-col items-center rounded-lg p-3 transition-all',
-                        component.name === option.name
+                        selectedProducts
+                          .map((item) => item.id)
+                          .includes(option.id)
                           ? 'bg-primary/10 border-primary border-2 shadow-[0_0_10px_rgba(79,70,229,0.2)]'
                           : 'border-2 border-gray-200 bg-white hover:border-gray-300',
                       )}
@@ -644,12 +613,10 @@ export default function PCBuilder({
                         {option.name}
                       </p>
                       <p className="text-sm font-bold">{option.price} €</p>
-                      {/* {option.recommended && (
-                        <Badge className="absolute -top-2 -right-2 bg-amber-500 hover:bg-amber-500">
-                          <Award className="mr-1 size-3" /> Best
-                        </Badge>
-                      )} */}
-                      {component.name === option.name && (
+
+                      {selectedProducts
+                        .map((item) => item.id)
+                        .includes(option.id) && (
                         <motion.div
                           className="bg-primary absolute top-2 left-2 rounded-full p-1 text-white"
                           initial={{ scale: 0 }}
@@ -671,36 +638,6 @@ export default function PCBuilder({
           </motion.div>
         ))}
       </Accordion>
-
-      {/* {hasConflict && (
-        <motion.div
-          className="mt-6 flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50 p-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="flex items-center gap-2">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
-            >
-              <AlertCircle size={20} className="text-amber-500" />
-            </motion.div>
-            <span className="font-medium text-amber-800">
-              There are conflicts with your configuration
-            </span>
-          </div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              onClick={resolveConflicts}
-              variant="outline"
-              className="border-amber-300 transition-all hover:bg-amber-100"
-            >
-              Resolve the conflicts
-            </Button>
-          </motion.div>
-        </motion.div>
-      )} */}
 
       <motion.div
         className="mt-8 border-t border-gray-200 pt-4"
