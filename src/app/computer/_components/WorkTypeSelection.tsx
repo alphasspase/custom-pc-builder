@@ -76,7 +76,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
     <div className="container mx-auto px-5 py-8">
       <section className="mb-8 text-center">
         <motion.div
-          key={questionList.question} // This ensures that Framer Motion knows when to animate
+          key={questionList.id} // This ensures that Framer Motion knows when to animate
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
