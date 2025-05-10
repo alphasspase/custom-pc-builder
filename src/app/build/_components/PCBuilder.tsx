@@ -19,6 +19,8 @@ import {
   Product,
   ProductCategory,
 } from '@/lib/api/services/pc_configuration/type';
+import Link from 'next/link';
+import { URLS } from '@/utils/urls';
 
 const productCategories = [
   {
@@ -404,15 +406,6 @@ const data2 = {
       stock: 42,
       image: 'http://127.0.0.1:8000/media/product_image/power-supply.png',
     },
-    {
-      id: 36,
-      category: 'power supply',
-      name: 'VEGA 550W Bronze',
-      description: 'VEGA 550W Bronze',
-      price: '2323.00',
-      stock: 22,
-      image: 'http://127.0.0.1:8000/media/product_image/power-supply1.png',
-    },
   ],
 };
 export default function PCBuilder({
@@ -431,7 +424,7 @@ export default function PCBuilder({
     data2.components,
   );
 
-  const selectOption = (componentId: string, selectedOption: Product) => {
+  const selectOption = (selectedOption: Product) => {
     setSelectedProducts((prev) => {
       // Check if a product with the same category already exists
       const existingProductIndex = prev.findIndex(
@@ -568,7 +561,6 @@ export default function PCBuilder({
                     animate={{ opacity: 1, y: 0 }}
                     className="mr-4 font-semibold"
                   >
-                    {/* {components[0]?.price.toFixed(2)} € */}
                     {
                       selectedProducts.find(
                         (item) => item.category === component.name,
@@ -586,7 +578,7 @@ export default function PCBuilder({
                       key={option.id}
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.97 }}
-                      onClick={() => selectOption(component.name, option)}
+                      onClick={() => selectOption(option)}
                       className={cn(
                         'relative flex cursor-pointer flex-col items-center rounded-lg p-3 transition-all',
                         selectedProducts
@@ -681,9 +673,9 @@ export default function PCBuilder({
             whileTap={{ scale: 0.98 }}
             className="flex-1"
           >
-            <Button className="w-full" disabled={hasConflict}>
-              Further
-            </Button>
+            <Link href={URLS.component}>
+              <Button className="w-full">Further</Button>
+            </Link>
           </motion.div>
         </div>
 
