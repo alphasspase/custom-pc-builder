@@ -29,12 +29,8 @@ export default function PCBuilder({
   defaultSelectedProducts: Product[];
   productCategories: ProductCategory[];
 }) {
-  console.log('productCategories --->', productCategories);
-  console.log('defaultSelectedProducts --->', defaultSelectedProducts);
   const router = useRouter();
-
   const [total, setTotal] = useState<number>(0);
-
   const [selectedProducts, setSelectedProducts] = useState<Product[]>(
     defaultSelectedProducts,
   );
@@ -47,14 +43,12 @@ export default function PCBuilder({
       );
 
       if (existingProductIndex !== -1) {
-        // Replace the existing product with the new one
         return [
           ...prev.slice(0, existingProductIndex),
           selectedOption,
           ...prev.slice(existingProductIndex + 1),
         ];
       } else {
-        // Add the new product if no product with the same category exists
         return [...prev, selectedOption];
       }
     });
@@ -92,19 +86,6 @@ export default function PCBuilder({
     <div className="mx-auto max-w-3xl rounded-lg border border-gray-100 bg-gradient-to-b from-white to-gray-50 p-4 shadow-lg">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">Build Your PC</h2>
-        {/* <div className="flex items-center gap-2">
-          <div className="text-sm font-medium text-gray-500">
-            {completionPercentage}% Complete
-          </div>
-          <div className="h-2 w-32 overflow-hidden rounded-full bg-gray-200">
-            <motion.div
-              className="bg-primary h-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${completionPercentage}%` }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-            />
-          </div>
-        </div> */}
       </div>
 
       {/* RAM, SSD, and PSU with Accordion */}
