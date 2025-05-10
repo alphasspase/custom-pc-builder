@@ -8,8 +8,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { BsPcDisplay } from 'react-icons/bs';
 import { motion } from 'framer-motion';
-import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
 import { Question, QuestionOptions } from '@/services/demand_assessment/type';
+import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
 
 // const options = [
 //   {

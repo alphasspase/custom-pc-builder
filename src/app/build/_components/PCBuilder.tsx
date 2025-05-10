@@ -15,10 +15,7 @@ import {
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { getBaseUrl } from '@/utils/env';
-import {
-  Product,
-  ProductCategory,
-} from '@/lib/api/services/pc_configuration/type';
+import { Product, ProductCategory } from '@/services/pc_configuration/type';
 import Link from 'next/link';
 import { URLS } from '@/utils/urls';
 
