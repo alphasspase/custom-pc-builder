@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { BsPcDisplay } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
-import { Question } from '@/services/demand_assessment/type';
+import { Question, QuestionOptions } from '@/services/demand_assessment/type';
 
 // const options = [
 //   {
@@ -61,13 +61,16 @@ import { Question } from '@/services/demand_assessment/type';
 // Attractive icons\
 
 const WorkTypeSelection = ({ question }: { question: Question }) => {
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [selectedOption, setSelectedOption] = useState<QuestionOptions | null>(
+    null,
+  );
   const [questionList, setQuestionList] = useState<Question>(question);
 
   const handleNextQuestion = async (selectedId: number) => {
     const nextQuestion = await DemandAssessments.getNextQuestion(selectedId);
     setQuestionList(nextQuestion);
   };
+  console.log('selectedOption --->', selectedOption);
 
   return (
     <div className="container mx-auto px-5 py-8">
@@ -94,11 +97,11 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
               <Card
                 key={index}
                 className={`border-primary transform cursor-pointer rounded-lg border-2 p-6 transition-transform duration-300 ease-in-out hover:scale-105 ${
-                  selectedOption === option.id
+                  selectedOption?.id === option.id
                     ? 'bg-primary-200'
                     : 'hover:bg-gray-100'
                 }`}
-                onClick={() => setSelectedOption(option.id)}
+                onClick={() => setSelectedOption(option)}
               >
                 <div className="mb-4 flex items-center justify-center text-gray-800">
                   {option.icon || <BsPcDisplay size={40} />}
@@ -122,7 +125,14 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
 
         {questionList.is_last ? (
           <Button asChild size={'lg'} className="px-6 py-2">
-            <Link href={URLS.build} className="mr-2">
+            <Link
+              href={
+                selectedOption?.configuration_preset_id
+                  ? `${URLS.build}?id=${selectedOption.configuration_preset_id}`
+                  : URLS.build
+              }
+              className="mr-2"
+            >
               Finish
             </Link>
           </Button>
@@ -130,8 +140,8 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
           <Button
             disabled={!selectedOption}
             onClick={() => {
-              if (selectedOption) {
-                handleNextQuestion(selectedOption);
+              if (selectedOption?.id) {
+                handleNextQuestion(selectedOption?.id);
               }
             }}
             size={'lg'}
