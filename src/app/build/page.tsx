@@ -5,7 +5,7 @@ import CategoryNavigation from './_components/CategoryNavigation';
 import { GamepadIcon, Laptop, Monitor } from 'lucide-react';
 import { FaComputer } from 'react-icons/fa6';
 import PCBuilder from './_components/PCBuilder';
-import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
+import { GetPProductCategories } from '@/services/pc_configuration/pc_configuration';
 
 const categories = [
   {
@@ -35,9 +35,7 @@ const categories = [
 ];
 
 const buildPage = async () => {
-  const response = await PcConfiguration.getProductCategories();
-
-  console.log('response --->', response);
+  const response = await GetPProductCategories.getProductCategories();
 
   return (
     <div>
