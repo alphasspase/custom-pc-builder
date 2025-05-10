@@ -2,7 +2,7 @@ import { apiClient } from '@/api/apiClient';
 import endpoints from '@/api/endpoints';
 import { ProductCategory } from './type';
 
-export const GetPProductCategories = {
+export const GetProductCategories = {
   async getProductCategories(): Promise<ProductCategory[]> {
     return await apiClient.get(
       endpoints.pc_configuration.getProductCategories,
