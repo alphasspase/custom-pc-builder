@@ -39,8 +39,10 @@ const buildPage = async (props: { searchParams: SearchParams }) => {
   const searchParams = await props.searchParams;
   console.log('searchParams', searchParams);
   const response = await PcConfiguration.getProductCategories();
-  const defaultSelectedProducts =
-    await PcConfiguration.getProductCategoriesById(Number(searchParams.id));
+  const defaultSelectedProducts = searchParams.id
+    ? (await PcConfiguration.getProductCategoriesById(Number(searchParams.id)))
+        .components
+    : [];
 
   return (
     <div>
@@ -58,7 +60,7 @@ for your needs."
         </div>
         <div>
           <PCBuilder
-            defaultSelectedProducts={defaultSelectedProducts.components}
+            defaultSelectedProducts={defaultSelectedProducts}
             productCategories={response}
           />
         </div>
