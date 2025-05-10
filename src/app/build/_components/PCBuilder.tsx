@@ -23,16 +23,21 @@ import Link from 'next/link';
 import { URLS } from '@/utils/urls';
 
 export default function PCBuilder({
+  defaultSelectedProducts = [],
   productCategories,
 }: {
+  defaultSelectedProducts: Product[];
   productCategories: ProductCategory[];
 }) {
-  // console.log('productCategories --->', productCategories1);
+  console.log('productCategories --->', productCategories);
+  console.log('defaultSelectedProducts --->', defaultSelectedProducts);
   const router = useRouter();
 
   const [total, setTotal] = useState<number>(0);
 
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>(
+    defaultSelectedProducts,
+  );
 
   const selectOption = (selectedOption: Product) => {
     setSelectedProducts((prev) => {

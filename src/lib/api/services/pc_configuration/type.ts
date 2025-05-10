@@ -15,3 +15,12 @@ export interface ProductCategory {
   description: string;
   products: Product[];
 }
+
+export interface Configuration {
+  id: number;
+  name: string;
+  description: string;
+  total_price: string;
+  is_preset: boolean;
+  components: Product[];
+}
