@@ -1,16 +1,10 @@
-import { apiClient } from '@/lib/api/apiClient';
 import HeroHighlightSection from '../../components/global/HeroHighlightSection';
 import WorkTypeSelection from './_components/WorkTypeSelection';
-import endpoints from '@/lib/api/endpoints';
-import { Question } from './type';
+
+import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
 
 const computerPage = async () => {
-  const question: Question = await apiClient.get(
-    endpoints.demand_assessment.getFirstQuestion,
-    {
-      next: { tags: ['get-first-question'] },
-    },
-  );
+  const question = await DemandAssessments.getFirstQuestion();
 
   return (
     <div>

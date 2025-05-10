@@ -3,6 +3,7 @@ export interface QuestionOptions {
   option_text: string;
   icon: string | null;
   next_question: number;
+  configuration_preset_id: number | null;
 }
 
 export interface Question {

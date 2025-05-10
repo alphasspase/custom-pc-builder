@@ -5,6 +5,8 @@ import CategoryNavigation from './_components/CategoryNavigation';
 import { GamepadIcon, Laptop, Monitor } from 'lucide-react';
 import { FaComputer } from 'react-icons/fa6';
 import PCBuilder from './_components/PCBuilder';
+import { PcConfiguration } from '@/services/pc_configuration/pc_configuration';
+import { SearchParams } from '@/types/global';
 
 const categories = [
   {
@@ -33,7 +35,13 @@ const categories = [
   },
 ];
 
-const buildPage = () => {
+const buildPage = async (props: { searchParams: SearchParams }) => {
+  const searchParams = await props.searchParams;
+  console.log('searchParams', searchParams);
+  const response = await PcConfiguration.getProductCategories();
+  const defaultSelectedProducts =
+    await PcConfiguration.getProductCategoriesById(Number(searchParams.id));
+
   return (
     <div>
       <HeroHighlightSection
@@ -49,7 +57,10 @@ for your needs."
           <CategoryNavigation categories={categories} />
         </div>
         <div>
-          <PCBuilder />
+          <PCBuilder
+            defaultSelectedProducts={defaultSelectedProducts.components}
+            productCategories={response}
+          />
         </div>
       </div>
     </div>

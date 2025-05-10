@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-
-import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
@@ -19,12 +17,12 @@ interface CategoryProps {
 }
 
 export default function CategoryNavigation({ categories }: CategoryProps) {
-  const [activeCategory, setActiveCategory] = useState(categories[0]?.id);
-  const [hoverCategory, setHoverCategory] = useState<string | null>(null);
+  const [activeCategory] = useState(categories[0]?.id);
+  // const [hoverCategory, setHoverCategory] = useState<string | null>(null);
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <div className="mb-8 flex flex-wrap gap-3">
+      {/* <div className="mb-8 flex flex-wrap gap-3">
         {categories.map((category) => (
           <button
             key={category.id}
@@ -67,7 +65,7 @@ export default function CategoryNavigation({ categories }: CategoryProps) {
             )}
           </button>
         ))}
-      </div>
+      </div> */}
 
       <div className="bg-primary-gray-600 relative h-[400px] w-full overflow-hidden rounded-xl shadow-xl">
         {categories.map((category) => (
