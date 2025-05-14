@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Check, Cpu, Monitor, HardDrive, Layers, Plug } from 'lucide-react';
@@ -18,6 +17,8 @@ import { getBaseUrl } from '@/utils/env';
 import { Product, ProductCategory } from '@/services/pc_configuration/type';
 import Link from 'next/link';
 import { URLS } from '@/utils/urls';
+import { usePCBuilder } from '@/hooks/usePCBuilder';
+import { useEffect } from 'react';
 
 export default function PCBuilder({
   defaultSelectedProducts = [],
@@ -27,37 +28,17 @@ export default function PCBuilder({
   productCategories: ProductCategory[];
 }) {
   const router = useRouter();
-  const [total, setTotal] = useState<number>(0);
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>(
-    defaultSelectedProducts,
-  );
+  const { selectedProducts, total, addProduct } = usePCBuilder();
+
+  useEffect(() => {
+    defaultSelectedProducts.forEach((product) => {
+      addProduct(product);
+    });
+  }, [defaultSelectedProducts]);
 
   const selectOption = (selectedOption: Product) => {
-    setSelectedProducts((prev) => {
-      // Check if a product with the same category already exists
-      const existingProductIndex = prev.findIndex(
-        (item) => item.category === selectedOption.category,
-      );
-
-      if (existingProductIndex !== -1) {
-        return [
-          ...prev.slice(0, existingProductIndex),
-          selectedOption,
-          ...prev.slice(existingProductIndex + 1),
-        ];
-      } else {
-        return [...prev, selectedOption];
-      }
-    });
+    addProduct(selectedOption);
   };
-  useEffect(() => {
-    const totalPrice = selectedProducts.reduce((acc, product) => {
-      const price = parseFloat(product.price);
-
-      return acc + (isNaN(price) ? 0 : price);
-    }, 0);
-    setTotal(totalPrice);
-  }, [selectedProducts]);
 
   // Helper function to get component icon
   const getComponentIcon = (id: string) => {
@@ -120,7 +101,11 @@ export default function PCBuilder({
                                 (item) => item.category === component.name,
                               )?.image || '/noData.jpg'
                             }
-                            alt={component.name}
+                            alt={
+                              selectedProducts.find(
+                                (item) => item.category === component.name,
+                              )?.name || 'Pc Builder'
+                            }
                             width={60}
                             height={60}
                             className="object-contain"
@@ -150,7 +135,11 @@ export default function PCBuilder({
                     </div>
                   </div>
                   <motion.div
-                    key={component.id}
+                    key={
+                      selectedProducts.find(
+                        (item) => item.category === component.name,
+                      )?.price
+                    }
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mr-4 font-semibold"
