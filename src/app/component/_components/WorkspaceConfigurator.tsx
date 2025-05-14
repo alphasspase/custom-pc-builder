@@ -12,14 +12,6 @@ import { usePCBuilder } from '@/hooks/usePCBuilder';
 export default function WorkspaceConfigurator() {
   const { selectedProducts, total } = usePCBuilder();
 
-  console.log('selectedProducts =>', selectedProducts);
-  // const calculateTotal = () => {
-  //   return Object.values(selectedProducts).reduce(
-  //     (sum, product) => sum + product.price,
-  //     0,
-  //   );
-  // };
-
   return (
     <div className="sticky top-20 lg:col-span-1">
       <motion.div
