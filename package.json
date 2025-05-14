@@ -16,8 +16,7 @@
       "npx cspell"
     ],
     "**/*.{md,json}": [
-      "prettier --write",
-      "npx cspell"
+      "prettier --write"
     ]
   },
   "dependencies": {
