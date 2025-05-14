@@ -12,61 +12,65 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { Product } from '../type';
 import { ProductCard } from './ProductCard';
 import { DeliveryOptionCard } from './DeliveryOptionCard';
+import { usePCBuilder } from '@/hooks/usePCBuilder';
+import Link from 'next/link';
+import { URLS } from '@/utils/urls';
 
 export default function Checkout() {
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: '1',
-      name: 'Wireless Gaming Mouse',
-      price: 79.99,
-      quantity: 1,
-      image: '/peripherals/mouse.jpg',
-    },
-    {
-      id: '2',
-      name: 'Mechanical Keyboard RGB',
-      price: 129.99,
-      quantity: 1,
-      image: '/peripherals/keyboard.jpg',
-    },
-    {
-      id: '3',
-      name: 'Ergonomic Office Chair',
-      price: 249.99,
-      quantity: 1,
-      image: '/chairs/chair.jpg',
-    },
-    {
-      id: '4',
-      name: 'Laptop Stand Adjustable',
-      price: 39.99,
-      quantity: 2,
-      image: '/desk/desk1.webp',
-    },
-    {
-      id: '5',
-      name: 'Noise Cancelling Headphones',
-      price: 199.99,
-      quantity: 1,
-      image: '/peripherals/usb.jpg',
-    },
-  ]);
+  // const [products, setProducts] = useState<Product[]>([
+  //   {
+  //     id: '1',
+  //     name: 'Wireless Gaming Mouse',
+  //     price: 79.99,
+  //     quantity: 1,
+  //     image: '/peripherals/mouse.jpg',
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'Mechanical Keyboard RGB',
+  //     price: 129.99,
+  //     quantity: 1,
+  //     image: '/peripherals/keyboard.jpg',
+  //   },
+  //   {
+  //     id: '3',
+  //     name: 'Ergonomic Office Chair',
+  //     price: 249.99,
+  //     quantity: 1,
+  //     image: '/chairs/chair.jpg',
+  //   },
+  //   {
+  //     id: '4',
+  //     name: 'Laptop Stand Adjustable',
+  //     price: 39.99,
+  //     quantity: 2,
+  //     image: '/desk/desk1.webp',
+  //   },
+  //   {
+  //     id: '5',
+  //     name: 'Noise Cancelling Headphones',
+  //     price: 199.99,
+  //     quantity: 1,
+  //     image: '/peripherals/usb.jpg',
+  //   },
+  // ]);
+  const { selectedProducts, total, removeProduct } = usePCBuilder();
+
   const [deliveryMethod, setDeliveryMethod] = useState('ups');
   const [deliverySpeed, setDeliverySpeed] = useState('express');
 
-  const subtotal = products.reduce(
-    (acc, product) => acc + product.price * product.quantity,
-    0,
-  );
+  // const subtotal = products.reduce(
+  //   (acc, product) => acc + product.price * product.quantity,
+  //   0,
+  // );
   const discount = 15;
   const deliveryFee = deliverySpeed === 'express' ? 22 : 12;
-  const total = subtotal - discount + deliveryFee;
+  const grandTotal = total - discount + deliveryFee;
 
-  const removeProduct = (id: string) =>
-    setProducts(products.filter((product) => product.id !== id));
+  // const removeProduct = (id: string) =>
+  //   setProducts(products.filter((product) => product.id !== id));
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
@@ -83,17 +87,16 @@ export default function Checkout() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="mb-2 grid grid-cols-4 gap-4 text-sm font-medium md:text-base">
-                <div className="col-span-2">Name</div>
-                <div className="text-center">Price</div>
-                <div className="text-right">Total</div>
+              <div className="mb-2 grid grid-cols-10 gap-4 text-sm font-medium md:text-base">
+                <div className="col-span-8">Name</div>
+                <div>Price</div>
               </div>
               <Separator className="mb-4" />
-              {products.map((product) => (
+              {selectedProducts.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onRemove={removeProduct}
+                  onRemove={() => removeProduct(product.id)}
                 />
               ))}
             </CardContent>
@@ -265,7 +268,7 @@ export default function Checkout() {
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">${subtotal}</span>
+                <span className="font-medium">${total}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Discount</span>
@@ -278,12 +281,13 @@ export default function Checkout() {
               <Separator />
               <div className="flex justify-between">
                 <span className="font-medium">Total</span>
-                <span className="text-xl font-bold">${total}</span>
+                <span className="text-xl font-bold">${grandTotal}</span>
               </div>
-
-              <Button className="mt-4 w-full" size="lg">
-                Proceed to payment
-              </Button>
+              <Link href={URLS.paymentInformation}>
+                <Button className="mt-4 w-full" size="lg">
+                  Proceed to payment
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
