@@ -119,7 +119,7 @@ export const HeroSection = () => {
       autoplayRef.current = setTimeout(() => {
         api.scrollNext();
         startAutoplay();
-      }, 5000);
+      }, 3000);
     };
 
     startAutoplay();
@@ -161,7 +161,7 @@ export const HeroSection = () => {
               key={index}
               className="flex items-center justify-center"
             >
-              <div className="grid grid-cols-1 items-center gap-8 px-6 md:grid-cols-2">
+              <div className="flex items-center gap-8 px-15 max-sm:flex-wrap">
                 {/* Left side - Text content */}
                 <AnimatePresence mode="wait">
                   {current === index && (
@@ -183,7 +183,7 @@ export const HeroSection = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="max-w-screen-md text-left text-4xl font-bold md:text-6xl"
+                        className="max-w-screen-md text-left text-4xl font-bold max-sm:text-center md:text-6xl"
                       >
                         <h1>{slide.title}</h1>
                       </motion.div>
@@ -201,7 +201,7 @@ export const HeroSection = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex flex-wrap gap-4"
+                        className="flex gap-4 max-sm:flex-col max-sm:items-center"
                       >
                         <Button
                           size={'lg'}
@@ -227,7 +227,7 @@ export const HeroSection = () => {
                 </AnimatePresence>
 
                 {/* Right side - PC Image - ADJUSTED SIZE */}
-                <div className="relative flex h-[300px] items-center justify-center md:h-[400px]">
+                <div className="relative flex h-[300px] items-center justify-center max-sm:hidden md:h-[400px]">
                   <AnimatePresence mode="wait">
                     {current === index && (
                       <motion.div
@@ -269,7 +269,7 @@ export const HeroSection = () => {
                               alt={slide.alt}
                               width={350}
                               height={400}
-                              className="max-h-[300px] object-contain drop-shadow-2xl md:max-h-[350px]"
+                              className="max-h-[300px] object-contain drop-shadow-lg md:max-h-[350px]"
                               priority
                             />
                           </motion.div>
