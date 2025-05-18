@@ -23,11 +23,26 @@ export const HeroSection = () => {
   const [count, setCount] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  console.log('isLoaded', isLoaded);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Track mouse position for parallax effects
   useEffect(() => {
-    // Set loaded state after component mounts to enable animations
-    setIsLoaded(true);
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX / (typeof window !== 'undefined' ? window.innerWidth : 1),
+        y: e.clientY / (typeof window !== 'undefined' ? window.innerHeight : 1),
+      });
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('mousemove', handleMouseMove);
+      }
+    };
   }, []);
 
   const slides = [
@@ -37,7 +52,7 @@ export const HeroSection = () => {
       title: (
         <>
           Build Your{' '}
-          <span className="to-primary bg-gradient-to-r from-yellow-300 bg-clip-text px-2 text-transparent">
+          <span className="to-primary bg-gradient-to-l from-yellow-500 bg-clip-text px-2 text-transparent">
             Dream
           </span>{' '}
           PC
@@ -48,6 +63,8 @@ export const HeroSection = () => {
       image: '/desktop-pc/pc2.png',
       alt: 'Gaming PC with RGB lighting',
       color: 'from-yellow-500/20',
+      accentColor: 'from-yellow-500 to-amber-300',
+      particles: 'bg-yellow-300/20',
     },
     {
       badge: 'Hot',
@@ -55,7 +72,7 @@ export const HeroSection = () => {
       title: (
         <>
           Unleash Your{' '}
-          <span className="to-primary bg-gradient-to-r from-yellow-300 bg-clip-text px-2 text-transparent">
+          <span className="to-primary bg-gradient-to-l from-yellow-500 bg-clip-text px-2 text-transparent">
             Gaming
           </span>{' '}
           Potential
@@ -65,7 +82,9 @@ export const HeroSection = () => {
         'Experience next-level gaming with our high-performance custom builds. Designed for maximum FPS and stunning visuals.',
       image: '/desktop-pc/pc3.png',
       alt: 'High-performance gaming PC',
-      color: 'from-red-500/20',
+      color: 'from-yellow-500/20',
+      accentColor: 'from-yellow-500 to-amber-300',
+      particles: 'bg-yellow-300/20',
     },
     {
       badge: 'Pro',
@@ -73,7 +92,7 @@ export const HeroSection = () => {
       title: (
         <>
           Power Your{' '}
-          <span className="to-primary bg-gradient-to-r from-yellow-300 bg-clip-text px-2 text-transparent">
+          <span className="to-primary bg-gradient-to-l from-yellow-500 bg-clip-text px-2 text-transparent">
             Workflow
           </span>{' '}
           Today
@@ -83,7 +102,9 @@ export const HeroSection = () => {
         'Professional-grade workstations for content creators, developers, and designers. Built for reliability and performance.',
       image: '/desktop-pc/pc4.png',
       alt: 'Professional workstation PC',
-      color: 'from-blue-500/20',
+      color: 'from-yellow-500/20',
+      accentColor: 'from-yellow-500 to-amber-300',
+      particles: 'bg-yellow-300/20',
     },
   ];
 
@@ -133,8 +154,46 @@ export const HeroSection = () => {
 
   return (
     <section className="bg-primary-gray-600 relative flex h-[calc(100vh-65px)] w-full items-center justify-center overflow-hidden">
+      {/* Animated particles background */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`particles-${current}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.8 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7 }}
+            className="absolute inset-0"
+          >
+            {Array.from({ length: 20 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className={`absolute rounded-full ${slides[current].particles}`}
+                initial={{
+                  opacity: Math.random() * 0.5 + 0.3,
+                  scale: Math.random() * 0.6 + 0.4,
+                  x: Math.random() * 100,
+                  y: Math.random() * 100,
+                  width: Math.random() * 80 + 20,
+                  height: Math.random() * 80 + 20,
+                }}
+                animate={{
+                  y: [Math.random() * 100, Math.random() * 100 - 200],
+                  opacity: [Math.random() * 0.5 + 0.3, 0],
+                }}
+                transition={{
+                  duration: Math.random() * 10 + 15,
+                  repeat: Infinity,
+                  ease: 'linear',
+                }}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
       {/* Background gradient effect that changes with slides */}
-      <div className="absolute inset-0 z-0 opacity-30">
+      <div className="absolute inset-0 z-0 opacity-40">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -142,14 +201,49 @@ export const HeroSection = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.7 }}
-            className={`bg-gradient-radial absolute inset-0 ${slides[current].color} to-transparent`}
-          />
+            className="absolute inset-0 overflow-hidden"
+          >
+            <motion.div
+              className={`bg-gradient-radial absolute h-[100vh] w-[100vw] bg-gradient-to-r ${slides[current].accentColor} opacity-30`}
+              style={{
+                left: `calc(50% - 50vh)`,
+                top: `calc(50% - 50vh)`,
+                borderRadius: '50%',
+                transform: `translate(${mousePosition.x * 40 - 20}px, ${mousePosition.y * 40 - 20}px)`,
+              }}
+            />
+            <div
+              className={`bg-gradient-radial absolute inset-0 ${slides[current].color} to-transparent`}
+            />
+          </motion.div>
         </AnimatePresence>
+      </div>
+
+      {/* Animated light beam effect */}
+      <div className="absolute inset-0 z-0 overflow-hidden opacity-20">
+        <motion.div
+          animate={{
+            rotate: 360,
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+          className="absolute -inset-1/4 h-[150%] w-[150%]"
+        >
+          <div
+            className={`absolute top-0 left-1/2 h-full w-[1px] -translate-x-1/2 transform bg-gradient-to-b ${slides[current].accentColor}`}
+          />
+          <div
+            className={`absolute top-1/2 left-0 h-[1px] w-full -translate-y-1/2 transform bg-gradient-to-r ${slides[current].accentColor}`}
+          />
+        </motion.div>
       </div>
 
       <Carousel
         setApi={setApi}
-        className="mx-auto w-full max-w-7xl"
+        className="z-10 mx-auto w-full max-w-7xl"
         opts={{
           align: 'center',
           loop: true,
@@ -161,7 +255,7 @@ export const HeroSection = () => {
               key={index}
               className="flex items-center justify-center"
             >
-              <div className="flex items-center gap-8 px-15 max-sm:flex-wrap">
+              <div className="grid grid-cols-1 items-center gap-8 px-15 max-sm:flex-wrap sm:grid-cols-3">
                 {/* Left side - Text content */}
                 <AnimatePresence mode="wait">
                   {current === index && (
@@ -170,20 +264,38 @@ export const HeroSection = () => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 20 }}
                       transition={{ duration: 0.5, delay: 0.1 }}
-                      className="space-y-8 text-left"
+                      className="col-span-2 space-y-4 text-left sm:space-y-8"
                     >
-                      <Badge variant="outline" className="py-2 text-sm">
-                        <span className="text-primary mr-2">
-                          <Badge>{slide.badge}</Badge>
-                        </span>
-                        <span> {slide.badgeText} </span>
-                      </Badge>
+                      <motion.div
+                        whileHover={{
+                          scale: 1.05,
+                          transition: {
+                            type: 'spring',
+                            stiffness: 400,
+                            damping: 10,
+                          },
+                        }}
+                      >
+                        <Badge
+                          variant="outline"
+                          className="border-white/10 bg-black/5 py-2 text-sm backdrop-blur-sm"
+                        >
+                          <span className="text-primary mr-2">
+                            <Badge
+                              className={`bg-gradient-to-r ${slides[index].accentColor} text-white hover:bg-none`}
+                            >
+                              {slide.badge}
+                            </Badge>
+                          </span>
+                          <span> {slide.badgeText} </span>
+                        </Badge>
+                      </motion.div>
 
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="max-w-screen-md text-left text-4xl font-bold max-sm:text-center md:text-6xl"
+                        className="px-4 py-2 text-left max-sm:text-center"
                       >
                         <h1>{slide.title}</h1>
                       </motion.div>
@@ -192,7 +304,7 @@ export const HeroSection = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
-                        className="text-muted-foreground max-w-screen-sm text-xl"
+                        className="text-muted-foreground max-w-screen-sm px-4 py-2 text-center text-xl sm:text-left"
                       >
                         {slide.description}
                       </motion.p>
@@ -217,7 +329,7 @@ export const HeroSection = () => {
                           size={'lg'}
                           asChild
                           variant="outline"
-                          className="text-base font-bold"
+                          // className="border-white/20 text-base font-bold backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:shadow-lg"
                         >
                           <Link href={URLS.build}>Configure Custom PC Now</Link>
                         </Button>
@@ -226,7 +338,7 @@ export const HeroSection = () => {
                   )}
                 </AnimatePresence>
 
-                {/* Right side - PC Image - ADJUSTED SIZE */}
+                {/* Right side - PC Image with enhanced effects */}
                 <div className="relative flex h-[300px] items-center justify-center max-sm:hidden md:h-[400px]">
                   <AnimatePresence mode="wait">
                     {current === index && (
@@ -239,18 +351,36 @@ export const HeroSection = () => {
                         className="relative flex h-full w-full items-center justify-center"
                       >
                         <div className="flex items-center justify-center">
-                          {/* Glow effect behind the image */}
-                          <div
-                            className={`absolute h-48 w-48 rounded-full bg-gradient-to-r blur-3xl filter ${
-                              index === 0
-                                ? 'from-yellow-300/30 to-yellow-500/10'
-                                : index === 1
-                                  ? 'from-red-300/30 to-red-500/10'
-                                  : 'from-blue-300/30 to-blue-500/10'
-                            }`}
+                          {/* Enhanced glow effect behind the image */}
+                          <motion.div
+                            animate={{
+                              scale: [1, 1.2, 1],
+                              opacity: [0.5, 0.8, 0.5],
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              repeatType: 'reverse',
+                            }}
+                            className={`absolute h-64 w-64 rounded-full bg-gradient-to-r ${slides[index].accentColor} opacity-30 blur-3xl filter`}
                           />
 
-                          {/* PC Image - ADJUSTED SIZE */}
+                          {/* Circular ring effect */}
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 20,
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                            className="absolute h-80 w-80"
+                          >
+                            <div
+                              className={`absolute inset-0 rounded-full border-2 border-dashed ${slides[index].particles} opacity-40`}
+                            />
+                          </motion.div>
+
+                          {/* PC Image with enhanced animations */}
                           <motion.div
                             animate={{
                               y: [0, -10, 0],
@@ -263,6 +393,12 @@ export const HeroSection = () => {
                               ease: 'easeInOut',
                             }}
                             className="relative z-10"
+                            style={{
+                              x: mousePosition.x * 20 - 10,
+                              y: mousePosition.y * 20 - 10,
+                              filter:
+                                'drop-shadow(0 0 15px rgba(255,255,255,0.3))',
+                            }}
                           >
                             <Image
                               src={slide.image || '/placeholder.svg'}
@@ -271,6 +407,20 @@ export const HeroSection = () => {
                               height={400}
                               className="max-h-[300px] object-contain drop-shadow-lg md:max-h-[350px]"
                               priority
+                            />
+
+                            {/* Shine effect overlay */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-tr from-transparent via-white to-transparent opacity-0"
+                              animate={{
+                                opacity: [0, 0.4, 0],
+                                left: ['-100%', '100%', '100%'],
+                              }}
+                              transition={{
+                                duration: 3,
+                                repeat: Infinity,
+                                repeatDelay: 5,
+                              }}
                             />
                           </motion.div>
                         </div>
@@ -284,23 +434,26 @@ export const HeroSection = () => {
         </CarouselContent>
 
         <CarouselPrevious
-          className="left-4 border-none bg-black/20 text-white hover:bg-black/40"
+          className="left-4 z-20 border-none bg-black/20 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-black/40"
           onClick={() => setAutoplay(false)}
         />
         <CarouselNext
-          className="right-4 border-none bg-black/20 text-white hover:bg-black/40"
+          className="right-4 z-20 border-none bg-black/20 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-black/40"
           onClick={() => setAutoplay(false)}
         />
       </Carousel>
 
-      {/* Custom indicators */}
-      <div className="absolute right-0 bottom-8 left-0 z-10">
+      {/* Custom indicators with enhanced styling */}
+      <div className="absolute right-0 bottom-8 left-0 z-20">
         <div className="mt-2 flex justify-center gap-2">
           {Array.from({ length: count }).map((_, index) => (
-            <div
+            <motion.div
               key={index}
+              whileHover={{ scale: 1.2 }}
               className={`h-2 cursor-pointer rounded-full transition-all duration-300 ${
-                index === current ? 'bg-primary w-4' : 'w-2 bg-gray-400'
+                index === current
+                  ? `w-10 bg-gradient-to-r ${slides[index].accentColor} shadow-lg`
+                  : 'bg-primary-200 border-primary w-2 border'
               }`}
               onClick={() => {
                 api?.scrollTo(index);
