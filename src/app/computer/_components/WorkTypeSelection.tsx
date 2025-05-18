@@ -10,6 +10,7 @@ import { BsPcDisplay } from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import { Question, QuestionOptions } from '@/services/demand_assessment/type';
 import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
+import Image from 'next/image';
 
 // const options = [
 //   {
@@ -96,20 +97,34 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
             {questionList.options.map((option, index) => (
               <Card
                 key={index}
-                className={`border-primary transform cursor-pointer rounded-lg border-2 p-6 transition-transform duration-300 ease-in-out hover:scale-105 ${
+                className={`group relative transform cursor-pointer overflow-hidden rounded-xl border-2 border-gray-200 p-4 shadow-md transition duration-300 hover:shadow-xl ${
                   selectedOption?.id === option.id
-                    ? 'bg-primary-200'
-                    : 'hover:bg-gray-100'
+                    ? 'border-primary ring-primary-300 ring-2'
+                    : 'hover:border-primary-300'
                 }`}
                 onClick={() => setSelectedOption(option)}
               >
-                <div className="mb-4 flex items-center justify-center text-gray-800">
-                  {option.icon || <BsPcDisplay size={40} />}
+                <div className="h-40 w-full overflow-hidden rounded-lg bg-gray-100">
+                  {option.icon ? (
+                    <Image
+                      width={500}
+                      height={500}
+                      src={`${option.icon}`}
+                      alt={option.option_text}
+                      className="h-full w-full transition duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center object-cover text-gray-500">
+                      {option.icon || <BsPcDisplay size={40} />}
+                    </div>
+                  )}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {option.option_text}
-                </h3>
-                {/* <p className="mt-2 text-gray-600">{option.description}</p> */}
+
+                <div className="mt-4 text-center">
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {option.option_text}
+                  </h3>
+                </div>
               </Card>
             ))}
           </div>
