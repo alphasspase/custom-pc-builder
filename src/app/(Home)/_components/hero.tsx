@@ -60,7 +60,7 @@ export const HeroSection = () => {
       ),
       description:
         'Custom-build your perfect PC with our intelligent configurator. Answer a few questions and let us recommend the best components for your needs.',
-      image: '/desktop-pc/pc2.png',
+      image: '/desktop-pc/dream_pc.webp',
       alt: 'Gaming PC with RGB lighting',
       color: 'from-yellow-500/20',
       accentColor: 'from-yellow-500 to-amber-300',
@@ -80,7 +80,7 @@ export const HeroSection = () => {
       ),
       description:
         'Experience next-level gaming with our high-performance custom builds. Designed for maximum FPS and stunning visuals.',
-      image: '/desktop-pc/pc3.png',
+      image: '/desktop-pc/gaming_pc.jpg',
       alt: 'High-performance gaming PC',
       color: 'from-yellow-500/20',
       accentColor: 'from-yellow-500 to-amber-300',
