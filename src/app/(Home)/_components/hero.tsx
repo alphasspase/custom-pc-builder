@@ -282,7 +282,7 @@ export const HeroSection = () => {
                         >
                           <span className="text-primary mr-2">
                             <Badge
-                              className={`bg-gradient-to-r ${slides[index].accentColor} text-white hover:bg-none`}
+                              className={`bg-gradient-to-r ${slides[index].accentColor} `}
                             >
                               {slide.badge}
                             </Badge>
@@ -435,11 +435,17 @@ export const HeroSection = () => {
 
         <CarouselPrevious
           className="left-4 z-20 border-none bg-black/20 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-black/40"
-          onClick={() => setAutoplay(false)}
+          onClick={() => {
+            api?.scrollPrev();
+            setAutoplay(false);
+          }}
         />
         <CarouselNext
           className="right-4 z-20 border-none bg-black/20 text-white backdrop-blur-md transition-all hover:scale-110 hover:bg-black/40"
-          onClick={() => setAutoplay(false)}
+          onClick={() => {
+            api?.scrollNext();
+            setAutoplay(false);
+          }}
         />
       </Carousel>
 
