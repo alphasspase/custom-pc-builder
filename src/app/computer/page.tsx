@@ -1,7 +1,6 @@
 import HeroHighlightSection from '../../components/global/HeroHighlightSection';
-import WorkTypeSelection from './_components/WorkTypeSelection';
-
 import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
+import WorkTypeSelection from './_components/WorkTypeSelection';
 
 const computerPage = async () => {
   const question = await DemandAssessments.getFirstQuestion();
