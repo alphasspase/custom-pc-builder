@@ -14,55 +14,6 @@ import { DemandAssessments } from '@/services/demand_assessment/demand_assessmen
 import Image from 'next/image';
 import { getBaseUrl } from '@/utils/env';
 
-// const options = [
-//   {
-//     title: 'Gaming',
-//     description: 'Tell us about your needs and usage requirements',
-//     icon: <FaGamepad size={40} />,
-//   },
-//   {
-//     title: 'Streaming',
-//     description: 'Review and customize recommended components',
-//     icon: <FaVideo size={40} />,
-//   },
-//   {
-//     title: 'All round',
-//     description: 'Choose peripherals and complete your order',
-//     icon: <FaDesktop size={40} />,
-//   },
-//   {
-//     title: 'Music Production',
-//     description: 'Optimize for audio recording and editing',
-//     icon: <FaMusic size={40} />,
-//   },
-//   {
-//     title: 'Web Development',
-//     description: 'Perfect for coding and web app design',
-//     icon: <FaCode size={40} />,
-//   },
-//   {
-//     title: 'Creative Work',
-//     description: 'For designers, artists, and digital creators',
-//     icon: <FaLightbulb size={40} />,
-//   },
-//   {
-//     title: 'Tablet Use',
-//     description: 'Lightweight for portability and everyday use',
-//     icon: <FaTabletAlt size={40} />,
-//   },
-//   {
-//     title: 'Business/Office',
-//     description: 'Essential for work, productivity, and meetings',
-//     icon: <FaBriefcase size={40} />,
-//   },
-//   {
-//     title: 'Media Consumption',
-//     description: 'Perfect for watching movies and streaming',
-//     icon: <FaAppleAlt size={40} />,
-//   },
-// ];
-// Attractive icons\
-
 const WorkTypeSelection = ({ question }: { question: Question }) => {
   const [selectedOption, setSelectedOption] = useState<QuestionOptions | null>(
     null,
@@ -86,8 +37,6 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
       setClickedIndex(null);
     }, 300);
   };
-
-  console.log('selectedOption --->', selectedOption);
 
   return (
     <div className="container mx-auto px-5 py-8">
