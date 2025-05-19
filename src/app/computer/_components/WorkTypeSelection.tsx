@@ -141,43 +141,109 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
                   }`}
                   onClick={() => handleCardClick(option, index)}
                 >
-                  {/* Selection check icon with enhanced animation and visibility */}
+                  {/* Selection check icon with enhanced animation, visibility and attention-grabbing elements */}
                   {selectedOption?.id === option.id && (
-                    <div className="absolute top-3 right-3 z-10">
+                    <>
+                      {/* Main selection check with pulsing effect */}
+                      <div className="absolute top-3 right-3 z-10">
+                        <motion.div
+                          initial={{ scale: 0, opacity: 0, rotate: -10 }}
+                          animate={{
+                            scale: 1,
+                            opacity: 1,
+                            rotate: 0,
+                          }}
+                          transition={{
+                            type: 'spring',
+                            stiffness: 260,
+                            damping: 20,
+                            duration: 0.5,
+                          }}
+                        >
+                          {/* Outer glow ring */}
+                          <motion.div
+                            animate={{
+                              scale: [1, 1.3, 1],
+                              opacity: [0.7, 0.2, 0.7],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              repeatType: 'loop',
+                            }}
+                            className="bg-primary/30 absolute inset-0 rounded-full blur-md"
+                          />
+
+                          <motion.div
+                            animate={{
+                              scale: [1, 1.15, 1],
+                              boxShadow: [
+                                '0px 0px 0px rgba(248, 165, 4, 0)',
+                                '0px 0px 15px rgba(248, 165, 4, 0.8)',
+                                '0px 0px 0px rgba(248, 165, 4, 0)',
+                              ],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              repeatType: 'loop',
+                            }}
+                            className="border-primary/20 flex h-9 w-9 items-center justify-center rounded-full border-2 bg-white shadow-xl"
+                          >
+                            <BsCheckCircleFill
+                              size={30}
+                              className="text-primary drop-shadow-md"
+                            />
+                          </motion.div>
+                        </motion.div>
+                      </div>
+
+                      {/* Corner ribbon effect */}
+                      <div className="absolute -top-1 -right-1 z-[5]">
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.2, duration: 0.3 }}
+                          className="h-16 w-16 overflow-hidden"
+                        >
+                          <div className="bg-primary absolute top-[10px] right-[-35px] w-[110px] rotate-45 transform py-1 text-center text-xs font-bold text-white shadow-md">
+                            Selected
+                          </div>
+                        </motion.div>
+                      </div>
+
+                      {/* Floating badge with star effect */}
                       <motion.div
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{
-                          scale: 1,
-                          opacity: 1,
-                        }}
+                        className="absolute -top-2 -left-2 z-20"
+                        initial={{ opacity: 0, scale: 0.5, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{
-                          duration: 0.4,
-                          ease: 'easeOut',
+                          type: 'spring',
+                          stiffness: 500,
+                          damping: 15,
+                          delay: 0.3,
                         }}
                       >
                         <motion.div
+                          className="via-primary flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 p-0.5 shadow-lg"
                           animate={{
-                            scale: [1, 1.15, 1],
                             boxShadow: [
-                              '0px 0px 0px rgba(79, 70, 229, 0)',
-                              '0px 0px 12px rgba(79, 70, 229, 0.7)',
-                              '0px 0px 0px rgba(79, 70, 229, 0)',
+                              '0 0 0 0 rgba(248, 165, 4, 0.4)',
+                              '0 0 0 10px rgba(248, 165, 4, 0)',
                             ],
                           }}
                           transition={{
-                            duration: 2,
+                            duration: 1.5,
                             repeat: Infinity,
                             repeatType: 'loop',
                           }}
-                          className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg"
                         >
-                          <BsCheckCircleFill
-                            size={28}
-                            className="text-primary drop-shadow-md"
-                          />
+                          <div className="text-primary flex h-full w-full items-center justify-center rounded-full bg-white text-lg">
+                            ★
+                          </div>
                         </motion.div>
                       </motion.div>
-                    </div>
+                    </>
                   )}
 
                   {/* Ripple effect when clicked with enhanced animation */}
@@ -330,7 +396,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
           </Link>
         </Button>
 
-        {questionList.is_last ? (
+        {selectedOption?.configuration_preset_id ? (
           <Button
             asChild
             size={'lg'}
