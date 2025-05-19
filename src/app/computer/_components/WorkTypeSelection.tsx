@@ -141,7 +141,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
                   }`}
                   onClick={() => handleCardClick(option, index)}
                 >
-                  {/* Selection check icon with enhanced animation */}
+                  {/* Selection check icon with enhanced animation and visibility */}
                   {selectedOption?.id === option.id && (
                     <div className="absolute top-3 right-3 z-10">
                       <motion.div
@@ -160,7 +160,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
                             scale: [1, 1.15, 1],
                             boxShadow: [
                               '0px 0px 0px rgba(79, 70, 229, 0)',
-                              '0px 0px 8px rgba(79, 70, 229, 0.5)',
+                              '0px 0px 12px rgba(79, 70, 229, 0.7)',
                               '0px 0px 0px rgba(79, 70, 229, 0)',
                             ],
                           }}
@@ -169,11 +169,11 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
                             repeat: Infinity,
                             repeatType: 'loop',
                           }}
-                          className="rounded-full"
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-lg"
                         >
                           <BsCheckCircleFill
-                            size={26}
-                            className="text-green-500 drop-shadow-sm"
+                            size={28}
+                            className="text-primary drop-shadow-md"
                           />
                         </motion.div>
                       </motion.div>
