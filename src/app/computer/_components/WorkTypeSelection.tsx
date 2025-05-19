@@ -112,7 +112,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
             {questionList.options.map((option, index) => (
               <motion.div
-                key={index}
+                key={option.id}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 animate={
