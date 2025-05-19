@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { Question, QuestionOptions } from '@/services/demand_assessment/type';
 import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
 import Image from 'next/image';
+import { getBaseUrl } from '@/utils/env';
 
 // const options = [
 //   {
@@ -190,7 +191,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
                       <Image
                         width={500}
                         height={500}
-                        src={`${option.icon}`}
+                        src={`${getBaseUrl()}${option.icon}`}
                         alt={option.option_text}
                         className={`h-full w-full transition duration-300 ${
                           selectedOption?.id === option.id
