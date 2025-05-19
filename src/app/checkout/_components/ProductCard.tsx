@@ -8,7 +8,7 @@ export const ProductCard = ({
   onRemove,
 }: {
   product: Product;
-  onRemove: (id: string) => void;
+  onRemove: (id: number) => void;
 }) => (
   <div className="grid grid-cols-3 items-center gap-4 border-b py-3">
     <div className="col-span-2 flex items-center gap-3">
