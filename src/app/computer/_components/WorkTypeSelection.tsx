@@ -260,7 +260,13 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
 
                   {/* Enhanced text area with fixed height to ensure uniform cards */}
                   <div className="mt-4 flex flex-1 flex-col items-center justify-between">
-                    <h3 className="group-hover:text-primary-700 line-clamp-2 min-h-[3rem] text-lg font-bold text-gray-800">
+                    <h3
+                      className={`line-clamp-2 min-h-[3rem] text-lg font-bold transition-colors duration-300 ${
+                        selectedOption?.id === option.id
+                          ? 'text-primary'
+                          : 'group-hover:text-primary/80 text-gray-800'
+                      }`}
+                    >
                       {option.option_text}
                     </h3>
 
