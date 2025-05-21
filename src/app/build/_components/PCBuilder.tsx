@@ -207,6 +207,30 @@ export default function PCBuilder({
                       )}
                     </motion.div>
                   ))}
+
+                  {/* Explore More Card */}
+                  <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => console.log('Explore More')}
+                    className="hover:border-primary/50 hover:bg-primary/5 relative flex cursor-pointer flex-col items-center rounded-lg border-2 border-dashed border-gray-300 p-3 transition-all"
+                  >
+                    <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-md bg-gray-50">
+                      <motion.div
+                        whileHover={{ rotate: 180 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-primary"
+                      >
+                        <Layers className="size-8" />
+                      </motion.div>
+                    </div>
+                    <p className="text-center text-sm font-medium text-gray-600">
+                      Explore More
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      See all {component.name} options
+                    </p>
+                  </motion.div>
                 </div>
               </AccordionContent>
             </AccordionItem>
