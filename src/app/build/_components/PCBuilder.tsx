@@ -2,7 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Check, Cpu, Monitor, HardDrive, Layers, Plug } from 'lucide-react';
+import {
+  Check,
+  Cpu,
+  Monitor,
+  HardDrive,
+  Layers,
+  Plug,
+  Search,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -215,9 +223,7 @@ export default function PCBuilder({
                       boxShadow: '0 0 25px rgba(79,70,229,0.4)',
                     }}
                     whileTap={{ scale: 0.97 }}
-                    onClick={() =>
-                      router.push(`/components/${component.name.toLowerCase()}`)
-                    }
+                    onClick={() => console.log('Explore More clicked')}
                     className="from-primary/5 via-primary/10 to-primary/5 hover:border-primary border-primary/30 group relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-gradient-to-br p-3 transition-all"
                   >
                     <motion.div
@@ -243,7 +249,7 @@ export default function PCBuilder({
                           }}
                           className="text-primary relative z-10"
                         >
-                          <Layers className="size-8" />
+                          <Search className="size-8" />
                         </motion.div>
                         <div className="bg-primary/20 absolute inset-0 rounded-full blur-md" />
                       </div>
