@@ -156,7 +156,7 @@ export default function PCBuilder({
 
               <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up border-t border-gray-200 bg-gray-50 px-4 pt-4 pb-6">
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                  {component.products?.map((option) => (
+                  {component.products?.slice(1, 4).map((option) => (
                     <motion.div
                       key={option.id}
                       whileHover={{ scale: 1.03 }}
@@ -218,7 +218,7 @@ export default function PCBuilder({
                     onClick={() =>
                       router.push(`/components/${component.name.toLowerCase()}`)
                     }
-                    className="from-primary/5 via-primary/10 to-primary/5 hover:border-primary border-primary/30 group relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-gradient-to-br p-6 transition-all"
+                    className="from-primary/5 via-primary/10 to-primary/5 hover:border-primary border-primary/30 group relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-gradient-to-br p-3 transition-all"
                   >
                     <motion.div
                       initial={{ y: 0 }}
@@ -230,7 +230,7 @@ export default function PCBuilder({
                       }}
                       className="relative mb-4"
                     >
-                      <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-xl">
+                      <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-xl">
                         <motion.div
                           animate={{
                             rotate: [0, 10, -10, 10, 0],
@@ -243,7 +243,7 @@ export default function PCBuilder({
                           }}
                           className="text-primary relative z-10"
                         >
-                          <Layers className="size-12" />
+                          <Layers className="size-8" />
                         </motion.div>
                         <div className="bg-primary/20 absolute inset-0 rounded-full blur-md" />
                       </div>
@@ -252,9 +252,9 @@ export default function PCBuilder({
                     <p className="text-primary/90 group-hover:text-primary mb-1 text-center text-lg font-bold">
                       Discover More
                     </p>
-                    <p className="text-primary/70 group-hover:text-primary/90 text-center text-sm font-medium">
+                    {/* <p className="text-primary/70 group-hover:text-primary/90 text-center text-sm font-medium">
                       Explore All {component.name} Options
-                    </p>
+                    </p> */}
                     <motion.div
                       className="from-primary/20 to-primary/20 absolute inset-0 -z-10 rounded-lg bg-gradient-to-br via-transparent opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100"
                       initial={false}
