@@ -277,31 +277,37 @@ function ModalBody({
 
           <Select value={sortOption} onValueChange={setSortOption}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by" />
+              <SelectValue placeholder="Sort Components" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="featured">
+                <span className="flex items-center gap-2">
+                  <Cpu className="text-primary h-4 w-4" />
+                  <span>Featured Components</span>
+                </span>
+              </SelectItem>
               <SelectItem value="priceAsc">
                 <span className="flex items-center gap-2">
                   <ArrowUpCircle className="h-4 w-4 text-green-500" />
-                  <span>Price: Low to High</span>
+                  <span>Sort by Price: Low to High</span>
                 </span>
               </SelectItem>
               <SelectItem value="priceDesc">
                 <span className="flex items-center gap-2">
                   <ArrowDownCircle className="h-4 w-4 text-red-500" />
-                  <span>Price: High to Low</span>
+                  <span>Sort by Price: High to Low</span>
                 </span>
               </SelectItem>
               <SelectItem value="nameAsc">
                 <span className="flex items-center gap-2">
                   <AlignStartVertical className="h-4 w-4 text-blue-500" />
-                  <span>Name: A to Z</span>
+                  <span>Sort by Name: A to Z</span>
                 </span>
               </SelectItem>
               <SelectItem value="nameDesc">
                 <span className="flex items-center gap-2">
                   <AlignEndVertical className="h-4 w-4 text-orange-500" />
-                  <span>Name: Z to A</span>
+                  <span>Sort by Name: Z to A</span>
                 </span>
               </SelectItem>
             </SelectContent>
