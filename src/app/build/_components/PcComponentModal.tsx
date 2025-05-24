@@ -18,12 +18,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Slider } from '@/components/ui/slider';
+import { Input } from '@/components/ui/input';
 import {
   Cpu,
   Search,
-  SlidersHorizontal,
   ArrowUpCircle,
   ArrowDownCircle,
   AlignStartVertical,
@@ -166,7 +164,9 @@ function Header({
     <>
       <DialogTitle className="text-primary flex items-center gap-2">
         <Cpu size={30} className="text-primary" />
-        <span className="text-2xl font-semibold md:text-3xl">{title}</span>
+        <span className="text-2xl font-semibold capitalize md:text-3xl">
+          {title}
+        </span>
       </DialogTitle>
       <DialogDescription>{description}</DialogDescription>
     </>
@@ -184,11 +184,8 @@ function ModalBody({
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [sortOption, setSortOption] = useState('featured');
-  const [filterVisible, setFilterVisible] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  // Extract unique categories from products
-  const categories = [...new Set(products.map((product) => product.category))];
+  const [selectedCategories] = useState<string[]>([]);
 
   // Apply filters and sorting to products
   const filteredProducts = products
@@ -228,20 +225,6 @@ function ModalBody({
       }
     });
 
-  const handleToggleCategory = (value: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value],
-    );
-  };
-
-  const hasActiveFilters = !!(
-    minPrice ||
-    maxPrice ||
-    selectedCategories.length
-  );
-
   return (
     <div className="flex flex-col space-y-4">
       {/* Search and Filter Controls */}
@@ -249,163 +232,109 @@ function ModalBody({
         {/* Search Input */}
         <div className="relative flex-1">
           <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
-          <input
+          <Input
             type="text"
             placeholder="Search components..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-input bg-background focus-visible:ring-ring placeholder:text-muted-foreground w-full rounded-md border py-2 pr-4 pl-10 text-sm focus-visible:ring-2 focus-visible:outline-none"
+            className="pl-10"
           />
         </div>
 
-        {/* Filter and Sort Controls */}
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setFilterVisible(!filterVisible)}
-            className="flex items-center gap-1"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            Filters
-            {hasActiveFilters && (
-              <span className="bg-primary text-primary-foreground ml-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px]">
-                !
-              </span>
-            )}
-          </Button>
-
-          <Select value={sortOption} onValueChange={setSortOption}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort Components" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="featured">
-                <span className="flex items-center gap-2">
-                  <Cpu className="text-primary h-4 w-4" />
-                  <span>Featured Components</span>
-                </span>
-              </SelectItem>
-              <SelectItem value="priceAsc">
-                <span className="flex items-center gap-2">
-                  <ArrowUpCircle className="h-4 w-4 text-green-500" />
-                  <span>Sort by Price: Low to High</span>
-                </span>
-              </SelectItem>
-              <SelectItem value="priceDesc">
-                <span className="flex items-center gap-2">
-                  <ArrowDownCircle className="h-4 w-4 text-red-500" />
-                  <span>Sort by Price: High to Low</span>
-                </span>
-              </SelectItem>
-              <SelectItem value="nameAsc">
-                <span className="flex items-center gap-2">
-                  <AlignStartVertical className="h-4 w-4 text-blue-500" />
-                  <span>Sort by Name: A to Z</span>
-                </span>
-              </SelectItem>
-              <SelectItem value="nameDesc">
-                <span className="flex items-center gap-2">
-                  <AlignEndVertical className="h-4 w-4 text-orange-500" />
-                  <span>Sort by Name: Z to A</span>
-                </span>
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Expandable Filter Panel */}
-      {filterVisible && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="bg-card/95 sticky top-0 z-10 border-t border-b px-4 py-4 shadow-md backdrop-blur-sm"
-        >
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Price Range Filter */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-semibold">Price Range</h4>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="bg-background rounded border px-2 py-1 text-xs font-medium">
-                    ${minPrice || '0'}
-                  </span>
-                  <span className="text-muted-foreground">-</span>
-                  <span className="bg-background rounded border px-2 py-1 text-xs font-medium">
-                    ${maxPrice || 'Max'}
-                  </span>
-                </div>
-              </div>
-              <Slider
-                defaultValue={[0, 100]}
-                min={0}
-                max={5000}
-                step={50}
-                value={[
-                  minPrice ? parseInt(minPrice) : 0,
-                  maxPrice ? parseInt(maxPrice) : 5000,
-                ]}
-                onValueChange={(values) => {
-                  setMinPrice(values[0].toString());
-                  setMaxPrice(values[1].toString());
-                }}
-                className="mt-6"
-              />
+        <div className="flex items-center gap-3">
+          <div className="group relative flex-1">
+            <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              $
             </div>
-
-            {/* Category Filter */}
-            {categories.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold">Categories</h4>
-                <div className="mt-3 flex flex-wrap gap-3">
-                  {categories.map((category) => (
-                    <div key={category} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`category-${category}`}
-                        checked={selectedCategories.includes(category)}
-                        onCheckedChange={() => handleToggleCategory(category)}
-                      />
-                      <label
-                        htmlFor={`category-${category}`}
-                        className="cursor-pointer text-sm font-medium"
-                      >
-                        {category}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Filter Actions */}
-          <div className="mt-4 flex justify-end gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearchQuery('');
-                setMinPrice('');
-                setMaxPrice('');
-                setSelectedCategories([]);
-                setSortOption('featured');
+            <Input
+              type="number"
+              className="min-w-32 pl-8"
+              placeholder="Min Price"
+              value={minPrice}
+              onChange={(e) => {
+                const value = e.target.value;
+                const numValue = parseInt(value);
+                if (
+                  value === '' ||
+                  (numValue >= 0 &&
+                    numValue <= (maxPrice ? parseInt(maxPrice) : 5000))
+                ) {
+                  setMinPrice(value);
+                }
               }}
-            >
-              Reset All
-            </Button>
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => setFilterVisible(false)}
-            >
-              Apply Filters
-            </Button>
+              min="0"
+              max={maxPrice || '5000'}
+            />
           </div>
-        </motion.div>
-      )}
+
+          <span className="text-muted-foreground">to</span>
+
+          <div className="group relative flex-1">
+            <div className="text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              $
+            </div>
+            <Input
+              type="number"
+              className="min-w-32 pl-8"
+              placeholder="Max Price"
+              value={maxPrice}
+              onChange={(e) => {
+                const value = e.target.value;
+                const numValue = parseInt(value);
+                if (
+                  value === '' ||
+                  (numValue >= (minPrice ? parseInt(minPrice) : 0) &&
+                    numValue <= 5000)
+                ) {
+                  setMaxPrice(value);
+                }
+              }}
+              min={minPrice || '0'}
+              max="5000"
+            />
+          </div>
+        </div>
+
+        {/* Filter and Sort Controls */}
+
+        <Select value={sortOption} onValueChange={setSortOption}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sort Components" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="featured">
+              <span className="flex items-center gap-2">
+                <Cpu className="text-primary h-4 w-4" />
+                <span>Featured Components</span>
+              </span>
+            </SelectItem>
+            <SelectItem value="priceAsc">
+              <span className="flex items-center gap-2">
+                <ArrowUpCircle className="h-4 w-4 text-green-500" />
+                <span>Sort by Price: Low to High</span>
+              </span>
+            </SelectItem>
+            <SelectItem value="priceDesc">
+              <span className="flex items-center gap-2">
+                <ArrowDownCircle className="h-4 w-4 text-red-500" />
+                <span>Sort by Price: High to Low</span>
+              </span>
+            </SelectItem>
+            <SelectItem value="nameAsc">
+              <span className="flex items-center gap-2">
+                <AlignStartVertical className="h-4 w-4 text-blue-500" />
+                <span>Sort by Name: A to Z</span>
+              </span>
+            </SelectItem>
+            <SelectItem value="nameDesc">
+              <span className="flex items-center gap-2">
+                <AlignEndVertical className="h-4 w-4 text-orange-500" />
+                <span>Sort by Name: Z to A</span>
+              </span>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       {/* Results count */}
       <div className="px-4">
