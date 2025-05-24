@@ -191,17 +191,22 @@ function ModalBody({
 }) {
   console.log(categoryName, 'categoryName');
   const [searchQuery, setSearchQuery] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const [sortOption, setSortOption] = useState('featured');
 
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
+    console.log('sortOption', sortOption);
     const fetchProducts = async () => {
       try {
         const data = await PcConfiguration.getFilteredProducts({
           category: categoryName,
+          search: searchQuery,
+          min_price: minPrice,
+          max_price: maxPrice,
+          sort_by: sortOption,
         });
 
         setProducts(data);
@@ -212,7 +217,7 @@ function ModalBody({
     };
 
     fetchProducts();
-  }, [categoryName]);
+  }, [categoryName, searchQuery, minPrice, maxPrice, sortOption]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -240,19 +245,11 @@ function ModalBody({
               className="min-w-32 pl-8"
               placeholder="Min Price"
               value={minPrice}
-              onChange={(e) => {
-                const value = e.target.value;
-                const numValue = parseInt(value);
-                if (
-                  value === '' ||
-                  (numValue >= 0 &&
-                    numValue <= (maxPrice ? parseInt(maxPrice) : 5000))
-                ) {
-                  setMinPrice(value);
-                }
-              }}
+              onChange={(e) =>
+                setMinPrice(e.target.value ? Number(e.target.value) : undefined)
+              }
               min="0"
-              max={maxPrice || '5000'}
+              max={maxPrice || 5000}
             />
           </div>
 
@@ -267,19 +264,10 @@ function ModalBody({
               className="min-w-32 pl-8"
               placeholder="Max Price"
               value={maxPrice}
-              onChange={(e) => {
-                const value = e.target.value;
-                const numValue = parseInt(value);
-                if (
-                  value === '' ||
-                  (numValue >= (minPrice ? parseInt(minPrice) : 0) &&
-                    numValue <= 5000)
-                ) {
-                  setMaxPrice(value);
-                }
-              }}
-              min={minPrice || '0'}
-              max="5000"
+              onChange={(e) =>
+                setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
+              }
+              min={minPrice || 0}
             />
           </div>
         </div>
@@ -297,25 +285,25 @@ function ModalBody({
                 <span>Featured Components</span>
               </span>
             </SelectItem>
-            <SelectItem value="priceAsc">
+            <SelectItem value="price">
               <span className="flex items-center gap-2">
                 <ArrowUpCircle className="h-4 w-4 text-green-500" />
                 <span>Sort by Price: Low to High</span>
               </span>
             </SelectItem>
-            <SelectItem value="priceDesc">
+            <SelectItem value="-price">
               <span className="flex items-center gap-2">
                 <ArrowDownCircle className="h-4 w-4 text-red-500" />
                 <span>Sort by Price: High to Low</span>
               </span>
             </SelectItem>
-            <SelectItem value="nameAsc">
+            <SelectItem value="name">
               <span className="flex items-center gap-2">
                 <AlignStartVertical className="h-4 w-4 text-blue-500" />
                 <span>Sort by Name: A to Z</span>
               </span>
             </SelectItem>
-            <SelectItem value="nameDesc">
+            <SelectItem value="-name">
               <span className="flex items-center gap-2">
                 <AlignEndVertical className="h-4 w-4 text-orange-500" />
                 <span>Sort by Name: Z to A</span>
