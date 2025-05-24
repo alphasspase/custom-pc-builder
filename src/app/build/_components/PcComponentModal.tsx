@@ -2,6 +2,7 @@
 
 import { JSX, useEffect, useState } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useDebounce } from '@/hooks/use-debounce';
 import {
   Dialog,
   DialogContent,
@@ -152,7 +153,11 @@ function MobileDrawer({
         </DrawerHeader>
         <div className="px-4 pb-4">
           <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
-            <ModalBody products={products} onProductSelect={onProductSelect} />
+            <ModalBody
+              categoryName={title}
+              products={products}
+              onProductSelect={onProductSelect}
+            />
           </ScrollArea>
         </div>
       </DrawerContent>
@@ -194,30 +199,43 @@ function ModalBody({
   const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const [sortOption, setSortOption] = useState('featured');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Apply debouncing to the frequently changing filter values
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedMinPrice = useDebounce(minPrice, 500);
+  const debouncedMaxPrice = useDebounce(maxPrice, 500);
 
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    console.log('sortOption', sortOption);
     const fetchProducts = async () => {
+      setIsLoading(true);
       try {
         const data = await PcConfiguration.getFilteredProducts({
           category: categoryName,
-          search: searchQuery,
-          min_price: minPrice,
-          max_price: maxPrice,
+          search: debouncedSearchQuery,
+          min_price: debouncedMinPrice,
+          max_price: debouncedMaxPrice,
           sort_by: sortOption,
         });
 
         setProducts(data);
-        console.log('productsData --->', data);
       } catch (error) {
         console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchProducts();
-  }, [categoryName, searchQuery, minPrice, maxPrice, sortOption]);
+  }, [
+    categoryName,
+    debouncedSearchQuery,
+    debouncedMinPrice,
+    debouncedMaxPrice,
+    sortOption,
+  ]);
 
   return (
     <div className="flex flex-col space-y-4">
