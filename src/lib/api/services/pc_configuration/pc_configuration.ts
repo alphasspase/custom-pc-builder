@@ -31,7 +31,7 @@ export const PcConfiguration = {
     sort_by?: string;
     min_price?: number;
     max_price?: number;
-  } = {}): Promise<Product> {
+  } = {}): Promise<Product[]> {
     const params = new URLSearchParams();
 
     if (category) params.append('category', category);

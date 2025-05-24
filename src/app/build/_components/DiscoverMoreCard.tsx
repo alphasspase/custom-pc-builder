@@ -4,8 +4,6 @@ import { Search } from 'lucide-react';
 import PcComponentModal from './PcComponentModal';
 import { Product } from '@/lib/api/services/pc_configuration/type';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
-import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
-import { useEffect, useState } from 'react';
 
 interface DiscoverMoreCardProps {
   componentName: string;
@@ -18,26 +16,6 @@ export function DiscoverMoreCard({
   componentDescription = 'Browse all available PC components',
   // products = [],
 }: DiscoverMoreCardProps) {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await PcConfiguration.getFilteredProducts({
-          category: componentName,
-        });
-        // Convert to array if it's a single product or handle array properly
-        const productArray = Array.isArray(data) ? data : [data];
-        setProducts(productArray);
-        console.log('productsData --->', productArray);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
-  }, [componentName]);
-
   const { addProduct } = usePCBuilder();
 
   const handleProductSelect = (product: Product) => {
@@ -102,8 +80,8 @@ export function DiscoverMoreCard({
 
   return (
     <PcComponentModal
-      products={products}
-      componentName={componentName}
+      products={[]}
+      categoryName={componentName}
       componentDescription={componentDescription}
       onProductSelect={handleProductSelect}
     >

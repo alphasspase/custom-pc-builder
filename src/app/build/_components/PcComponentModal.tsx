@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import {
   Dialog,
@@ -35,10 +35,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
 
 interface PcComponentModalProps {
   products: Product[];
-  componentName: string;
+  categoryName: string;
   componentDescription: string;
   children: JSX.Element;
   onProductSelect?: (product: Product) => void;
@@ -46,7 +47,7 @@ interface PcComponentModalProps {
 
 function PcComponentModal({
   products,
-  componentName,
+  categoryName,
   componentDescription,
   children,
   onProductSelect,
@@ -58,9 +59,9 @@ function PcComponentModal({
     <>
       {isDesktop ? (
         <DesktopModal
+          categoryName={categoryName}
           open={open}
           setOpen={setOpen}
-          title={componentName}
           description={componentDescription}
           products={products}
           TriggerButton={children}
@@ -75,7 +76,7 @@ function PcComponentModal({
         <MobileDrawer
           open={open}
           setOpen={setOpen}
-          title={componentName}
+          title={categoryName}
           description={componentDescription}
           products={products}
           TriggerButton={children}
@@ -94,26 +95,32 @@ function PcComponentModal({
 function DesktopModal({
   open,
   setOpen,
-  title,
+
   description,
   products,
   TriggerButton,
   onProductSelect,
+  categoryName,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  title: string;
+
   description: string;
   products: Product[];
   TriggerButton: JSX.Element;
   onProductSelect?: (product: Product) => void;
+  categoryName: string;
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
       <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
-        <Header title={title} description={description} />
-        <ModalBody products={products} onProductSelect={onProductSelect} />
+        <Header title={categoryName} description={description} />
+        <ModalBody
+          categoryName={categoryName}
+          products={products}
+          onProductSelect={onProductSelect}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -174,56 +181,38 @@ function Header({
 }
 
 function ModalBody({
-  products,
+  // products,
   onProductSelect,
+  categoryName,
 }: {
+  categoryName: string;
   products: Product[];
   onProductSelect?: (product: Product) => void;
 }) {
+  console.log(categoryName, 'categoryName');
   const [searchQuery, setSearchQuery] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [sortOption, setSortOption] = useState('featured');
 
-  const [selectedCategories] = useState<string[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  // Apply filters and sorting to products
-  const filteredProducts = products
-    .filter((product) => {
-      // Search query filter
-      const matchesSearch =
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase());
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await PcConfiguration.getFilteredProducts({
+          category: categoryName,
+        });
 
-      // Price range filter
-      const minPriceValue = minPrice ? parseFloat(minPrice) : 0;
-      const maxPriceValue = maxPrice ? parseFloat(maxPrice) : Infinity;
-      const productPrice = parseFloat(product.price);
-      const matchesPrice =
-        productPrice >= minPriceValue && productPrice <= maxPriceValue;
-
-      // Category filter
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(product.category);
-
-      return matchesSearch && matchesPrice && matchesCategory;
-    })
-    .sort((a, b) => {
-      // Sort products based on selected option
-      switch (sortOption) {
-        case 'priceAsc':
-          return parseFloat(a.price) - parseFloat(b.price);
-        case 'priceDesc':
-          return parseFloat(b.price) - parseFloat(a.price);
-        case 'nameAsc':
-          return a.name.localeCompare(b.name);
-        case 'nameDesc':
-          return b.name.localeCompare(a.name);
-        default:
-          return 0; // Featured/default sorting
+        setProducts(data);
+        console.log('productsData --->', data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
       }
-    });
+    };
+
+    fetchProducts();
+  }, [categoryName]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -339,8 +328,7 @@ function ModalBody({
       {/* Results count */}
       <div className="px-4">
         <p className="text-muted-foreground text-sm">
-          {filteredProducts.length}{' '}
-          {filteredProducts.length === 1 ? 'result' : 'results'} found
+          {products.length} {products.length === 1 ? 'result' : 'results'} found
         </p>
       </div>
 
@@ -352,8 +340,8 @@ function ModalBody({
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
         >
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
+          {products.length > 0 ? (
+            products.map((product, index) => (
               <ProductItemCard
                 key={product.id}
                 product={product}
