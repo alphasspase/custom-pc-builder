@@ -158,7 +158,7 @@ export default function PCBuilder({
                         ))}
                     <DiscoverMoreCard
                       componentName={component.name}
-                      componentDescription={`Explore all ${component.name} options`}
+                      componentDescription={component.description}
                       products={component.products}
                     />
                   </div>
