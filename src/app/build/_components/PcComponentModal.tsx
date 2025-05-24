@@ -468,5 +468,4 @@ function ProductItemCard({
   );
 }
 
-export { PcComponentModal };
 export default PcComponentModal;

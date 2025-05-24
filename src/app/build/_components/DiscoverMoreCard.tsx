@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
-import { PcComponentModal } from './PcComponentModal';
+import PcComponentModal from './PcComponentModal';
 import { Product } from '@/lib/api/services/pc_configuration/type';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
 
