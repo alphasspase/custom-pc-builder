@@ -1,15 +1,33 @@
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
+import { PcComponentModal } from './PcComponentModal';
+import { Product } from '@/lib/api/services/pc_configuration/type';
+import { usePCBuilder } from '@/hooks/usePCBuilder';
 
-export function DiscoverMoreCard() {
-  return (
+interface DiscoverMoreCardProps {
+  componentName?: string;
+  componentDescription?: string;
+  products?: Product[];
+}
+
+export function DiscoverMoreCard({
+  componentName = 'PC Components',
+  componentDescription = 'Browse all available PC components',
+  products = [],
+}: DiscoverMoreCardProps) {
+  const { selectProduct } = usePCBuilder();
+
+  const handleProductSelect = (product: Product) => {
+    selectProduct(product);
+  };
+
+  const CardContent = (
     <motion.div
       whileHover={{
         scale: 1.05,
         boxShadow: '0 0 25px rgba(79,70,229,0.4)',
       }}
       whileTap={{ scale: 0.97 }}
-      onClick={() => console.log('Explore More clicked')}
       className="from-primary/5 via-primary/10 to-primary/5 hover:border-primary border-primary/30 group relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed bg-gradient-to-br p-3 transition-all"
     >
       <motion.div
@@ -44,9 +62,6 @@ export function DiscoverMoreCard() {
       <p className="text-primary/90 group-hover:text-primary mb-1 text-center text-lg font-bold">
         Discover More
       </p>
-      {/* <p className="text-primary/70 group-hover:text-primary/90 text-center text-sm font-medium">
-          Explore All {component.name} Options
-        </p> */}
       <motion.div
         className="from-primary/20 to-primary/20 absolute inset-0 -z-10 rounded-lg bg-gradient-to-br via-transparent opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100"
         initial={false}
@@ -60,5 +75,16 @@ export function DiscoverMoreCard() {
         <div className="from-primary/20 via-primary/30 to-primary/20 h-full w-full rounded-lg bg-gradient-to-r blur-xl" />
       </motion.div>
     </motion.div>
+  );
+
+  return (
+    <PcComponentModal
+      products={products}
+      componentName={componentName}
+      componentDescription={componentDescription}
+      onProductSelect={handleProductSelect}
+    >
+      {CardContent}
+    </PcComponentModal>
   );
 }

@@ -156,7 +156,11 @@ export default function PCBuilder({
                             onSelect={selectOption}
                           />
                         ))}
-                    <DiscoverMoreCard />
+                    <DiscoverMoreCard
+                      componentName={component.name}
+                      componentDescription={`Explore all ${component.name} options`}
+                      products={component.products}
+                    />
                   </div>
                 </AccordionContent>
               </AccordionItem>
