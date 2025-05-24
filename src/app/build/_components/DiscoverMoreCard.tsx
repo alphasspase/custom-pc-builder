@@ -15,10 +15,10 @@ export function DiscoverMoreCard({
   componentDescription = 'Browse all available PC components',
   products = [],
 }: DiscoverMoreCardProps) {
-  const { selectProduct } = usePCBuilder();
+  const { addProduct } = usePCBuilder();
 
   const handleProductSelect = (product: Product) => {
-    selectProduct(product);
+    addProduct(product);
   };
 
   const CardContent = (
