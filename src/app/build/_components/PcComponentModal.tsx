@@ -18,7 +18,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Cpu } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Cpu, Search, SlidersHorizontal } from 'lucide-react';
 import { Product } from '@/lib/api/services/pc_configuration/type';
 
 interface PcComponentModalProps {
@@ -163,24 +164,292 @@ function ModalBody({
   products: Product[];
   onProductSelect?: (product: Product) => void;
 }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [sortOption, setSortOption] = useState('featured');
+  const [filterVisible, setFilterVisible] = useState(false);
+  const [availabilityFilter, setAvailabilityFilter] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  // Extract unique categories from products
+  const categories = [...new Set(products.map((product) => product.category))];
+
+  // Apply filters and sorting to products
+  const filteredProducts = products
+    .filter((product) => {
+      // Search query filter
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+      // Price range filter
+      const minPriceValue = minPrice ? parseFloat(minPrice) : 0;
+      const maxPriceValue = maxPrice ? parseFloat(maxPrice) : Infinity;
+      const productPrice = parseFloat(product.price);
+      const matchesPrice =
+        productPrice >= minPriceValue && productPrice <= maxPriceValue;
+
+      // Availability filter
+      const matchesAvailability =
+        availabilityFilter.length === 0 ||
+        (availabilityFilter.includes('inStock') && product.stock > 0) ||
+        (availabilityFilter.includes('outOfStock') && product.stock === 0);
+
+      // Category filter
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.category);
+
+      return (
+        matchesSearch && matchesPrice && matchesAvailability && matchesCategory
+      );
+    })
+    .sort((a, b) => {
+      // Sort products based on selected option
+      switch (sortOption) {
+        case 'priceAsc':
+          return parseFloat(a.price) - parseFloat(b.price);
+        case 'priceDesc':
+          return parseFloat(b.price) - parseFloat(a.price);
+        case 'nameAsc':
+          return a.name.localeCompare(b.name);
+        case 'nameDesc':
+          return b.name.localeCompare(a.name);
+        default:
+          return 0; // Featured/default sorting
+      }
+    });
+
+  const handleToggleAvailability = (value: string) => {
+    setAvailabilityFilter((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value],
+    );
+  };
+
+  const handleToggleCategory = (value: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value],
+    );
+  };
+
+  const hasActiveFilters = !!(
+    minPrice ||
+    maxPrice ||
+    availabilityFilter.length ||
+    selectedCategories.length
+  );
+
   return (
-    <ScrollArea className="rounded-md border sm:h-[calc(100dvh-170px)]">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
-      >
-        {products.map((product, index) => (
-          <ProductItemCard
-            key={product.id}
-            product={product}
-            index={index}
-            onClick={() => onProductSelect && onProductSelect(product)}
+    <div className="flex flex-col space-y-4">
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col gap-4 px-4 pt-4 md:flex-row md:items-center md:justify-between">
+        {/* Search Input */}
+        <div className="relative flex-1">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
+          <input
+            type="text"
+            placeholder="Search components..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="border-input bg-background focus-visible:ring-ring placeholder:text-muted-foreground w-full rounded-md border py-2 pr-4 pl-10 text-sm focus-visible:ring-2 focus-visible:outline-none"
           />
-        ))}
-      </motion.div>
-    </ScrollArea>
+        </div>
+
+        {/* Filter and Sort Controls */}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setFilterVisible(!filterVisible)}
+            className="flex items-center gap-1"
+          >
+            <SlidersHorizontal className="h-4 w-4" />
+            Filters
+            {hasActiveFilters && (
+              <span className="bg-primary text-primary-foreground ml-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px]">
+                !
+              </span>
+            )}
+          </Button>
+
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+            className="border-input bg-background focus-visible:ring-ring h-9 rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:outline-none"
+          >
+            <option value="featured">Featured</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
+            <option value="nameAsc">Name: A to Z</option>
+            <option value="nameDesc">Name: Z to A</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Expandable Filter Panel */}
+      {filterVisible && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="bg-card border-t border-b px-4 py-3"
+        >
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {/* Price Range Filter */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Price Range</h4>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  placeholder="Min"
+                  value={minPrice}
+                  onChange={(e) => setMinPrice(e.target.value)}
+                  className="border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:outline-none"
+                />
+                <span className="text-muted-foreground">to</span>
+                <input
+                  type="number"
+                  placeholder="Max"
+                  value={maxPrice}
+                  onChange={(e) => setMaxPrice(e.target.value)}
+                  className="border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Availability Filter */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Availability</h4>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="in-stock"
+                    checked={availabilityFilter.includes('inStock')}
+                    onCheckedChange={() => handleToggleAvailability('inStock')}
+                  />
+                  <label
+                    htmlFor="in-stock"
+                    className="cursor-pointer text-sm font-medium"
+                  >
+                    In Stock
+                  </label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="out-of-stock"
+                    checked={availabilityFilter.includes('outOfStock')}
+                    onCheckedChange={() =>
+                      handleToggleAvailability('outOfStock')
+                    }
+                  />
+                  <label
+                    htmlFor="out-of-stock"
+                    className="cursor-pointer text-sm font-medium"
+                  >
+                    Out of Stock
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Category Filter */}
+            {categories.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Categories</h4>
+                <div className="flex flex-wrap gap-4">
+                  {categories.map((category) => (
+                    <div key={category} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`category-${category}`}
+                        checked={selectedCategories.includes(category)}
+                        onCheckedChange={() => handleToggleCategory(category)}
+                      />
+                      <label
+                        htmlFor={`category-${category}`}
+                        className="cursor-pointer text-sm font-medium"
+                      >
+                        {category}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Filter Actions */}
+          <div className="mt-4 flex justify-end gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSearchQuery('');
+                setMinPrice('');
+                setMaxPrice('');
+                setAvailabilityFilter([]);
+                setSelectedCategories([]);
+                setSortOption('featured');
+              }}
+            >
+              Reset All
+            </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setFilterVisible(false)}
+            >
+              Apply Filters
+            </Button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Results count */}
+      <div className="px-4">
+        <p className="text-muted-foreground text-sm">
+          {filteredProducts.length}{' '}
+          {filteredProducts.length === 1 ? 'result' : 'results'} found
+        </p>
+      </div>
+
+      {/* Product Grid */}
+      <ScrollArea className="rounded-md border sm:h-[calc(100dvh-290px)]">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
+        >
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product, index) => (
+              <ProductItemCard
+                key={product.id}
+                product={product}
+                index={index}
+                onClick={() => onProductSelect && onProductSelect(product)}
+              />
+            ))
+          ) : (
+            <div className="col-span-full py-12 text-center">
+              <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+                <Search className="text-muted-foreground h-8 w-8" />
+              </div>
+              <h3 className="mb-1 text-lg font-semibold">No products found</h3>
+              <p className="text-muted-foreground">
+                Try adjusting your search or filters to find what you&apos;re
+                looking for.
+              </p>
+            </div>
+          )}
+        </motion.div>
+      </ScrollArea>
+    </div>
   );
 }
 
