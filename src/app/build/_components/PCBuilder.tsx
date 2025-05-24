@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Check, Cpu, Monitor, HardDrive, Layers, Plug } from 'lucide-react';
+import { Cpu, Monitor, HardDrive, Layers, Plug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -13,12 +13,35 @@ import {
 } from '@/components/ui/accordion';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { getBaseUrl } from '@/utils/env';
 import { Product, ProductCategory } from '@/services/pc_configuration/type';
 import Link from 'next/link';
 import { URLS } from '@/utils/urls';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
 import { useEffect } from 'react';
+import { BuildPCProductoptionCard } from './BuildPCProductoptionCard';
+import { DiscoverMoreCard } from './DiscoverMoreCard';
+
+// Helper function to get component icon
+function getComponentIcon(id: string) {
+  switch (id) {
+    case 'graphics':
+      return <Monitor className="size-5" />;
+    case 'processor':
+      return <Cpu className="size-5" />;
+    case 'mainboard':
+      return <Layers className="size-5" />;
+    case 'ram':
+      return <Layers className="size-5" />;
+    case 'ssd':
+      return <HardDrive className="size-5" />;
+    case 'power supply':
+      return <Plug className="size-5" />;
+    default:
+      return null;
+  }
+}
+
+// Card for the Discover More action
 
 export default function PCBuilder({
   defaultSelectedProducts = [],
@@ -34,186 +57,119 @@ export default function PCBuilder({
     defaultSelectedProducts.forEach((product) => {
       addProduct(product);
     });
-  }, [defaultSelectedProducts]);
+  }, [defaultSelectedProducts, addProduct]);
 
   const selectOption = (selectedOption: Product) => {
     addProduct(selectedOption);
   };
 
-  // Helper function to get component icon
-  const getComponentIcon = (id: string) => {
-    switch (id) {
-      case 'graphics':
-        return <Monitor className="size-5" />;
-      case 'processor':
-        return <Cpu className="size-5" />;
-      case 'mainboard':
-        return <Layers className="size-5" />;
-      case 'ram':
-        return <Layers className="size-5" />;
-      case 'ssd':
-        return <HardDrive className="size-5" />;
-      case 'power supply':
-        return <Plug className="size-5" />;
-      default:
-        return null;
-    }
-  };
-
+  // Main render
   return (
     <div className="mx-auto max-w-3xl rounded-lg border border-gray-100 bg-gradient-to-b from-white to-gray-50 p-4 shadow-lg">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">Build Your PC</h2>
       </div>
 
-      {/* RAM, SSD, and PSU with Accordion */}
+      {/* Product Categories Accordion */}
       <Accordion type="single" collapsible className="mb-6">
-        {productCategories.map((component, index) => (
-          <motion.div
-            key={component.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-          >
-            <AccordionItem
-              value={component.name}
-              className={cn(
-                'mb-3 overflow-hidden rounded-lg border transition-shadow hover:shadow-md',
-                'data-[state=open]:border-primary/50 data-[state=open]:shadow-md',
-              )}
+        {productCategories.map((component, index) => {
+          const selectedProduct = selectedProducts.find(
+            (item) => item.category === component.name,
+          );
+
+          return (
+            <motion.div
+              key={component.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <AccordionTrigger className="group px-4 py-3 hover:no-underline">
-                <div className="flex w-full items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100">
-                        <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          transition={{
-                            type: 'spring',
-                            stiffness: 400,
-                            damping: 10,
-                          }}
-                        >
-                          <Image
-                            src={
-                              selectedProducts.find(
-                                (item) => item.category === component.name,
-                              )?.image || '/noData.jpg'
-                            }
-                            alt={
-                              selectedProducts.find(
-                                (item) => item.category === component.name,
-                              )?.name || 'Pc Builder'
-                            }
-                            width={60}
-                            height={60}
-                            className="object-contain"
-                          />
-                        </motion.div>
+              <AccordionItem
+                value={component.name}
+                className={cn(
+                  'mb-3 overflow-hidden rounded-lg border transition-shadow hover:shadow-md',
+                  'data-[state=open]:border-primary/50 data-[state=open]:shadow-md',
+                )}
+              >
+                <AccordionTrigger className="group px-4 py-3 hover:no-underline">
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100">
+                          <motion.div
+                            whileHover={{ scale: 1.05 }}
+                            transition={{
+                              type: 'spring',
+                              stiffness: 400,
+                              damping: 10,
+                            }}
+                          >
+                            <Image
+                              src={selectedProduct?.image || '/noData.jpg'}
+                              alt={selectedProduct?.name || 'Pc Builder'}
+                              width={60}
+                              height={60}
+                              className="object-contain"
+                            />
+                          </motion.div>
+                        </div>
                       </div>
-                      {/* {component.recommended && (
-                        <Badge className="absolute -top-2 -right-2 scale-75 bg-amber-500 hover:bg-amber-500">
-                          <Award className="mr-1 size-3" /> Best
-                        </Badge>
-                      )} */}
-                    </div>
-                    <div className="text-left">
-                      <div className="flex items-center gap-2">
-                        <motion.div
-                          className="bg-primary/10 text-primary rounded-full p-1"
-                          whileHover={{ rotate: 360 }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          {getComponentIcon(component.name.toLowerCase())}
-                        </motion.div>
-                        <p className="text-sm font-medium text-gray-500 uppercase">
-                          {component.name}
-                        </p>
+                      <div className="text-left">
+                        <div className="flex items-center gap-2">
+                          <motion.div
+                            className="bg-primary/10 text-primary rounded-full p-1"
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            {getComponentIcon(component.name.toLowerCase())}
+                          </motion.div>
+                          <p className="text-sm font-medium text-gray-500 uppercase">
+                            {component.name}
+                          </p>
+                        </div>
+                        <p className="font-semibold">{component.description}</p>
                       </div>
-                      <p className="font-semibold">{component.description}</p>
                     </div>
-                  </div>
-                  <motion.div
-                    key={
-                      selectedProducts.find(
-                        (item) => item.category === component.name,
-                      )?.price
-                    }
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mr-4 font-semibold"
-                  >
-                    {
-                      selectedProducts.find(
-                        (item) => item.category === component.name,
-                      )?.price
-                    }{' '}
-                    €
-                  </motion.div>
-                </div>
-              </AccordionTrigger>
-
-              <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up border-t border-gray-200 bg-gray-50 px-4 pt-4 pb-6">
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                  {component.products?.map((option) => (
                     <motion.div
-                      key={option.id}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => selectOption(option)}
-                      className={cn(
-                        'relative flex cursor-pointer flex-col items-center rounded-lg p-3 transition-all',
-                        selectedProducts
-                          .map((item) => item.id)
-                          .includes(option.id)
-                          ? 'bg-primary/10 border-primary border-2 shadow-[0_0_10px_rgba(79,70,229,0.2)]'
-                          : 'border-2 border-gray-200 bg-white hover:border-gray-300',
-                      )}
+                      key={selectedProduct?.price}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mr-4 font-semibold"
                     >
-                      <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-md bg-white">
-                        <Image
-                          src={
-                            option.image
-                              ? `${getBaseUrl()}${option.image}`
-                              : '/placeholder.svg'
-                          }
-                          alt={option.name}
-                          width={60}
-                          height={60}
-                          className="object-contain"
-                        />
-                      </div>
-                      <p className="text-center text-sm font-medium">
-                        {option.name}
-                      </p>
-                      <p className="text-sm font-bold">{option.price} €</p>
-
-                      {selectedProducts
-                        .map((item) => item.id)
-                        .includes(option.id) && (
-                        <motion.div
-                          className="bg-primary absolute top-2 left-2 rounded-full p-1 text-white"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{
-                            type: 'spring',
-                            stiffness: 500,
-                            damping: 15,
-                          }}
-                        >
-                          <Check size={14} />
-                        </motion.div>
-                      )}
+                      {selectedProduct?.price} €
                     </motion.div>
-                  ))}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </motion.div>
-        ))}
+                  </div>
+                </AccordionTrigger>
+
+                <AccordionContent className="data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up border-t border-gray-200 bg-gray-50 px-4 pt-4 pb-6">
+                  <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                    {component.products &&
+                      component.products
+                        .slice(1, 4)
+                        .map((option) => (
+                          <BuildPCProductoptionCard
+                            key={option.id}
+                            option={option}
+                            isSelected={selectedProducts
+                              .map((item) => item.id)
+                              .includes(option.id)}
+                            onSelect={selectOption}
+                          />
+                        ))}
+                    <DiscoverMoreCard
+                      componentName={component.name}
+                      componentDescription={`Explore all ${component.name} options`}
+                      products={component.products}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </motion.div>
+          );
+        })}
       </Accordion>
 
+      {/* Summary and Actions */}
       <motion.div
         className="mt-8 border-t border-gray-200 pt-4"
         initial={{ opacity: 0 }}
