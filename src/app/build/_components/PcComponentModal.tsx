@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Slider } from '@/components/ui/slider';
 import { Cpu, Search, SlidersHorizontal } from 'lucide-react';
 import { Product } from '@/lib/api/services/pc_configuration/type';
 
@@ -30,7 +31,7 @@ interface PcComponentModalProps {
   onProductSelect?: (product: Product) => void;
 }
 
-export function PcComponentModal({
+function PcComponentModal({
   products,
   componentName,
   componentDescription,
@@ -169,7 +170,6 @@ function ModalBody({
   const [maxPrice, setMaxPrice] = useState('');
   const [sortOption, setSortOption] = useState('featured');
   const [filterVisible, setFilterVisible] = useState(false);
-  const [availabilityFilter, setAvailabilityFilter] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   // Extract unique categories from products
@@ -190,20 +190,12 @@ function ModalBody({
       const matchesPrice =
         productPrice >= minPriceValue && productPrice <= maxPriceValue;
 
-      // Availability filter
-      const matchesAvailability =
-        availabilityFilter.length === 0 ||
-        (availabilityFilter.includes('inStock') && product.stock > 0) ||
-        (availabilityFilter.includes('outOfStock') && product.stock === 0);
-
       // Category filter
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes(product.category);
 
-      return (
-        matchesSearch && matchesPrice && matchesAvailability && matchesCategory
-      );
+      return matchesSearch && matchesPrice && matchesCategory;
     })
     .sort((a, b) => {
       // Sort products based on selected option
@@ -221,14 +213,6 @@ function ModalBody({
       }
     });
 
-  const handleToggleAvailability = (value: string) => {
-    setAvailabilityFilter((prev) =>
-      prev.includes(value)
-        ? prev.filter((item) => item !== value)
-        : [...prev, value],
-    );
-  };
-
   const handleToggleCategory = (value: string) => {
     setSelectedCategories((prev) =>
       prev.includes(value)
@@ -240,7 +224,6 @@ function ModalBody({
   const hasActiveFilters = !!(
     minPrice ||
     maxPrice ||
-    availabilityFilter.length ||
     selectedCategories.length
   );
 
@@ -294,75 +277,49 @@ function ModalBody({
       {/* Expandable Filter Panel */}
       {filterVisible && (
         <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="bg-card border-t border-b px-4 py-3"
+          className="bg-card/95 sticky top-0 z-10 border-t border-b px-4 py-4 shadow-md backdrop-blur-sm"
         >
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2">
             {/* Price Range Filter */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Price Range</h4>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  placeholder="Min"
-                  value={minPrice}
-                  onChange={(e) => setMinPrice(e.target.value)}
-                  className="border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:outline-none"
-                />
-                <span className="text-muted-foreground">to</span>
-                <input
-                  type="number"
-                  placeholder="Max"
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(e.target.value)}
-                  className="border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:outline-none"
-                />
-              </div>
-            </div>
-
-            {/* Availability Filter */}
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Availability</h4>
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="in-stock"
-                    checked={availabilityFilter.includes('inStock')}
-                    onCheckedChange={() => handleToggleAvailability('inStock')}
-                  />
-                  <label
-                    htmlFor="in-stock"
-                    className="cursor-pointer text-sm font-medium"
-                  >
-                    In Stock
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="out-of-stock"
-                    checked={availabilityFilter.includes('outOfStock')}
-                    onCheckedChange={() =>
-                      handleToggleAvailability('outOfStock')
-                    }
-                  />
-                  <label
-                    htmlFor="out-of-stock"
-                    className="cursor-pointer text-sm font-medium"
-                  >
-                    Out of Stock
-                  </label>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-semibold">Price Range</h4>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="bg-background rounded border px-2 py-1 text-xs font-medium">
+                    ${minPrice || '0'}
+                  </span>
+                  <span className="text-muted-foreground">-</span>
+                  <span className="bg-background rounded border px-2 py-1 text-xs font-medium">
+                    ${maxPrice || 'Max'}
+                  </span>
                 </div>
               </div>
+              <Slider
+                defaultValue={[0, 100]}
+                min={0}
+                max={5000}
+                step={50}
+                value={[
+                  minPrice ? parseInt(minPrice) : 0,
+                  maxPrice ? parseInt(maxPrice) : 5000,
+                ]}
+                onValueChange={(values) => {
+                  setMinPrice(values[0].toString());
+                  setMaxPrice(values[1].toString());
+                }}
+                className="mt-6"
+              />
             </div>
 
             {/* Category Filter */}
             {categories.length > 0 && (
               <div className="space-y-2">
-                <h4 className="text-sm font-medium">Categories</h4>
-                <div className="flex flex-wrap gap-4">
+                <h4 className="text-sm font-semibold">Categories</h4>
+                <div className="mt-3 flex flex-wrap gap-3">
                   {categories.map((category) => (
                     <div key={category} className="flex items-center space-x-2">
                       <Checkbox
@@ -392,7 +349,6 @@ function ModalBody({
                 setSearchQuery('');
                 setMinPrice('');
                 setMaxPrice('');
-                setAvailabilityFilter([]);
                 setSelectedCategories([]);
                 setSortOption('featured');
               }}
@@ -512,4 +468,5 @@ function ProductItemCard({
   );
 }
 
+export { PcComponentModal };
 export default PcComponentModal;
