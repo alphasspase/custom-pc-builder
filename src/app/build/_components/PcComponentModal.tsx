@@ -20,8 +20,23 @@ import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
-import { Cpu, Search, SlidersHorizontal } from 'lucide-react';
+import {
+  Cpu,
+  Search,
+  SlidersHorizontal,
+  ArrowUpCircle,
+  ArrowDownCircle,
+  AlignStartVertical,
+  AlignEndVertical,
+} from 'lucide-react';
 import { Product } from '@/lib/api/services/pc_configuration/type';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface PcComponentModalProps {
   products: Product[];
@@ -260,17 +275,37 @@ function ModalBody({
             )}
           </Button>
 
-          <select
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value)}
-            className="border-input bg-background focus-visible:ring-ring h-9 rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:outline-none"
-          >
-            <option value="featured">Featured</option>
-            <option value="priceAsc">Price: Low to High</option>
-            <option value="priceDesc">Price: High to Low</option>
-            <option value="nameAsc">Name: A to Z</option>
-            <option value="nameDesc">Name: Z to A</option>
-          </select>
+          <Select value={sortOption} onValueChange={setSortOption}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="priceAsc">
+                <span className="flex items-center gap-2">
+                  <ArrowUpCircle className="h-4 w-4 text-green-500" />
+                  <span>Price: Low to High</span>
+                </span>
+              </SelectItem>
+              <SelectItem value="priceDesc">
+                <span className="flex items-center gap-2">
+                  <ArrowDownCircle className="h-4 w-4 text-red-500" />
+                  <span>Price: High to Low</span>
+                </span>
+              </SelectItem>
+              <SelectItem value="nameAsc">
+                <span className="flex items-center gap-2">
+                  <AlignStartVertical className="h-4 w-4 text-blue-500" />
+                  <span>Name: A to Z</span>
+                </span>
+              </SelectItem>
+              <SelectItem value="nameDesc">
+                <span className="flex items-center gap-2">
+                  <AlignEndVertical className="h-4 w-4 text-orange-500" />
+                  <span>Name: Z to A</span>
+                </span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
