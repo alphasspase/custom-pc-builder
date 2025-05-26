@@ -78,7 +78,7 @@ export function DiscoverMoreCard({
 
   return (
     <PcComponentModal
-      products={[]}
+      // products={[]}
       categoryName={componentName}
       componentDescription={componentDescription}
       onProductSelect={handleProductSelect}

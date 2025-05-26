@@ -39,7 +39,6 @@ import {
 import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
 
 interface PcComponentModalProps {
-  products: Product[];
   categoryName: string;
   componentDescription: string;
   children: JSX.Element;
@@ -47,7 +46,6 @@ interface PcComponentModalProps {
 }
 
 function PcComponentModal({
-  products,
   categoryName,
   componentDescription,
   children,
@@ -64,7 +62,6 @@ function PcComponentModal({
           open={open}
           setOpen={setOpen}
           description={componentDescription}
-          products={products}
           TriggerButton={children}
           onProductSelect={(product) => {
             if (onProductSelect) {
@@ -79,7 +76,6 @@ function PcComponentModal({
           setOpen={setOpen}
           title={categoryName}
           description={componentDescription}
-          products={products}
           TriggerButton={children}
           onProductSelect={(product) => {
             if (onProductSelect) {
@@ -98,7 +94,7 @@ function DesktopModal({
   setOpen,
 
   description,
-  products,
+
   TriggerButton,
   onProductSelect,
   categoryName,
@@ -107,7 +103,7 @@ function DesktopModal({
   setOpen: (open: boolean) => void;
 
   description: string;
-  products: Product[];
+
   TriggerButton: JSX.Element;
   onProductSelect?: (product: Product) => void;
   categoryName: string;
@@ -119,7 +115,6 @@ function DesktopModal({
         <Header title={categoryName} description={description} />
         <ModalBody
           categoryName={categoryName}
-          products={products}
           onProductSelect={onProductSelect}
         />
       </DialogContent>
@@ -132,7 +127,7 @@ function MobileDrawer({
   setOpen,
   title,
   description,
-  products,
+
   TriggerButton,
   onProductSelect,
 }: {
@@ -140,7 +135,7 @@ function MobileDrawer({
   setOpen: (open: boolean) => void;
   title: string;
   description: string;
-  products: Product[];
+
   TriggerButton: JSX.Element;
   onProductSelect?: (product: Product) => void;
 }) {
@@ -153,11 +148,7 @@ function MobileDrawer({
         </DrawerHeader>
         <div className="px-4 pb-4">
           <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
-            <ModalBody
-              categoryName={title}
-              products={products}
-              onProductSelect={onProductSelect}
-            />
+            <ModalBody categoryName={title} onProductSelect={onProductSelect} />
           </ScrollArea>
         </div>
       </DrawerContent>
@@ -186,12 +177,11 @@ function Header({
 }
 
 function ModalBody({
-  // products,
   onProductSelect,
   categoryName,
 }: {
   categoryName: string;
-  products: Product[];
+
   onProductSelect?: (product: Product) => void;
 }) {
   console.log(categoryName, 'categoryName');
