@@ -8,13 +8,11 @@ import { usePCBuilder } from '@/hooks/usePCBuilder';
 interface DiscoverMoreCardProps {
   componentName: string;
   componentDescription: string;
-  products?: Product[];
 }
 
 export function DiscoverMoreCard({
   componentName = 'PC Components',
   componentDescription = 'Browse all available PC components',
-  // products = [],
 }: DiscoverMoreCardProps) {
   const { addProduct } = usePCBuilder();
 
