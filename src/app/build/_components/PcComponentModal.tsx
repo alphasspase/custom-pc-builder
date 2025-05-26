@@ -185,7 +185,6 @@ function ModalBody({
 
   onProductSelect?: (product: Product) => void;
 }) {
-  console.log(categoryName, 'categoryName');
   const [searchQuery, setSearchQuery] = useState('');
   const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
   const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
