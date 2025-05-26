@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
+import { ProductSkeletonCard } from './ProductSkeletonCard';
 
 interface PcComponentModalProps {
   categoryName: string;
@@ -209,6 +210,7 @@ function ModalBody({
           max_price: debouncedMaxPrice,
           sort_by: sortOption,
         });
+        console.log('data', data);
 
         setProducts(data);
       } catch (error) {
@@ -336,7 +338,12 @@ function ModalBody({
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
         >
-          {products.length > 0 ? (
+          {isLoading ? (
+            // Skeleton loading grid
+            Array.from({ length: 6 }).map((_, index) => (
+              <ProductSkeletonCard key={index} />
+            ))
+          ) : products.length > 0 ? (
             products.map((product, index) => (
               <ProductItemCard
                 key={product.id}
