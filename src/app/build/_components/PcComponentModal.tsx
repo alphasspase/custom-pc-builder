@@ -249,7 +249,7 @@ function ModalBody({
             placeholder="Search components..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="min-w-32 pl-10"
           />
         </div>
 
