@@ -1,6 +1,6 @@
 import { apiClient } from '@/api/apiClient';
 import endpoints from '@/api/endpoints';
-import { Configuration, ProductCategory } from './type';
+import { Configuration, Product, ProductCategory } from './type';
 
 export const PcConfiguration = {
   async getProductCategories(): Promise<ProductCategory[]> {
@@ -18,5 +18,35 @@ export const PcConfiguration = {
         next: { tags: [`get-product-categories-${id}`] },
       },
     );
+  },
+  async getFilteredProducts({
+    category,
+    search = '',
+    sort_by = '',
+    min_price,
+    max_price,
+  }: {
+    category?: string;
+    search?: string;
+    sort_by?: string;
+    min_price?: number;
+    max_price?: number;
+  } = {}): Promise<Product[]> {
+    const params = new URLSearchParams();
+
+    if (category) params.append('category', category);
+    if (search) params.append('search', search);
+    if (sort_by) params.append('sort_by', sort_by);
+    if (min_price !== undefined)
+      params.append('min_price', min_price.toString());
+    if (max_price !== undefined)
+      params.append('max_price', max_price.toString());
+
+    const queryString = params.toString();
+    const url = `${endpoints.pc_configuration.getFilteredProducts}${queryString ? `?${queryString}` : ''}`;
+
+    return await apiClient.get(url, {
+      next: { tags: ['filtered-products'] },
+    });
   },
 };

@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import PcComponentModal from './PcComponentModal';
@@ -5,15 +6,13 @@ import { Product } from '@/lib/api/services/pc_configuration/type';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
 
 interface DiscoverMoreCardProps {
-  componentName?: string;
-  componentDescription?: string;
-  products?: Product[];
+  componentName: string;
+  componentDescription: string;
 }
 
 export function DiscoverMoreCard({
   componentName = 'PC Components',
   componentDescription = 'Browse all available PC components',
-  products = [],
 }: DiscoverMoreCardProps) {
   const { addProduct } = usePCBuilder();
 
@@ -79,8 +78,7 @@ export function DiscoverMoreCard({
 
   return (
     <PcComponentModal
-      products={products}
-      componentName={componentName}
+      categoryName={componentName}
       componentDescription={componentDescription}
       onProductSelect={handleProductSelect}
     >

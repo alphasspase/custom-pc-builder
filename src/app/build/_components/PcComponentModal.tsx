@@ -1,7 +1,8 @@
 'use client';
 
-import { JSX, useState } from 'react';
+import { JSX, useEffect, useState } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useDebounce } from '@/hooks/use-debounce';
 import {
   Dialog,
   DialogContent,
@@ -35,18 +36,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
+import { ProductSkeletonCard } from './ProductSkeletonCard';
 
 interface PcComponentModalProps {
-  products: Product[];
-  componentName: string;
+  categoryName: string;
   componentDescription: string;
   children: JSX.Element;
   onProductSelect?: (product: Product) => void;
 }
 
 function PcComponentModal({
-  products,
-  componentName,
+  categoryName,
   componentDescription,
   children,
   onProductSelect,
@@ -58,11 +59,10 @@ function PcComponentModal({
     <>
       {isDesktop ? (
         <DesktopModal
+          categoryName={categoryName}
           open={open}
           setOpen={setOpen}
-          title={componentName}
           description={componentDescription}
-          products={products}
           TriggerButton={children}
           onProductSelect={(product) => {
             if (onProductSelect) {
@@ -75,9 +75,8 @@ function PcComponentModal({
         <MobileDrawer
           open={open}
           setOpen={setOpen}
-          title={componentName}
+          title={categoryName}
           description={componentDescription}
-          products={products}
           TriggerButton={children}
           onProductSelect={(product) => {
             if (onProductSelect) {
@@ -94,26 +93,31 @@ function PcComponentModal({
 function DesktopModal({
   open,
   setOpen,
-  title,
+
   description,
-  products,
+
   TriggerButton,
   onProductSelect,
+  categoryName,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  title: string;
+
   description: string;
-  products: Product[];
+
   TriggerButton: JSX.Element;
   onProductSelect?: (product: Product) => void;
+  categoryName: string;
 }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
       <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
-        <Header title={title} description={description} />
-        <ModalBody products={products} onProductSelect={onProductSelect} />
+        <Header title={categoryName} description={description} />
+        <ModalBody
+          categoryName={categoryName}
+          onProductSelect={onProductSelect}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -124,7 +128,7 @@ function MobileDrawer({
   setOpen,
   title,
   description,
-  products,
+
   TriggerButton,
   onProductSelect,
 }: {
@@ -132,7 +136,7 @@ function MobileDrawer({
   setOpen: (open: boolean) => void;
   title: string;
   description: string;
-  products: Product[];
+
   TriggerButton: JSX.Element;
   onProductSelect?: (product: Product) => void;
 }) {
@@ -145,7 +149,7 @@ function MobileDrawer({
         </DrawerHeader>
         <div className="px-4 pb-4">
           <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
-            <ModalBody products={products} onProductSelect={onProductSelect} />
+            <ModalBody categoryName={title} onProductSelect={onProductSelect} />
           </ScrollArea>
         </div>
       </DrawerContent>
@@ -174,56 +178,55 @@ function Header({
 }
 
 function ModalBody({
-  products,
   onProductSelect,
+  categoryName,
 }: {
-  products: Product[];
+  categoryName: string;
+
   onProductSelect?: (product: Product) => void;
 }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const [sortOption, setSortOption] = useState('featured');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [selectedCategories] = useState<string[]>([]);
+  // Apply debouncing to the frequently changing filter values
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  const debouncedMinPrice = useDebounce(minPrice, 500);
+  const debouncedMaxPrice = useDebounce(maxPrice, 500);
 
-  // Apply filters and sorting to products
-  const filteredProducts = products
-    .filter((product) => {
-      // Search query filter
-      const matchesSearch =
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase());
+  const [products, setProducts] = useState<Product[]>([]);
 
-      // Price range filter
-      const minPriceValue = minPrice ? parseFloat(minPrice) : 0;
-      const maxPriceValue = maxPrice ? parseFloat(maxPrice) : Infinity;
-      const productPrice = parseFloat(product.price);
-      const matchesPrice =
-        productPrice >= minPriceValue && productPrice <= maxPriceValue;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      try {
+        const data = await PcConfiguration.getFilteredProducts({
+          category: categoryName,
+          search: debouncedSearchQuery,
+          min_price: debouncedMinPrice,
+          max_price: debouncedMaxPrice,
+          sort_by: sortOption,
+        });
+        console.log('data', data);
 
-      // Category filter
-      const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(product.category);
-
-      return matchesSearch && matchesPrice && matchesCategory;
-    })
-    .sort((a, b) => {
-      // Sort products based on selected option
-      switch (sortOption) {
-        case 'priceAsc':
-          return parseFloat(a.price) - parseFloat(b.price);
-        case 'priceDesc':
-          return parseFloat(b.price) - parseFloat(a.price);
-        case 'nameAsc':
-          return a.name.localeCompare(b.name);
-        case 'nameDesc':
-          return b.name.localeCompare(a.name);
-        default:
-          return 0; // Featured/default sorting
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
       }
-    });
+    };
+
+    fetchProducts();
+  }, [
+    categoryName,
+    debouncedSearchQuery,
+    debouncedMinPrice,
+    debouncedMaxPrice,
+    sortOption,
+  ]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -237,7 +240,7 @@ function ModalBody({
             placeholder="Search components..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="min-w-32 pl-10"
           />
         </div>
 
@@ -251,19 +254,11 @@ function ModalBody({
               className="min-w-32 pl-8"
               placeholder="Min Price"
               value={minPrice}
-              onChange={(e) => {
-                const value = e.target.value;
-                const numValue = parseInt(value);
-                if (
-                  value === '' ||
-                  (numValue >= 0 &&
-                    numValue <= (maxPrice ? parseInt(maxPrice) : 5000))
-                ) {
-                  setMinPrice(value);
-                }
-              }}
+              onChange={(e) =>
+                setMinPrice(e.target.value ? Number(e.target.value) : undefined)
+              }
               min="0"
-              max={maxPrice || '5000'}
+              max={maxPrice || 5000}
             />
           </div>
 
@@ -278,19 +273,10 @@ function ModalBody({
               className="min-w-32 pl-8"
               placeholder="Max Price"
               value={maxPrice}
-              onChange={(e) => {
-                const value = e.target.value;
-                const numValue = parseInt(value);
-                if (
-                  value === '' ||
-                  (numValue >= (minPrice ? parseInt(minPrice) : 0) &&
-                    numValue <= 5000)
-                ) {
-                  setMaxPrice(value);
-                }
-              }}
-              min={minPrice || '0'}
-              max="5000"
+              onChange={(e) =>
+                setMaxPrice(e.target.value ? Number(e.target.value) : undefined)
+              }
+              min={minPrice || 0}
             />
           </div>
         </div>
@@ -308,25 +294,25 @@ function ModalBody({
                 <span>Featured Components</span>
               </span>
             </SelectItem>
-            <SelectItem value="priceAsc">
+            <SelectItem value="price">
               <span className="flex items-center gap-2">
                 <ArrowUpCircle className="h-4 w-4 text-green-500" />
                 <span>Sort by Price: Low to High</span>
               </span>
             </SelectItem>
-            <SelectItem value="priceDesc">
+            <SelectItem value="-price">
               <span className="flex items-center gap-2">
                 <ArrowDownCircle className="h-4 w-4 text-red-500" />
                 <span>Sort by Price: High to Low</span>
               </span>
             </SelectItem>
-            <SelectItem value="nameAsc">
+            <SelectItem value="name">
               <span className="flex items-center gap-2">
                 <AlignStartVertical className="h-4 w-4 text-blue-500" />
                 <span>Sort by Name: A to Z</span>
               </span>
             </SelectItem>
-            <SelectItem value="nameDesc">
+            <SelectItem value="-name">
               <span className="flex items-center gap-2">
                 <AlignEndVertical className="h-4 w-4 text-orange-500" />
                 <span>Sort by Name: Z to A</span>
@@ -339,8 +325,7 @@ function ModalBody({
       {/* Results count */}
       <div className="px-4">
         <p className="text-muted-foreground text-sm">
-          {filteredProducts.length}{' '}
-          {filteredProducts.length === 1 ? 'result' : 'results'} found
+          {products.length} {products.length === 1 ? 'result' : 'results'} found
         </p>
       </div>
 
@@ -352,8 +337,13 @@ function ModalBody({
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
         >
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
+          {isLoading ? (
+            // Skeleton loading grid
+            Array.from({ length: 6 }).map((_, index) => (
+              <ProductSkeletonCard key={index} />
+            ))
+          ) : products.length > 0 ? (
+            products.map((product, index) => (
               <ProductItemCard
                 key={product.id}
                 product={product}
