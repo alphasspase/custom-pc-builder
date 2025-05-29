@@ -24,3 +24,8 @@ export interface Configuration {
   is_preset: boolean;
   components: Product[];
 }
+
+export interface PcComponentsWithPreset {
+  preset_configuration: Configuration;
+  product_categories: ProductCategory[];
+}

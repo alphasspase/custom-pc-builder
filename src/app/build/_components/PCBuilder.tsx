@@ -145,7 +145,7 @@ export default function PCBuilder({
                   <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     {component.products &&
                       component.products
-                        .slice(1, 4)
+                        .slice(0, 3)
                         .map((option) => (
                           <BuildPCProductoptionCard
                             key={option.id}
@@ -159,7 +159,6 @@ export default function PCBuilder({
                     <DiscoverMoreCard
                       componentName={component.name}
                       componentDescription={component.description}
-                      products={component.products}
                     />
                   </div>
                 </AccordionContent>

@@ -1,6 +1,11 @@
 import { apiClient } from '@/api/apiClient';
 import endpoints from '@/api/endpoints';
-import { Configuration, Product, ProductCategory } from './type';
+import {
+  Configuration,
+  PcComponentsWithPreset,
+  Product,
+  ProductCategory,
+} from './type';
 
 export const PcConfiguration = {
   async getProductCategories(): Promise<ProductCategory[]> {
@@ -16,6 +21,17 @@ export const PcConfiguration = {
       endpoints.pc_configuration.getPcConfigurationById(id),
       {
         next: { tags: [`get-product-categories-${id}`] },
+      },
+    );
+  },
+  async getPcComponentsWithPreset(
+    id?: number,
+  ): Promise<PcComponentsWithPreset> {
+    return await apiClient.get(
+      endpoints.pc_configuration.getPcComponentsWithPreset +
+        (id ? `?preset_id=${id}` : ''),
+      {
+        next: { tags: [`get-pc-components-with-preset-${id}`] },
       },
     );
   },
