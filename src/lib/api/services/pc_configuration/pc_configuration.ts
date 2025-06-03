@@ -29,7 +29,7 @@ export const PcConfiguration = {
   ): Promise<PcComponentsWithPreset> {
     return await apiClient.get(
       endpoints.pc_configuration.getPcComponentsWithPreset +
-        (id ? `?preset_id=${id}` : ''),
+        (id != null ? `?preset_id=${id}` : ''),
       {
         next: { tags: [`get-pc-components-with-preset-${id}`] },
       },
