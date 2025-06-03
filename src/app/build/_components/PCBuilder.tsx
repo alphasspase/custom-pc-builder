@@ -17,7 +17,7 @@ import { Product, ProductCategory } from '@/services/pc_configuration/type';
 import Link from 'next/link';
 import { URLS } from '@/utils/urls';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BuildPCProductoptionCard } from './BuildPCProductoptionCard';
 import { DiscoverMoreCard } from './DiscoverMoreCard';
 
@@ -45,13 +45,16 @@ function getComponentIcon(id: string) {
 
 export default function PCBuilder({
   defaultSelectedProducts = [],
-  productCategories,
+  productCategories: initialProductCategories,
 }: {
   defaultSelectedProducts: Product[];
   productCategories: ProductCategory[];
 }) {
   const router = useRouter();
   const { selectedProducts, total, addProduct } = usePCBuilder();
+  const [productCategories, setProductCategories] = useState<ProductCategory[]>(
+    initialProductCategories,
+  );
 
   useEffect(() => {
     defaultSelectedProducts.forEach((product) => {
@@ -61,6 +64,31 @@ export default function PCBuilder({
 
   const selectOption = (selectedOption: Product) => {
     addProduct(selectedOption);
+
+    // Update product categories to move selected product to index 0
+    setProductCategories((prevCategories) => {
+      return prevCategories.map((category) => {
+        if (category.name === selectedOption.category) {
+          const products = [...category.products];
+          const selectedIndex = products.findIndex(
+            (p) => p.id === selectedOption.id,
+          );
+
+          if (selectedIndex !== -1) {
+            // Remove the product from its current position and add it to the beginning
+            const [product] = products.splice(selectedIndex, 1);
+            products.unshift(product);
+          }
+
+          return {
+            ...category,
+            products,
+          };
+        }
+
+        return category;
+      });
+    });
   };
 
   // Main render
@@ -159,6 +187,7 @@ export default function PCBuilder({
                     <DiscoverMoreCard
                       componentName={component.name}
                       componentDescription={component.description}
+                      selectOption={selectOption}
                     />
                   </div>
                 </AccordionContent>
