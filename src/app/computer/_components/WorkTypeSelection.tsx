@@ -334,12 +334,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
       </section>
 
       <div className="mt-8 flex flex-wrap-reverse items-center justify-center gap-5">
-        <Button
-          asChild
-          size={'lg'}
-          variant="outline"
-          className="px-6 py-2 transition-colors hover:bg-gray-100/80"
-        >
+        <Button asChild size={'lg'} variant="outline">
           <Link href={URLS.build} className="mr-2">
             Skip Questions
           </Link>
