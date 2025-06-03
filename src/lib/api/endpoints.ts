@@ -8,6 +8,8 @@ const endpoints = {
     submitPcConfiguration:
       '/pc_configuration/rest_api/submit-pc-configuration/',
     getFilteredProducts: '/pc_configuration/rest_api/filtered-products/',
+    getPcComponentsWithPreset:
+      '/pc_configuration/rest_api/get-pc-components-with-preset/',
     getPcConfigurationById: (id: number) =>
       `/pc_configuration/rest_api/get-pc-configuration/${id}/`,
   },

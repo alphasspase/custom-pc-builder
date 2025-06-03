@@ -6,17 +6,21 @@ import { Product } from '@/lib/api/services/pc_configuration/type';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
 
 interface DiscoverMoreCardProps {
-  componentName: string;
-  componentDescription: string;
+  componentName?: string;
+  componentDescription?: string;
+  selectOption: (product: Product) => void;
 }
 
 export function DiscoverMoreCard({
   componentName = 'PC Components',
   componentDescription = 'Browse all available PC components',
+  selectOption,
 }: DiscoverMoreCardProps) {
   const { addProduct } = usePCBuilder();
 
   const handleProductSelect = (product: Product) => {
+    // Pass the selected product to both PCBuilder's selectOption and addProduct
+    selectOption(product);
     addProduct(product);
   };
 

@@ -8,7 +8,7 @@ import PCBuilder from './_components/PCBuilder';
 import { PcConfiguration } from '@/services/pc_configuration/pc_configuration';
 import { SearchParams } from '@/types/global';
 
-const categories = [
+const categoriesTab = [
   {
     id: 'computer',
     name: 'Computer',
@@ -38,11 +38,12 @@ const categories = [
 const buildPage = async (props: { searchParams: SearchParams }) => {
   const searchParams = await props.searchParams;
   console.log('searchParams', searchParams);
-  const response = await PcConfiguration.getProductCategories();
-  const defaultSelectedProducts = searchParams.id
-    ? (await PcConfiguration.getProductCategoriesById(Number(searchParams.id)))
-        .components
-    : [];
+  const combinedCategories = await PcConfiguration.getPcComponentsWithPreset(
+    searchParams.id ? Number(searchParams.id) : undefined,
+  );
+  console.log('combinedCategories ---->', combinedCategories);
+  const defaultSelectedProducts = combinedCategories?.preset_configuration;
+  const categories = combinedCategories?.product_categories;
 
   return (
     <div>
@@ -56,12 +57,12 @@ for your needs."
 
       <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
         <div>
-          <CategoryNavigation categories={categories} />
+          <CategoryNavigation categories={categoriesTab} />
         </div>
         <div>
           <PCBuilder
-            defaultSelectedProducts={defaultSelectedProducts}
-            productCategories={response}
+            defaultSelectedProducts={defaultSelectedProducts?.components || []}
+            productCategories={categories}
           />
         </div>
       </div>
