@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
 export interface ProductSectionData {
@@ -10,10 +11,21 @@ export interface ProductSectionData {
 export interface ProductCarouselProps {
   title: string;
   description: string;
-  products: Setup_Product[];
+  products: Setup_Product[] | null;
   isLoading?: boolean;
   onLoadMore?: () => void;
   hasMore?: boolean;
+  category?: number;
+}
+
+export interface ModalProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  title: string;
+  description: string;
+  products: Setup_Product[];
+  category?: number;
+  TriggerButton: JSX.Element;
 }
 
 export interface ProductOption {

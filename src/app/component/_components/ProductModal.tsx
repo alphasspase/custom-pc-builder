@@ -1,7 +1,8 @@
 'use client';
 
-import { JSX, useState, useMemo } from 'react';
+import { JSX, useState, useEffect, useCallback } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
 import {
   Dialog,
   DialogContent,
@@ -18,10 +19,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { FaWhiskeyGlass } from 'react-icons/fa6';
-import { ProductCard } from './ProductCard';
-import { ProductCarouselProps } from '../types';
-import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -38,101 +35,12 @@ import {
   AlignStartVertical,
   AlignEndVertical,
 } from 'lucide-react';
+import { ProductCard } from './ProductCard';
+import { ProductCarouselProps } from '../types';
+import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
-export function ProductModal({
-  products,
-  title,
-  description,
-}: ProductCarouselProps) {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-
-  const TriggerButton = <Button size="lg">Explore More</Button>;
-
-  // Provide empty array as fallback when products is null
-  const safeProducts = products || [];
-
-  return (
-    <>
-      {isDesktop ? (
-        <DesktopModal
-          open={open}
-          setOpen={setOpen}
-          title={title}
-          description={description}
-          products={safeProducts}
-          TriggerButton={TriggerButton}
-        />
-      ) : (
-        <MobileDrawer
-          open={open}
-          setOpen={setOpen}
-          title={title}
-          description={description}
-          products={safeProducts}
-          TriggerButton={TriggerButton}
-        />
-      )}
-    </>
-  );
-}
-
-function DesktopModal({
-  open,
-  setOpen,
-  title,
-  description,
-  products,
-  TriggerButton,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  title: string;
-  description: string;
-  products: Setup_Product[];
-  TriggerButton: JSX.Element;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
-      <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
-        <Header title={title} description={description} />
-        <ModalBody products={products} />
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function MobileDrawer({
-  open,
-  setOpen,
-  title,
-  description,
-  products,
-  TriggerButton,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  title: string;
-  description: string;
-  products: Setup_Product[];
-  TriggerButton: JSX.Element;
-}) {
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
-      <DrawerContent className="border-t-primary-200">
-        <DrawerHeader className="text-left">
-          <Header title={title} description={description} />
-        </DrawerHeader>
-        <div className="px-4 pb-4">
-          <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
-            <ModalBody products={products} />
-          </ScrollArea>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  );
+function ProductSkeleton() {
+  return <div className="h-[300px] animate-pulse rounded-lg bg-gray-200 p-4" />;
 }
 
 function Header({
@@ -145,7 +53,7 @@ function Header({
   return (
     <>
       <DialogTitle className="text-primary flex items-center gap-2">
-        <FaWhiskeyGlass size={30} className="text-primary" />
+        <Cpu size={30} className="text-primary" />
         <span className="text-2xl font-semibold md:text-3xl">{title}</span>
       </DialogTitle>
       <DialogDescription>{description}</DialogDescription>
@@ -153,46 +61,58 @@ function Header({
   );
 }
 
-function ModalBody({ products }: { products: Setup_Product[] }) {
+function ModalBody({
+  products: initialProducts,
+  category,
+}: {
+  products: Setup_Product[];
+  category?: number;
+}) {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [minPrice, setMinPrice] = useState<number | undefined>();
   const [maxPrice, setMaxPrice] = useState<number | undefined>();
   const [sortOption, setSortOption] = useState<string>('featured');
+  const [loading, setLoading] = useState(false);
+  const [filteredProducts, setFilteredProducts] =
+    useState<Setup_Product[]>(initialProducts);
 
-  const filteredProducts = useMemo(() => {
-    return products
-      .filter((product) => {
-        const matchesSearch = product.name
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
-        const matchesMinPrice = minPrice
-          ? parseFloat(product.price) >= minPrice
-          : true;
-        const matchesMaxPrice = maxPrice
-          ? parseFloat(product.price) <= maxPrice
-          : true;
+  const [totalCount, setTotalCount] = useState(initialProducts.length);
 
-        return matchesSearch && matchesMinPrice && matchesMaxPrice;
-      })
-      .sort((a, b) => {
-        switch (sortOption) {
-          case 'price':
-            return parseFloat(a.price) - parseFloat(b.price);
-          case '-price':
-            return parseFloat(b.price) - parseFloat(a.price);
-          case 'name':
-            return a.name.localeCompare(b.name);
-          case '-name':
-            return b.name.localeCompare(a.name);
-          default:
-            return a.most_popular ? -1 : 1;
-        }
+  const fetchFilteredProducts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await SetupConfiguration.getSetupProductByFilters({
+        category,
+        search: searchQuery,
+        sort_by: sortOption,
+        min_price: minPrice,
+        max_price: maxPrice,
+        page: 1,
+        page_size: 9,
       });
-  }, [products, searchQuery, minPrice, maxPrice, sortOption]);
+      setFilteredProducts(response.results);
+      setTotalCount(response.count);
+    } catch (error) {
+      console.error('Error fetching filtered products:', error);
+      setFilteredProducts(initialProducts);
+      setTotalCount(initialProducts.length);
+    } finally {
+      setLoading(false);
+    }
+  }, [category, searchQuery, sortOption, minPrice, maxPrice, initialProducts]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchFilteredProducts();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [fetchFilteredProducts]);
 
   return (
-    <>
+    <div className="flex flex-col space-y-4">
+      {/* Search and Filters */}
       <div className="flex flex-col gap-4 px-4 pt-4 md:flex-row md:items-center md:justify-between">
         <div className="relative flex-1">
           <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
@@ -283,29 +203,148 @@ function ModalBody({ products }: { products: Setup_Product[] }) {
 
       <div className="px-4">
         <p className="text-muted-foreground text-sm">
-          {filteredProducts.length}{' '}
-          {filteredProducts.length === 1 ? 'result' : 'results'} found
+          {totalCount} {totalCount === 1 ? 'result' : 'results'} found
         </p>
       </div>
 
-      <ScrollArea className="rounded-md border sm:h-[calc(100dvh-170px)]">
+      <ScrollArea className="rounded-md border sm:h-[calc(100dvh-270px)]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
         >
-          {filteredProducts.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isSelected={selectedProduct === product.id.toString()}
-              onSelect={setSelectedProduct}
-              index={index}
-            />
-          ))}
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <ProductSkeleton key={index} />
+            ))
+          ) : filteredProducts.length > 0 ? (
+            filteredProducts.map((product, index) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isSelected={selectedProduct === product.id.toString()}
+                onSelect={setSelectedProduct}
+                index={index}
+              />
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-12">
+              <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+                <Search className="text-muted-foreground h-8 w-8" />
+              </div>
+              <h3 className="mb-1 text-lg font-semibold">No products found</h3>
+              <p className="text-muted-foreground">
+                Try adjusting your search or filters to find what you&apos;re
+                looking for.
+              </p>
+            </div>
+          )}
         </motion.div>
       </ScrollArea>
+    </div>
+  );
+}
+
+function DesktopModal({
+  open,
+  setOpen,
+  title,
+  description,
+  products,
+  category,
+  TriggerButton,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  title: string;
+  description: string;
+  products: Setup_Product[];
+  category?: number;
+  TriggerButton: JSX.Element;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
+      <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
+        <Header title={title} description={description} />
+        <ModalBody products={products} category={category} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function MobileDrawer({
+  open,
+  setOpen,
+  title,
+  description,
+  products,
+  category,
+  TriggerButton,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  title: string;
+  description: string;
+  products: Setup_Product[];
+  category?: number;
+  TriggerButton: JSX.Element;
+}) {
+  return (
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>{TriggerButton}</DrawerTrigger>
+      <DrawerContent className="border-t-primary-200">
+        <DrawerHeader className="text-left">
+          <Header title={title} description={description} />
+        </DrawerHeader>
+        <div className="px-4 pb-4">
+          <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
+            <ModalBody products={products} category={category} />
+          </ScrollArea>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+export function ProductModal({
+  products: initialProducts,
+  title,
+  description,
+  category,
+}: ProductCarouselProps & { category?: number }) {
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+
+  const TriggerButton = <Button size="lg">Explore More</Button>;
+
+  // Provide empty array as fallback when products is null
+  const safeProducts = initialProducts || [];
+
+  return (
+    <>
+      {isDesktop ? (
+        <DesktopModal
+          open={open}
+          setOpen={setOpen}
+          title={title}
+          description={description}
+          products={safeProducts}
+          category={category}
+          TriggerButton={TriggerButton}
+        />
+      ) : (
+        <MobileDrawer
+          open={open}
+          setOpen={setOpen}
+          title={title}
+          description={description}
+          products={safeProducts}
+          category={category}
+          TriggerButton={TriggerButton}
+        />
+      )}
     </>
   );
 }
