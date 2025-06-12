@@ -2,30 +2,55 @@ import HeroHighlightSection from '@/components/global/HeroHighlightSection';
 import React from 'react';
 import ProductCarousel from './_components/ProductCarousel';
 import WorkspaceConfigurator from './_components/WorkspaceConfigurator';
-import { chair_products, peripheralProducts, products } from '.';
+import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
+import { ProductSectionData } from './types';
 
-const productsCardData = [
+const productsCardData: ProductSectionData[] = [
   {
     title: 'Choose Your Perfect Desk',
     description:
       'Elevate your workspace with our premium desk options designed for comfort and productivity',
-    products: products,
+    category: 1, // desk category
+    products: null,
   },
   {
     title: 'Find Your Ultimate Chair Experience',
     description:
       'Discover chairs crafted with precision, offering superior comfort, ergonomic support, and sleek design to elevate your workspace.',
-    products: chair_products,
+    category: 2, // chair category
+    products: null,
   },
   {
     title: 'Revolutionize Your Setup with Premium Peripherals',
     description:
       'Discover top-tier accessories—from gaming gear to advanced audio solutions—designed to boost productivity and elevate your immersive experience.',
-    products: peripheralProducts,
+    category: 3, // peripherals category
+    products: null,
   },
 ];
 
-const componentPage = () => {
+const ComponentPage = async () => {
+  // Fetch data for all sections in parallel
+  const productSections = await Promise.all(
+    productsCardData.map(async (section) => {
+      if (!section.category) return section;
+
+      const response = await SetupConfiguration.getSetupProductByFilters({
+        category: section.category,
+        page_size: 6,
+      });
+
+      return {
+        ...section,
+        products: response.results.map((product) => ({
+          ...product,
+          title: product.name, // Map name to title for compatibility
+        })),
+      };
+    }),
+  );
+  console.log('productSections --->', productSections);
+
   return (
     <div className="relative">
       <HeroHighlightSection
@@ -36,9 +61,8 @@ const componentPage = () => {
    for your needs."
       />
       <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-3 lg:gap-8">
-        {/* sub grid */}
         <div className="col-span-2 space-y-5">
-          {productsCardData.map((product, index) => (
+          {productSections.map((product, index) => (
             <ProductCarousel
               key={index}
               title={product.title}
@@ -47,7 +71,6 @@ const componentPage = () => {
             />
           ))}
         </div>
-        {/* sub grid */}
         <div>
           <WorkspaceConfigurator />
         </div>
@@ -56,4 +79,4 @@ const componentPage = () => {
   );
 };
 
-export default componentPage;
+export default ComponentPage;

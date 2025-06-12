@@ -1,4 +1,4 @@
-import { ProductCarouselProps } from '../type';
+import { ProductCarouselProps } from '../types';
 import ProductBanner from './ProductBanner';
 
 export default function ProductCarousel({

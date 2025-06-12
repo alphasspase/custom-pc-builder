@@ -20,7 +20,8 @@ import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FaWhiskeyGlass } from 'react-icons/fa6';
 import { ProductCard } from './ProductCard';
-import { ProductCarouselProps, ProductOption } from '../type';
+import { ProductCarouselProps } from '../types';
+import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
 export function ProductModal({
   products,
@@ -32,6 +33,9 @@ export function ProductModal({
 
   const TriggerButton = <Button size="lg">Explore More</Button>;
 
+  // Provide empty array as fallback when products is null
+  const safeProducts = products || [];
+
   return (
     <>
       {isDesktop ? (
@@ -40,7 +44,7 @@ export function ProductModal({
           setOpen={setOpen}
           title={title}
           description={description}
-          products={products}
+          products={safeProducts}
           TriggerButton={TriggerButton}
         />
       ) : (
@@ -49,7 +53,7 @@ export function ProductModal({
           setOpen={setOpen}
           title={title}
           description={description}
-          products={products}
+          products={safeProducts}
           TriggerButton={TriggerButton}
         />
       )}
@@ -69,7 +73,7 @@ function DesktopModal({
   setOpen: (open: boolean) => void;
   title: string;
   description: string;
-  products: ProductOption[];
+  products: Setup_Product[];
   TriggerButton: JSX.Element;
 }) {
   return (
@@ -95,7 +99,7 @@ function MobileDrawer({
   setOpen: (open: boolean) => void;
   title: string;
   description: string;
-  products: ProductOption[];
+  products: Setup_Product[];
   TriggerButton: JSX.Element;
 }) {
   return (
@@ -133,7 +137,7 @@ function Header({
   );
 }
 
-function ModalBody({ products }: { products: ProductOption[] }) {
+function ModalBody({ products }: { products: Setup_Product[] }) {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   return (

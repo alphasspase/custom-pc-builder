@@ -13,19 +13,8 @@ const endpoints = {
     getPcConfigurationById: (id: number) =>
       `/pc_configuration/rest_api/get-pc-configuration/${id}/`,
   },
-  user: {
-    getJoke: '/public/randomjokese',
-    getUserById: (id: string) => `/users/${id}`,
-    updateUser: (id: string) => `/users/${id}`,
-    deleteUser: (id: string) => `/users/${id}`,
-    searchUsers: (query: string, filters?: Record<string, string>) =>
-      `/users/search?q=${encodeURIComponent(query)}${filters ? `&${new URLSearchParams(filters)}` : ''}`,
-  },
-  todo: {
-    getTodo: '/todos',
-    createTodo: '/todos/',
-    getTodoById: (todoId: string) => `/todos/${todoId}`,
-    updateTodoById: (todoId: string) => `/todos/${todoId}`,
+  setup_configuration: {
+    getSetupProductByFilters: '/setup_configuration/rest_api/products/',
   },
 } as const;
 

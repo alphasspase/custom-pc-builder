@@ -3,32 +3,14 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Check, Sparkles, Star, ArrowRight } from 'lucide-react';
-import { ProductOption } from '../type';
+import { Check, Sparkles, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-/** Renders a row of star icons based on the product rating */
-const renderStars = (rating: number) => {
-  return Array(5)
-    .fill(0)
-    .map((_, i) => (
-      <Star
-        key={i}
-        className={cn(
-          'h-4 w-4',
-          i < Math.floor(rating)
-            ? 'fill-yellow-400 text-yellow-400'
-            : 'text-gray-300',
-        )}
-      />
-    ));
-};
+import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
 interface ProductCardProps {
-  product: ProductOption;
+  product: Setup_Product;
   isSelected: boolean;
   onSelect: (id: string) => void;
-  mounted: boolean;
   index: number;
 }
 
@@ -36,7 +18,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   isSelected,
   onSelect,
-  mounted,
   index,
 }) => {
   return (
@@ -55,29 +36,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             ? 'border-primary shadow-primary/20 shadow-lg'
             : 'border-border hover:border-primary/50',
         )}
-        onClick={() => onSelect(product.id)}
+        onClick={() => onSelect(product.id.toString())}
       >
         <div className="relative overflow-hidden">
           <div className="aspect-3/2 overflow-hidden">
             <Image
               fill
-              src={product.image || '/placeholder.svg'}
-              alt={product.title}
+              src={product.image || '/noData.jpg'}
+              alt={product.name}
               className="relative z-0 h-full w-full transition-transform duration-500 group-hover:scale-110"
             />
             <div className="absolute inset-0 z-20 bg-black/20"></div>
             <div className="absolute right-0 bottom-0 left-0 z-30 p-4 text-white">
-              <div className="mb-1 flex items-center gap-1">
+              {/* <div className="mb-1 flex items-center gap-1">
                 {mounted && product.rating && renderStars(product.rating)}
                 {product.rating && (
                   <span className="ml-1 text-sm">({product.rating})</span>
                 )}
-              </div>
-              <h3 className="text-xl font-bold">{product.title}</h3>
+              </div> */}
+              <h3 className="text-xl font-bold">{product.name}</h3>
             </div>
           </div>
 
-          {product.popular && (
+          {product.most_popular && (
             <Badge className="absolute top-3 right-3 z-30 bg-white font-medium text-black shadow-lg">
               <Sparkles className="mr-1 h-3.5 w-3.5 text-yellow-500" />
               Most Popular
@@ -104,7 +85,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <CardContent>
           <div className="mb-1 flex items-baseline">
             <div className="text-3xl font-bold">
-              ${product.price - (product.discount || 0)}
+              ${Number(product.price) - Number(product.discount || 0)}
             </div>
             {product.discount && (
               <div className="text-muted-foreground ml-2 text-lg line-through">
@@ -112,7 +93,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             )}
           </div>
-          <ul className="space-y-1">
+          {/* <ul className="space-y-1">
             {product.features.slice(0, 3).map((feature, i) => (
               <motion.li
                 key={i}
@@ -125,7 +106,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 <span>{feature}</span>
               </motion.li>
             ))}
-          </ul>
+          </ul> */}
         </CardContent>
 
         <CardFooter>

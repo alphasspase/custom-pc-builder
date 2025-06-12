@@ -11,9 +11,10 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import { ProductCarouselProps, ProductOption } from '../type';
 import { ProductModal } from './ProductModal';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
+import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
+import { ProductCarouselProps } from '../types';
 
 // Constants
 const AUTO_PLAY_INTERVAL = 5000;
@@ -21,14 +22,14 @@ const DEFAULT_IMAGE = '/placeholder.svg';
 
 // Interfaces
 interface ProductBannerProps extends ProductCarouselProps {
-  products: ProductOption[];
+  products: Setup_Product[];
 }
 
 interface ProductItemProps {
-  product: ProductOption;
+  product: Setup_Product;
   title: string;
   description: string;
-  products: ProductOption[];
+  products: Setup_Product[];
 }
 
 // Components
@@ -82,7 +83,10 @@ function ProductBanner({ products, title, description }: ProductBannerProps) {
             {products.map((product) => (
               <CarouselItem key={product.id}>
                 <div className="grid h-full md:grid-cols-2">
-                  <ProductImage src={product.image} alt={product.title} />
+                  <ProductImage
+                    src={product.image || '/noData.jpg'}
+                    alt={product.name}
+                  />
                   <ProductDetails
                     product={product}
                     title={title}
