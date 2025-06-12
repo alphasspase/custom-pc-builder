@@ -4,13 +4,13 @@ export interface ProductSectionData {
   title: string;
   description: string;
   category?: number;
-  products: Setup_Product[] | null;
+  products: Setup_Product[];
 }
 
 export interface ProductCarouselProps {
   title: string;
   description: string;
-  products: Setup_Product[] | null;
+  products: Setup_Product[];
   isLoading?: boolean;
   onLoadMore?: () => void;
   hasMore?: boolean;

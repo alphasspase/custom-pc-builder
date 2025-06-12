@@ -131,12 +131,16 @@ function ProductDetails({
 }: ProductItemProps) {
   return (
     <div className="flex flex-col justify-center p-6 md:p-8">
-      <h2 className="mb-3 text-2xl font-bold md:text-3xl">{product.title}</h2>
+      <h2 className="mb-3 text-2xl font-bold md:text-3xl">{product.name}</h2>
       <p className="mb-4 text-gray-600">{product.description}</p>
 
       <div className="mb-6 flex items-baseline">
         <span className="text-3xl font-bold">
-          ${product.price - (product.discount || 0)}
+          $
+          {(
+            Number(product.price) *
+            (1 - Number(product.discount || 0) / 100)
+          ).toFixed(2)}
         </span>
         {product.discount && (
           <span className="text-muted-foreground ml-2 text-lg line-through">
