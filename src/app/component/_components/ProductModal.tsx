@@ -1,6 +1,6 @@
 'use client';
 
-import { JSX, useState, useEffect, useCallback, useRef } from 'react';
+import { JSX, useState, useCallback } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -81,7 +81,6 @@ function ModalBody({
   const [totalCount, setTotalCount] = useState(initialProducts.length);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const isFirstRender = useRef(true);
 
   const fetchFilteredProducts = useCallback(
     async (pageNumber: number, isNewSearch = false) => {
@@ -96,7 +95,7 @@ function ModalBody({
           page: pageNumber,
           page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
         });
-        console.log('`response`', response);
+        console.log('API response:', response);
 
         if (isNewSearch) {
           setFilteredProducts(response.results);
@@ -106,15 +105,10 @@ function ModalBody({
 
         setTotalCount(response.count);
 
-        // Calculate whether there are more products to load
-        // Use current page size and total count instead of stale filteredProducts.length
-        const currentDisplayedItems = isNewSearch
-          ? response.results.length
-          : (pageNumber - 1) * PAGE_SIZE + response.results.length;
+        // More direct and reliable way to check if there are more products
+        setHasMore(!!response.next);
 
-        setHasMore(
-          response.results.length > 0 && currentDisplayedItems < response.count,
-        );
+        return response; // Return response for chaining
       } catch (error) {
         console.error('Error fetching filtered products:', error);
         if (isNewSearch) {
@@ -122,6 +116,7 @@ function ModalBody({
           setTotalCount(initialProducts.length);
           setHasMore(false);
         }
+        throw error; // Propagate error for proper handling
       } finally {
         setLoading(false);
       }
@@ -129,48 +124,17 @@ function ModalBody({
     [category, searchQuery, sortOption, minPrice, maxPrice, initialProducts],
   ); // Handle initial load and filter changes
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-
-      // Load initial data if we don't have any
-      if (filteredProducts.length === 0) {
-        fetchFilteredProducts(1, true);
-      }
-
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setPage(1);
-      fetchFilteredProducts(1, true);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [
-    searchQuery,
-    sortOption,
-    minPrice,
-    maxPrice,
-    category,
-    fetchFilteredProducts,
-    filteredProducts.length,
-  ]);
-
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-
   const loadMore = useCallback(() => {
-    if (isLoadingMore || loading) return; // Prevent multiple simultaneous calls
-
     console.log('loadMore called, fetching page:', page + 1);
-    setIsLoadingMore(true);
+    setLoading(true);
     const nextPage = page + 1;
+
     setPage(nextPage);
 
     fetchFilteredProducts(nextPage, false).finally(() => {
-      setIsLoadingMore(false);
+      setLoading(false);
     });
-  }, [fetchFilteredProducts, page, isLoadingMore, loading]);
+  }, [fetchFilteredProducts, page]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -285,7 +249,7 @@ function ModalBody({
               ))}
             </div>
           }
-          scrollThreshold={0.8}
+          scrollThreshold={0.7}
           scrollableTarget="scrollableDiv"
           endMessage={
             <p className="text-muted-foreground mt-4 mb-2 text-center">
