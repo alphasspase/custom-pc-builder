@@ -1,8 +1,9 @@
 'use client';
 
-import { JSX, useState, useEffect, useCallback } from 'react';
+import { JSX, useState, useEffect, useCallback, useRef } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   Dialog,
   DialogContent,
@@ -68,6 +69,7 @@ function ModalBody({
   products: Setup_Product[];
   category?: number;
 }) {
+  const PAGE_SIZE = 9; // Define a constant for page size
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [minPrice, setMinPrice] = useState<number | undefined>();
@@ -76,39 +78,99 @@ function ModalBody({
   const [loading, setLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] =
     useState<Setup_Product[]>(initialProducts);
-
   const [totalCount, setTotalCount] = useState(initialProducts.length);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const isFirstRender = useRef(true);
 
-  const fetchFilteredProducts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await SetupConfiguration.getSetupProductByFilters({
-        category,
-        search: searchQuery,
-        sort_by: sortOption,
-        min_price: minPrice,
-        max_price: maxPrice,
-        page: 1,
-        page_size: 9,
-      });
-      setFilteredProducts(response.results);
-      setTotalCount(response.count);
-    } catch (error) {
-      console.error('Error fetching filtered products:', error);
-      setFilteredProducts(initialProducts);
-      setTotalCount(initialProducts.length);
-    } finally {
-      setLoading(false);
-    }
-  }, [category, searchQuery, sortOption, minPrice, maxPrice, initialProducts]);
+  const fetchFilteredProducts = useCallback(
+    async (pageNumber: number, isNewSearch = false) => {
+      setLoading(true);
+      try {
+        const response = await SetupConfiguration.getSetupProductByFilters({
+          category,
+          search: searchQuery,
+          sort_by: sortOption,
+          min_price: minPrice,
+          max_price: maxPrice,
+          page: pageNumber,
+          page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
+        });
+        console.log('`response`', response);
+
+        if (isNewSearch) {
+          setFilteredProducts(response.results);
+        } else {
+          setFilteredProducts((prev) => [...prev, ...response.results]);
+        }
+
+        setTotalCount(response.count);
+
+        // Calculate whether there are more products to load
+        // Use current page size and total count instead of stale filteredProducts.length
+        const currentDisplayedItems = isNewSearch
+          ? response.results.length
+          : (pageNumber - 1) * PAGE_SIZE + response.results.length;
+
+        setHasMore(
+          response.results.length > 0 && currentDisplayedItems < response.count,
+        );
+      } catch (error) {
+        console.error('Error fetching filtered products:', error);
+        if (isNewSearch) {
+          setFilteredProducts(initialProducts);
+          setTotalCount(initialProducts.length);
+          setHasMore(false);
+        }
+      } finally {
+        setLoading(false);
+      }
+    },
+    [category, searchQuery, sortOption, minPrice, maxPrice, initialProducts],
+  ); // Handle initial load and filter changes
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+
+      // Load initial data if we don't have any
+      if (filteredProducts.length === 0) {
+        fetchFilteredProducts(1, true);
+      }
+
+      return;
+    }
+
     const timer = setTimeout(() => {
-      fetchFilteredProducts();
+      setPage(1);
+      fetchFilteredProducts(1, true);
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [fetchFilteredProducts]);
+  }, [
+    searchQuery,
+    sortOption,
+    minPrice,
+    maxPrice,
+    category,
+    fetchFilteredProducts,
+    filteredProducts.length,
+  ]);
+
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const loadMore = useCallback(() => {
+    if (isLoadingMore || loading) return; // Prevent multiple simultaneous calls
+
+    console.log('loadMore called, fetching page:', page + 1);
+    setIsLoadingMore(true);
+    const nextPage = page + 1;
+    setPage(nextPage);
+
+    fetchFilteredProducts(nextPage, false).finally(() => {
+      setIsLoadingMore(false);
+    });
+  }, [fetchFilteredProducts, page, isLoadingMore, loading]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -207,40 +269,66 @@ function ModalBody({
         </p>
       </div>
 
-      <ScrollArea className="rounded-md border sm:h-[calc(100dvh-270px)]">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
-        >
-          {loading ? (
-            Array.from({ length: 6 }).map((_, index) => (
-              <ProductSkeleton key={index} />
-            ))
-          ) : filteredProducts.length > 0 ? (
-            filteredProducts.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                isSelected={selectedProduct === product.id.toString()}
-                onSelect={setSelectedProduct}
-                index={index}
-              />
-            ))
-          ) : (
-            <div className="col-span-full flex flex-col items-center justify-center py-12">
-              <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
-                <Search className="text-muted-foreground h-8 w-8" />
-              </div>
-              <h3 className="mb-1 text-lg font-semibold">No products found</h3>
-              <p className="text-muted-foreground">
-                Try adjusting your search or filters to find what you&apos;re
-                looking for.
-              </p>
+      <ScrollArea
+        className="rounded-md border sm:h-[calc(100dvh-270px)]"
+        id="scrollableDiv"
+      >
+        <InfiniteScroll
+          dataLength={filteredProducts.length}
+          next={loadMore}
+          hasMore={hasMore}
+          height="calc(100dvh - 270px)"
+          loader={
+            <div className="grid grid-cols-1 gap-5 p-5 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <ProductSkeleton key={`loading-${index}`} />
+              ))}
             </div>
-          )}
-        </motion.div>
+          }
+          scrollThreshold={0.8}
+          scrollableTarget="scrollableDiv"
+          endMessage={
+            <p className="text-muted-foreground mt-4 mb-2 text-center">
+              {filteredProducts.length > 0 && "You've seen all products"}
+            </p>
+          }
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+            className="grid grid-cols-1 gap-5 rounded-lg p-5 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {loading && page === 1 ? (
+              Array.from({ length: 9 }).map((_, index) => (
+                <ProductSkeleton key={index} />
+              ))
+            ) : filteredProducts.length > 0 ? (
+              filteredProducts.map((product, index) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isSelected={selectedProduct === product.id.toString()}
+                  onSelect={setSelectedProduct}
+                  index={index}
+                />
+              ))
+            ) : (
+              <div className="col-span-full flex flex-col items-center justify-center py-12">
+                <div className="bg-muted mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+                  <Search className="text-muted-foreground h-8 w-8" />
+                </div>
+                <h3 className="mb-1 text-lg font-semibold">
+                  No products found
+                </h3>
+                <p className="text-muted-foreground">
+                  Try adjusting your search or filters to find what you&apos;re
+                  looking for.
+                </p>
+              </div>
+            )}
+          </motion.div>
+        </InfiniteScroll>
       </ScrollArea>
     </div>
   );
@@ -299,7 +387,10 @@ function MobileDrawer({
           <Header title={title} description={description} />
         </DrawerHeader>
         <div className="px-4 pb-4">
-          <ScrollArea className="h-[calc(100dvh-300px)] rounded-md border">
+          <ScrollArea
+            className="h-[calc(100dvh-300px)] rounded-md border"
+            id="mobileScrollableDiv"
+          >
             <ModalBody products={products} category={category} />
           </ScrollArea>
         </div>
