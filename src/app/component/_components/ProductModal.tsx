@@ -1,7 +1,7 @@
 // filepath: /Users/avialdosolutions/Desktop/custom-pc-builder/src/app/component/_components/ProductModal.tsx
 'use client';
 
-import { JSX, useState, useCallback, useEffect } from 'react';
+import { JSX, useState, useEffect } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -86,66 +86,64 @@ function ModalBody({
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchFilteredProducts = useCallback(
-    async (pageNumber: number, isNewSearch = false) => {
-      setLoading(true);
-      try {
-        const response = await SetupConfiguration.getSetupProductByFilters({
-          category: category,
-          search: searchQuery,
-          sort_by: sortOption,
-          min_price: minPrice,
-          max_price: maxPrice,
-          page: pageNumber,
-          page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
-        });
-        console.log('API response:', response);
+  // Remove useCallback for fetchFilteredProducts
+  // Define fetchFilteredProducts as a regular function with correct formatting
+  async function fetchFilteredProducts(
+    pageNumber: number,
+    isNewSearch = false,
+  ) {
+    setLoading(true);
+    try {
+      const response = await SetupConfiguration.getSetupProductByFilters({
+        category: category,
+        search: searchQuery,
+        sort_by: sortOption,
+        min_price: minPrice,
+        max_price: maxPrice,
+        page: pageNumber,
+        page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
+      });
+      console.log('API response:', response);
 
-        if (isNewSearch) {
-          setFilteredProducts(response.results);
-        } else {
-          setFilteredProducts((prev) => [...prev, ...response.results]);
-        }
-
-        setTotalCount(response.count);
-
-        // More direct and reliable way to check if there are more products
-        setHasMore(!!response.next);
-
-        return response; // Return response for chaining
-      } catch (error) {
-        console.error('Error fetching filtered products:', error);
-        if (isNewSearch) {
-          setFilteredProducts(initialProducts);
-          setTotalCount(initialProducts.length);
-          setHasMore(false);
-        }
-        throw error; // Propagate error for proper handling
-      } finally {
-        setLoading(false);
+      if (isNewSearch) {
+        setFilteredProducts(response.results);
+      } else {
+        setFilteredProducts((prev) => [...prev, ...response.results]);
       }
-    },
-    [category, searchQuery, sortOption, minPrice, maxPrice, initialProducts],
-  ); // Handle initial load and filter changes
 
-  const loadMore = useCallback(() => {
+      setTotalCount(response.count);
+      setHasMore(!!response.next);
+
+      return response;
+    } catch (error) {
+      console.error('Error fetching filtered products:', error);
+      if (isNewSearch) {
+        setFilteredProducts(initialProducts);
+        setTotalCount(initialProducts.length);
+        setHasMore(false);
+      }
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Define loadMore as a regular function
+  function loadMore() {
     setLoading(true);
     const nextPage = page + 1;
-
     setPage(nextPage);
-
     fetchFilteredProducts(nextPage, false).finally(() => {
       setLoading(false);
     });
-  }, [fetchFilteredProducts, page]);
+  }
 
-  // Add useEffect to watch for filter changes
+  // Fix useEffect dependencies to avoid double call
   useEffect(() => {
-    // Reset page to 1 when filters change
     setPage(1);
-    // Fetch new products with the updated filters
     fetchFilteredProducts(1, true).catch(console.error);
-  }, [searchQuery, minPrice, maxPrice, sortOption, fetchFilteredProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, minPrice, maxPrice, sortOption, category]);
 
   return (
     <div className="flex flex-col space-y-4">
