@@ -38,8 +38,11 @@ import {
   AlignEndVertical,
 } from 'lucide-react';
 import { ProductCard } from './ProductCard';
-import { ProductCarouselProps } from '../types';
-import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
+
+import {
+  Setup_Product,
+  SetupCategoryWithProducts,
+} from '@/lib/api/services/setup_configuration/type';
 
 function ProductSkeleton() {
   return <div className="h-[300px] animate-pulse rounded-lg bg-gray-200 p-4" />;
@@ -88,7 +91,7 @@ function ModalBody({
       setLoading(true);
       try {
         const response = await SetupConfiguration.getSetupProductByFilters({
-          category,
+          category: category,
           search: searchQuery,
           sort_by: sortOption,
           min_price: minPrice,
@@ -126,7 +129,6 @@ function ModalBody({
   ); // Handle initial load and filter changes
 
   const loadMore = useCallback(() => {
-    console.log('loadMore called, fetching page:', page + 1);
     setLoading(true);
     const nextPage = page + 1;
 
@@ -373,18 +375,15 @@ function MobileDrawer({
 }
 
 export function ProductModal({
-  products: initialProducts,
+  products,
   title,
   description,
-  category,
-}: ProductCarouselProps & { category?: number }) {
+  id,
+}: SetupCategoryWithProducts) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   const TriggerButton = <Button size="lg">Explore More</Button>;
-
-  // Provide empty array as fallback when products is null
-  const safeProducts = initialProducts || [];
 
   return (
     <>
@@ -394,8 +393,8 @@ export function ProductModal({
           setOpen={setOpen}
           title={title}
           description={description}
-          products={safeProducts}
-          category={category}
+          products={products}
+          category={id}
           TriggerButton={TriggerButton}
         />
       ) : (
@@ -404,8 +403,8 @@ export function ProductModal({
           setOpen={setOpen}
           title={title}
           description={description}
-          products={safeProducts}
-          category={category}
+          products={products}
+          category={id}
           TriggerButton={TriggerButton}
         />
       )}

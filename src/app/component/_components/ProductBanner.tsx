@@ -26,11 +26,13 @@ interface ProductItemProps {
   title: string;
   description: string;
   products: Setup_Product[];
+  categoryId: number;
 }
 
 // Components
 
 function ProductBanner({
+  id,
   products,
   title,
   description,
@@ -92,6 +94,7 @@ function ProductBanner({
                     title={title}
                     description={description}
                     products={products}
+                    categoryId={id}
                   />
                 </div>
               </CarouselItem>
@@ -128,6 +131,7 @@ function ProductDetails({
   title,
   description,
   products,
+  categoryId,
 }: ProductItemProps) {
   return (
     <div className="flex flex-col justify-center p-6 md:p-8">
@@ -136,13 +140,9 @@ function ProductDetails({
 
       <div className="mb-6 flex items-baseline">
         <span className="text-3xl font-bold">
-          $
-          {(
-            Number(product.price) *
-            (1 - Number(product.discount || 0) / 100)
-          ).toFixed(2)}
+          ${(Number(product.price) - Number(product.discount || 0)).toFixed(2)}
         </span>
-        {product.discount && (
+        {Number(product.discount) && (
           <span className="text-muted-foreground ml-2 text-lg line-through">
             ${product.price}
           </span>
@@ -153,6 +153,7 @@ function ProductDetails({
         products={products}
         title={title}
         description={description}
+        id={categoryId}
       />
     </div>
   );
