@@ -1,6 +1,10 @@
 import { apiClient } from '../../apiClient';
 import endpoints from '../../endpoints';
-import { PaginatedResponse, Setup_Product } from './type';
+import {
+  PaginatedResponse,
+  Setup_Product,
+  SetupCategoryWithProducts,
+} from './type';
 
 export const SetupConfiguration = {
   async getSetupProductByFilters({
@@ -38,6 +42,14 @@ export const SetupConfiguration = {
       `${endpoints.setup_configuration.getSetupProductByFilters}?${params.toString()}`,
       {
         next: { tags: ['get-setup-product-by-filters'] },
+      },
+    );
+  },
+  async getCategoriesWithProduct(): Promise<SetupCategoryWithProducts[]> {
+    return await apiClient.get(
+      endpoints.setup_configuration.getCategoriesWithProduct,
+      {
+        next: { tags: ['get-categories-with-product'] },
       },
     );
   },

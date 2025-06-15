@@ -3,40 +3,17 @@ import React from 'react';
 import ProductCarousel from './_components/ProductCarousel';
 import WorkspaceConfigurator from './_components/WorkspaceConfigurator';
 import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
-import { ProductSectionData } from './types';
-
-const productsCardData: ProductSectionData[] = [
-  {
-    title: 'Choose Your Perfect Desk',
-    description:
-      'Elevate your workspace with our premium desk options designed for comfort and productivity',
-    category: 1, // desk category
-    products: [],
-  },
-  {
-    title: 'Find Your Ultimate Chair Experience',
-    description:
-      'Discover chairs crafted with precision, offering superior comfort, ergonomic support, and sleek design to elevate your workspace.',
-    category: 2, // chair category
-    products: [],
-  },
-  {
-    title: 'Revolutionize Your Setup with Premium Peripherals',
-    description:
-      'Discover top-tier accessories—from gaming gear to advanced audio solutions—designed to boost productivity and elevate your immersive experience.',
-    category: 3, // peripherals category
-    products: [],
-  },
-];
 
 const ComponentPage = async () => {
+  const categories = await SetupConfiguration.getCategoriesWithProduct();
+
   // Fetch data for all sections in parallel
   const productSections = await Promise.all(
-    productsCardData.map(async (section) => {
-      if (!section.category) return section;
+    categories.map(async (section) => {
+      if (!section.id) return section;
 
       const response = await SetupConfiguration.getSetupProductByFilters({
-        category: section.category,
+        category: section.id,
         page_size: 6,
       });
 
@@ -49,7 +26,6 @@ const ComponentPage = async () => {
       };
     }),
   );
-  console.log('productSections --->', productSections);
 
   return (
     <div className="relative">

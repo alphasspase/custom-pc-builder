@@ -22,3 +22,10 @@ export interface PaginatedResponse<T> {
   previous: string | null;
   results: T[];
 }
+export interface SetupCategoryWithProducts {
+  id: number;
+  name: string;
+  title: string;
+  description: string;
+  products: Setup_Product[];
+}

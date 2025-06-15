@@ -15,6 +15,8 @@ const endpoints = {
   },
   setup_configuration: {
     getSetupProductByFilters: '/setup_configuration/rest_api/products/',
+    getCategoriesWithProduct:
+      '/setup_configuration/rest_api/categories-with-products/',
   },
 } as const;
 
