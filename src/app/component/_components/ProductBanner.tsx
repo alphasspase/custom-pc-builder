@@ -13,17 +13,13 @@ import {
 } from '@/components/ui/carousel';
 import { ProductModal } from './ProductModal';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
-import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
-import { ProductCarouselProps } from '../types';
+import {
+  Setup_Product,
+  SetupCategoryWithProducts,
+} from '@/lib/api/services/setup_configuration/type';
 
 // Constants
 const AUTO_PLAY_INTERVAL = 5000;
-const DEFAULT_IMAGE = '/placeholder.svg';
-
-// Interfaces
-interface ProductBannerProps extends ProductCarouselProps {
-  products: Setup_Product[];
-}
 
 interface ProductItemProps {
   product: Setup_Product;
@@ -34,7 +30,11 @@ interface ProductItemProps {
 
 // Components
 
-function ProductBanner({ products, title, description }: ProductBannerProps) {
+function ProductBanner({
+  products,
+  title,
+  description,
+}: SetupCategoryWithProducts) {
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -112,7 +112,7 @@ function ProductImage({ src, alt }: { src: string; alt: string }) {
   return (
     <AspectRatio className="p-5">
       <Image
-        src={src || DEFAULT_IMAGE}
+        src={src || '/noData.jpg'}
         alt={alt}
         width={600}
         height={400}
