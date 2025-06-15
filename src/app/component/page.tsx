@@ -11,21 +11,21 @@ const productsCardData: ProductSectionData[] = [
     description:
       'Elevate your workspace with our premium desk options designed for comfort and productivity',
     category: 1, // desk category
-    products: null,
+    products: [],
   },
   {
     title: 'Find Your Ultimate Chair Experience',
     description:
       'Discover chairs crafted with precision, offering superior comfort, ergonomic support, and sleek design to elevate your workspace.',
     category: 2, // chair category
-    products: null,
+    products: [],
   },
   {
     title: 'Revolutionize Your Setup with Premium Peripherals',
     description:
       'Discover top-tier accessories—from gaming gear to advanced audio solutions—designed to boost productivity and elevate your immersive experience.',
     category: 3, // peripherals category
-    products: null,
+    products: [],
   },
 ];
 
