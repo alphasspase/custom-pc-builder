@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { usePCBuilder } from '@/hooks/usePCBuilder';
 import {
   Search,
   Cpu,
@@ -85,6 +86,7 @@ function ModalBody({
   const [totalCount, setTotalCount] = useState(initialProducts.length);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const { addProduct } = usePCBuilder();
 
   // Remove useCallback for fetchFilteredProducts
   // Define fetchFilteredProducts as a regular function with correct formatting
@@ -282,7 +284,25 @@ function ModalBody({
                   key={product.id}
                   product={product}
                   isSelected={selectedProduct === product.id.toString()}
-                  onSelect={setSelectedProduct}
+                  onSelect={(id) => {
+                    setSelectedProduct(id);
+                    // Find the selected product and add it to the configuration
+                    const productToAdd = filteredProducts.find(
+                      (p) => p.id.toString() === id,
+                    );
+                    if (productToAdd) {
+                      // Convert Setup_Product to Product type required by usePCBuilder
+                      addProduct({
+                        id: productToAdd.id,
+                        name: productToAdd.name,
+                        description: productToAdd.description,
+                        price: productToAdd.price,
+                        category: productToAdd.category_name || 'component',
+                        stock: productToAdd.stock || 1,
+                        image: productToAdd.image,
+                      });
+                    }
+                  }}
                   index={index}
                 />
               ))
