@@ -33,7 +33,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         className={cn(
           'group h-full cursor-pointer gap-4 overflow-hidden border-2 p-0 pb-6 transition-all duration-300',
           isSelected
-            ? 'border-primary shadow-primary/20 shadow-lg'
+            ? 'border-primary bg-primary/5 ring-primary/20 shadow-primary/25 shadow-xl ring-2'
             : 'border-border hover:border-primary/50',
         )}
         onClick={() => onSelect(product.id.toString())}
@@ -113,16 +113,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </CardContent>
 
         <CardFooter>
-          <Button
-            className="group relative w-full overflow-hidden"
-            size="lg"
-            variant={isSelected ? 'default' : 'outline'}
-          >
-            <span className="relative z-10">
-              {isSelected ? 'Selected' : 'Select'}
-            </span>
-            <ArrowRight className="relative z-10 ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Button>
+          {isSelected ? (
+            <Button
+              className="w-full bg-green-600 hover:bg-green-700"
+              size="lg"
+            >
+              <span className="flex items-center">
+                Selected
+                <Check className="ml-2 h-5 w-5" />
+              </span>
+            </Button>
+          ) : (
+            <Button className="w-full" size="lg" variant="outline">
+              <span className="flex items-center">
+                Select
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </motion.div>

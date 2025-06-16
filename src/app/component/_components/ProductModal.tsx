@@ -37,6 +37,7 @@ import {
   ArrowDownCircle,
   AlignStartVertical,
   AlignEndVertical,
+  Check,
 } from 'lucide-react';
 import { ProductCard } from './ProductCard';
 
@@ -70,9 +71,11 @@ function Header({
 function ModalBody({
   products: initialProducts,
   category,
+  setOpen,
 }: {
   products: Setup_Product[];
   category?: number;
+  setOpen: (open: boolean) => void;
 }) {
   const PAGE_SIZE = 9; // Define a constant for page size
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
@@ -238,10 +241,51 @@ function ModalBody({
         </Select>
       </div>
 
-      <div className="px-4">
+      <div className="flex items-end justify-between px-4">
         <p className="text-muted-foreground text-sm">
           {totalCount} {totalCount === 1 ? 'result' : 'results'} found
         </p>
+        <motion.div
+          animate={
+            selectedProduct
+              ? {
+                  scale: [1, 1.05, 1],
+                  boxShadow: [
+                    '0 0 0 rgba(34, 197, 94, 0)',
+                    '0 0 10px rgba(34, 197, 94, 0.7)',
+                    '0 0 0 rgba(34, 197, 94, 0)',
+                  ],
+                }
+              : {}
+          }
+          transition={{
+            repeat: selectedProduct ? Infinity : 0,
+            duration: 1.5,
+            repeatDelay: 0.5,
+          }}
+        >
+          <Button
+            onClick={() => setOpen(false)}
+            className={`flex items-center gap-2 px-6 text-base ${
+              selectedProduct ? 'bg-green-600 hover:bg-green-700' : ''
+            }`}
+            size="lg"
+          >
+            {selectedProduct ? (
+              <>
+                Done
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Check className="h-5 w-5" />
+                </motion.div>
+              </>
+            ) : (
+              'Done'
+            )}
+          </Button>
+        </motion.div>
       </div>
 
       <ScrollArea
@@ -349,7 +393,7 @@ function DesktopModal({
       <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
       <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
         <Header title={title} description={description} />
-        <ModalBody products={products} category={category} />
+        <ModalBody products={products} category={category} setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );
@@ -384,7 +428,11 @@ function MobileDrawer({
             className="h-[calc(100dvh-300px)] rounded-md border"
             id="mobileScrollableDiv"
           >
-            <ModalBody products={products} category={category} />
+            <ModalBody
+              products={products}
+              category={category}
+              setOpen={setOpen}
+            />
           </ScrollArea>
         </div>
       </DrawerContent>
