@@ -8,7 +8,6 @@ const ComponentPage = async () => {
   // Fetch all product sections with error handling
   const productSectionsData =
     await SetupConfiguration.getCategoriesWithProduct();
-  console.log('productSections', productSectionsData);
 
   return (
     <div className="relative">

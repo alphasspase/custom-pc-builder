@@ -47,6 +47,7 @@ function ProductBanner({
 
     intervalRef.current = setInterval(() => {
       api.scrollNext();
+      // The loop option will automatically handle wrapping to the first slide when at the end
     }, AUTO_PLAY_INTERVAL);
   }, [api, isAutoPlaying]);
 
@@ -57,7 +58,7 @@ function ProductBanner({
     }
   }, []);
 
-  // Effects
+  // Start/stop autoplay effect
   useEffect(() => {
     startAutoPlay();
 
@@ -80,6 +81,10 @@ function ProductBanner({
           className="w-full"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          opts={{
+            loop: true,
+            dragFree: false,
+          }}
         >
           <CarouselContent>
             {products.map((product) => (
