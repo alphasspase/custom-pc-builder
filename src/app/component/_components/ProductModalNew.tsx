@@ -1,7 +1,7 @@
 // filepath: /Users/avialdosolutions/Desktop/custom-pc-builder/src/app/component/_components/ProductModal.tsx
 'use client';
 
-import { JSX, useState, useEffect } from 'react';
+import { JSX, useState, useCallback, useEffect } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -29,7 +29,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { usePCBuilder } from '@/hooks/usePCBuilder';
 import {
   Search,
   Cpu,
@@ -37,14 +36,10 @@ import {
   ArrowDownCircle,
   AlignStartVertical,
   AlignEndVertical,
-  Check,
 } from 'lucide-react';
 import { ProductCard } from './ProductCard';
-
-import {
-  Setup_Product,
-  SetupCategoryWithProducts,
-} from '@/lib/api/services/setup_configuration/type';
+import { ProductCarouselProps } from '../types';
+import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
 function ProductSkeleton() {
   return <div className="h-[300px] animate-pulse rounded-lg bg-gray-200 p-4" />;
@@ -71,11 +66,9 @@ function Header({
 function ModalBody({
   products: initialProducts,
   category,
-  setOpen,
 }: {
   products: Setup_Product[];
   category?: number;
-  setOpen: (open: boolean) => void;
 }) {
   const PAGE_SIZE = 9; // Define a constant for page size
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
@@ -89,66 +82,68 @@ function ModalBody({
   const [totalCount, setTotalCount] = useState(initialProducts.length);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const { addProduct } = usePCBuilder();
 
-  // Remove useCallback for fetchFilteredProducts
-  // Define fetchFilteredProducts as a regular function with correct formatting
-  async function fetchFilteredProducts(
-    pageNumber: number,
-    isNewSearch = false,
-  ) {
-    setLoading(true);
-    try {
-      const response = await SetupConfiguration.getSetupProductByFilters({
-        category: category,
-        search: searchQuery,
-        sort_by: sortOption,
-        min_price: minPrice,
-        max_price: maxPrice,
-        page: pageNumber,
-        page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
-      });
-      console.log('API response:', response);
+  const fetchFilteredProducts = useCallback(
+    async (pageNumber: number, isNewSearch = false) => {
+      setLoading(true);
+      try {
+        const response = await SetupConfiguration.getSetupProductByFilters({
+          category,
+          search: searchQuery,
+          sort_by: sortOption,
+          min_price: minPrice,
+          max_price: maxPrice,
+          page: pageNumber,
+          page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
+        });
+        console.log('API response:', response);
 
-      if (isNewSearch) {
-        setFilteredProducts(response.results);
-      } else {
-        setFilteredProducts((prev) => [...prev, ...response.results]);
+        if (isNewSearch) {
+          setFilteredProducts(response.results);
+        } else {
+          setFilteredProducts((prev) => [...prev, ...response.results]);
+        }
+
+        setTotalCount(response.count);
+
+        // More direct and reliable way to check if there are more products
+        setHasMore(!!response.next);
+
+        return response; // Return response for chaining
+      } catch (error) {
+        console.error('Error fetching filtered products:', error);
+        if (isNewSearch) {
+          setFilteredProducts(initialProducts);
+          setTotalCount(initialProducts.length);
+          setHasMore(false);
+        }
+        throw error; // Propagate error for proper handling
+      } finally {
+        setLoading(false);
       }
+    },
+    [category, searchQuery, sortOption, minPrice, maxPrice, initialProducts],
+  ); // Handle initial load and filter changes
 
-      setTotalCount(response.count);
-      setHasMore(!!response.next);
-
-      return response;
-    } catch (error) {
-      console.error('Error fetching filtered products:', error);
-      if (isNewSearch) {
-        setFilteredProducts(initialProducts);
-        setTotalCount(initialProducts.length);
-        setHasMore(false);
-      }
-      throw error;
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // Define loadMore as a regular function
-  function loadMore() {
+  const loadMore = useCallback(() => {
+    console.log('loadMore called, fetching page:', page + 1);
     setLoading(true);
     const nextPage = page + 1;
+
     setPage(nextPage);
+
     fetchFilteredProducts(nextPage, false).finally(() => {
       setLoading(false);
     });
-  }
+  }, [fetchFilteredProducts, page]);
 
-  // Fix useEffect dependencies to avoid double call
+  // Add useEffect to watch for filter changes
   useEffect(() => {
+    // Reset page to 1 when filters change
     setPage(1);
+    // Fetch new products with the updated filters
     fetchFilteredProducts(1, true).catch(console.error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery, minPrice, maxPrice, sortOption, category]);
+  }, [searchQuery, minPrice, maxPrice, sortOption, fetchFilteredProducts]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -241,51 +236,10 @@ function ModalBody({
         </Select>
       </div>
 
-      <div className="flex items-end justify-between px-4">
+      <div className="px-4">
         <p className="text-muted-foreground text-sm">
           {totalCount} {totalCount === 1 ? 'result' : 'results'} found
         </p>
-        <motion.div
-          animate={
-            selectedProduct
-              ? {
-                  scale: [1, 1.05, 1],
-                  boxShadow: [
-                    '0 0 0 rgba(34, 197, 94, 0)',
-                    '0 0 10px rgba(34, 197, 94, 0.7)',
-                    '0 0 0 rgba(34, 197, 94, 0)',
-                  ],
-                }
-              : {}
-          }
-          transition={{
-            repeat: selectedProduct ? Infinity : 0,
-            duration: 1.5,
-            repeatDelay: 0.5,
-          }}
-        >
-          <Button
-            onClick={() => setOpen(false)}
-            className={`flex items-center gap-2 px-6 text-base ${
-              selectedProduct ? 'bg-green-600 hover:bg-green-700' : ''
-            }`}
-            size="lg"
-          >
-            {selectedProduct ? (
-              <>
-                Done
-                <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Check className="h-5 w-5" />
-                </motion.div>
-              </>
-            ) : (
-              'Done'
-            )}
-          </Button>
-        </motion.div>
       </div>
 
       <ScrollArea
@@ -328,25 +282,7 @@ function ModalBody({
                   key={product.id}
                   product={product}
                   isSelected={selectedProduct === product.id.toString()}
-                  onSelect={(id) => {
-                    setSelectedProduct(id);
-                    // Find the selected product and add it to the configuration
-                    const productToAdd = filteredProducts.find(
-                      (p) => p.id.toString() === id,
-                    );
-                    if (productToAdd) {
-                      // Convert Setup_Product to Product type required by usePCBuilder
-                      addProduct({
-                        id: productToAdd.id,
-                        name: productToAdd.name,
-                        description: productToAdd.description,
-                        price: productToAdd.price,
-                        category: productToAdd.category_name || 'component',
-                        stock: productToAdd.stock || 1,
-                        image: productToAdd.image,
-                      });
-                    }
-                  }}
+                  onSelect={setSelectedProduct}
                   index={index}
                 />
               ))
@@ -393,7 +329,7 @@ function DesktopModal({
       <DialogTrigger asChild>{TriggerButton}</DialogTrigger>
       <DialogContent className="w-full shadow-2xl sm:max-w-[90vw]">
         <Header title={title} description={description} />
-        <ModalBody products={products} category={category} setOpen={setOpen} />
+        <ModalBody products={products} category={category} />
       </DialogContent>
     </Dialog>
   );
@@ -428,11 +364,7 @@ function MobileDrawer({
             className="h-[calc(100dvh-300px)] rounded-md border"
             id="mobileScrollableDiv"
           >
-            <ModalBody
-              products={products}
-              category={category}
-              setOpen={setOpen}
-            />
+            <ModalBody products={products} category={category} />
           </ScrollArea>
         </div>
       </DrawerContent>
@@ -441,15 +373,18 @@ function MobileDrawer({
 }
 
 export function ProductModal({
-  products,
+  products: initialProducts,
   title,
   description,
-  id,
-}: SetupCategoryWithProducts) {
+  category,
+}: ProductCarouselProps & { category?: number }) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   const TriggerButton = <Button size="lg">Explore More</Button>;
+
+  // Provide empty array as fallback when products is null
+  const safeProducts = initialProducts || [];
 
   return (
     <>
@@ -459,8 +394,8 @@ export function ProductModal({
           setOpen={setOpen}
           title={title}
           description={description}
-          products={products}
-          category={id}
+          products={safeProducts}
+          category={category}
           TriggerButton={TriggerButton}
         />
       ) : (
@@ -469,8 +404,8 @@ export function ProductModal({
           setOpen={setOpen}
           title={title}
           description={description}
-          products={products}
-          category={id}
+          products={safeProducts}
+          category={category}
           TriggerButton={TriggerButton}
         />
       )}

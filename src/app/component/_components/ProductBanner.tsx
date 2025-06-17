@@ -11,29 +11,32 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from '@/components/ui/carousel';
-import { ProductCarouselProps, ProductOption } from '../type';
 import { ProductModal } from './ProductModal';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
+import {
+  Setup_Product,
+  SetupCategoryWithProducts,
+} from '@/lib/api/services/setup_configuration/type';
 
 // Constants
 const AUTO_PLAY_INTERVAL = 5000;
-const DEFAULT_IMAGE = '/placeholder.svg';
-
-// Interfaces
-interface ProductBannerProps extends ProductCarouselProps {
-  products: ProductOption[];
-}
 
 interface ProductItemProps {
-  product: ProductOption;
+  product: Setup_Product;
   title: string;
   description: string;
-  products: ProductOption[];
+  products: Setup_Product[];
+  categoryId: number;
 }
 
 // Components
 
-function ProductBanner({ products, title, description }: ProductBannerProps) {
+function ProductBanner({
+  id,
+  products,
+  title,
+  description,
+}: SetupCategoryWithProducts) {
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -44,6 +47,7 @@ function ProductBanner({ products, title, description }: ProductBannerProps) {
 
     intervalRef.current = setInterval(() => {
       api.scrollNext();
+      // The loop option will automatically handle wrapping to the first slide when at the end
     }, AUTO_PLAY_INTERVAL);
   }, [api, isAutoPlaying]);
 
@@ -54,7 +58,7 @@ function ProductBanner({ products, title, description }: ProductBannerProps) {
     }
   }, []);
 
-  // Effects
+  // Start/stop autoplay effect
   useEffect(() => {
     startAutoPlay();
 
@@ -77,17 +81,25 @@ function ProductBanner({ products, title, description }: ProductBannerProps) {
           className="w-full"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          opts={{
+            loop: true,
+            dragFree: false,
+          }}
         >
           <CarouselContent>
             {products.map((product) => (
               <CarouselItem key={product.id}>
                 <div className="grid h-full md:grid-cols-2">
-                  <ProductImage src={product.image} alt={product.title} />
+                  <ProductImage
+                    src={product.image || '/noData.jpg'}
+                    alt={product.name}
+                  />
                   <ProductDetails
                     product={product}
                     title={title}
                     description={description}
                     products={products}
+                    categoryId={id}
                   />
                 </div>
               </CarouselItem>
@@ -108,7 +120,7 @@ function ProductImage({ src, alt }: { src: string; alt: string }) {
   return (
     <AspectRatio className="p-5">
       <Image
-        src={src || DEFAULT_IMAGE}
+        src={src || '/noData.jpg'}
         alt={alt}
         width={600}
         height={400}
@@ -124,17 +136,18 @@ function ProductDetails({
   title,
   description,
   products,
+  categoryId,
 }: ProductItemProps) {
   return (
     <div className="flex flex-col justify-center p-6 md:p-8">
-      <h2 className="mb-3 text-2xl font-bold md:text-3xl">{product.title}</h2>
+      <h2 className="mb-3 text-2xl font-bold md:text-3xl">{product.name}</h2>
       <p className="mb-4 text-gray-600">{product.description}</p>
 
       <div className="mb-6 flex items-baseline">
         <span className="text-3xl font-bold">
-          ${product.price - (product.discount || 0)}
+          ${(Number(product.price) - Number(product.discount || 0)).toFixed(2)}
         </span>
-        {product.discount && (
+        {Number(product.discount) && (
           <span className="text-muted-foreground ml-2 text-lg line-through">
             ${product.price}
           </span>
@@ -145,6 +158,7 @@ function ProductDetails({
         products={products}
         title={title}
         description={description}
+        id={categoryId}
       />
     </div>
   );
