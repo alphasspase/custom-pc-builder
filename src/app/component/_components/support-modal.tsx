@@ -27,6 +27,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { HelpCircle, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { AssistanceService } from '@/lib/api/services/assistance/assistance';
+import { AssistanceRequestPayload } from '@/lib/api/services/assistance/type';
 
 export function SupportModal() {
   const [open, setOpen] = useState(false);
@@ -89,16 +91,79 @@ interface ModalContentProps {
 
 function ModalContent({ setOpen, drawer = false }: ModalContentProps) {
   const CloseButton = drawer ? DrawerClose : DialogClose;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    message: '',
+    subject: 'PC Builder Assistance Request',
+    description: '',
+    lack_of_clarity: false,
+    this_is_not_helpful: false,
+    this_is_not_safe: false,
+  });
+  const [submissionStatus, setSubmissionStatus] = useState<{
+    success?: boolean;
+    message?: string;
+  }>({});
 
   const feedbackOptions = [
-    { id: 'clarity', label: 'Lack of clarity' },
-    { id: 'helpful', label: 'This is not helpful' },
-    { id: 'unsafe', label: 'This is not safe' },
+    { id: 'lack_of_clarity', label: 'Lack of clarity' },
+    { id: 'this_is_not_helpful', label: 'This is not helpful' },
+    { id: 'this_is_not_safe', label: 'This is not safe' },
   ];
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleCheckboxChange = (id: string, checked: boolean) => {
+    setFormData((prev) => ({ ...prev, [id]: checked }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmissionStatus({});
+
+    try {
+      const payload: AssistanceRequestPayload = {
+        email: formData.email,
+        message: formData.message,
+        subject: formData.subject,
+        description: formData.description || formData.message,
+        lack_of_clarity: formData.lack_of_clarity,
+        this_is_not_helpful: formData.this_is_not_helpful,
+        this_is_not_safe: formData.this_is_not_safe,
+      };
+
+      const response = await AssistanceService.submitRequest(payload);
+      setSubmissionStatus({
+        success: true,
+        message:
+          response.message || 'Your request has been submitted successfully.',
+      });
+
+      // Close modal after successful submission with a short delay
+      setTimeout(() => {
+        setOpen(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Failed to submit assistance request:', error);
+      setSubmissionStatus({
+        success: false,
+        message: 'Failed to submit your request. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
-      <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -106,7 +171,14 @@ function ModalContent({ setOpen, drawer = false }: ModalContentProps) {
           className="space-y-2"
         >
           <Label htmlFor="email">Your Email</Label>
-          <Input id="email" type="email" placeholder="email@example.com" />
+          <Input
+            id="email"
+            type="email"
+            placeholder="email@example.com"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+          />
         </motion.div>
 
         <motion.div
@@ -115,13 +187,14 @@ function ModalContent({ setOpen, drawer = false }: ModalContentProps) {
           transition={{ duration: 0.3, delay: 0.1 }}
           className="space-y-2"
         >
-          <Label htmlFor="feedback">
-            What would the ideal answer have been?
-          </Label>
+          <Label htmlFor="message">How can we assist you?</Label>
           <Textarea
-            id="feedback"
+            id="message"
             placeholder="Please describe what you're looking for..."
             className="min-h-24"
+            value={formData.message}
+            onChange={handleInputChange}
+            required
           />
         </motion.div>
 
@@ -139,13 +212,35 @@ function ModalContent({ setOpen, drawer = false }: ModalContentProps) {
               transition={{ duration: 0.2, delay: 0.3 + index * 0.1 }}
               className="flex items-center space-x-2"
             >
-              <Checkbox id={option.id} />
+              <Checkbox
+                id={option.id}
+                checked={
+                  formData[option.id as keyof typeof formData] as boolean
+                }
+                onCheckedChange={(checked) =>
+                  handleCheckboxChange(option.id, checked === true)
+                }
+              />
               <Label htmlFor={option.id} className="text-sm text-gray-600">
                 {option.label}
               </Label>
             </motion.div>
           ))}
         </motion.div>
+
+        {submissionStatus.message && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className={`rounded p-2 text-sm ${
+              submissionStatus.success
+                ? 'bg-green-50 text-green-600'
+                : 'bg-red-50 text-red-600'
+            }`}
+          >
+            {submissionStatus.message}
+          </motion.div>
+        )}
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -154,21 +249,15 @@ function ModalContent({ setOpen, drawer = false }: ModalContentProps) {
           className="flex justify-end space-x-2 pt-2"
         >
           <CloseButton asChild>
-            <Button
-              variant="outline"
-              // className="text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-800"
-            >
+            <Button variant="outline" type="button" disabled={isSubmitting}>
               Cancel
             </Button>
           </CloseButton>
-          <Button
-            type="submit"
-            className="group"
-            // className="group from-primary-600 hover:from-primary-700 relative overflow-hidden bg-gradient-to-r to-violet-600 transition-all duration-300 hover:to-violet-700"
-            onClick={() => setOpen(false)}
-          >
-            Create
-            <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <Button type="submit" className="group" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Submit'}
+            {!isSubmitting && (
+              <Send className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            )}
           </Button>
         </motion.div>
       </form>

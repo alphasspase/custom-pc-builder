@@ -18,6 +18,9 @@ const endpoints = {
     getCategoriesWithProduct:
       '/setup_configuration/rest_api/categories-with-products/',
   },
+  assistance: {
+    submitRequest: '/assistance/rest_api/request/',
+  },
 } as const;
 
 export default endpoints;
