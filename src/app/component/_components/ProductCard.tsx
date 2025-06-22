@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Sparkles, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
+import { usePCBuilder } from '@/hooks/usePCBuilder';
+import { useMemo } from 'react';
 
 interface ProductCardProps {
   product: Setup_Product;
@@ -16,10 +18,22 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  isSelected,
+  isSelected: propIsSelected, // Rename to avoid confusion
   onSelect,
   index,
 }) => {
+  const { selectedSetupProducts } = usePCBuilder();
+
+  // Check if this product is already selected in the store
+  const isSelectedInStore = useMemo(() => {
+    return selectedSetupProducts.some(
+      (selectedProduct) => selectedProduct.id === product.id,
+    );
+  }, [selectedSetupProducts, product.id]);
+
+  // Use either the prop or the store status, with store status taking priority
+  const isSelected = isSelectedInStore || propIsSelected;
+
   return (
     // <CarouselItem className="pl-2 sm:basis-1/2 md:pl-4 lg:basis-1/2">
     <motion.div

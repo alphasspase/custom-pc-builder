@@ -89,7 +89,21 @@ function ModalBody({
   const [totalCount, setTotalCount] = useState(initialProducts.length);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const { addProduct } = usePCBuilder();
+  const { addSetupProduct, selectedSetupProducts } = usePCBuilder();
+
+  // Check if any products are already selected in the store
+  useEffect(() => {
+    // Find if any of our products are already in the selectedSetupProducts
+    const alreadySelectedProduct = initialProducts.find((product) =>
+      selectedSetupProducts.some(
+        (selectedProduct) => selectedProduct.id === product.id,
+      ),
+    );
+
+    if (alreadySelectedProduct) {
+      setSelectedProduct(alreadySelectedProduct.id.toString());
+    }
+  }, [initialProducts, selectedSetupProducts]);
 
   // Remove useCallback for fetchFilteredProducts
   // Define fetchFilteredProducts as a regular function with correct formatting
@@ -335,16 +349,8 @@ function ModalBody({
                       (p) => p.id.toString() === id,
                     );
                     if (productToAdd) {
-                      // Convert Setup_Product to Product type required by usePCBuilder
-                      addProduct({
-                        id: productToAdd.id,
-                        name: productToAdd.name,
-                        description: productToAdd.description,
-                        price: productToAdd.price,
-                        category: productToAdd.category_name || 'component',
-                        stock: productToAdd.stock || 1,
-                        image: productToAdd.image,
-                      });
+                      // Add the selected setup product to the store
+                      addSetupProduct(productToAdd);
                     }
                   }}
                   index={index}
