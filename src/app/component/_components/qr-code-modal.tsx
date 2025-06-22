@@ -45,6 +45,10 @@ export function QrCodeModal() {
   const { selectedProducts, selectedSetupProducts, total } =
     usePCBuilderStore();
 
+  // Check if any products are selected
+  const hasSelectedProducts =
+    selectedProducts.length > 0 || selectedSetupProducts.length > 0;
+
   const handleSaveConfiguration = async () => {
     try {
       // Check if there are any selected components
@@ -120,6 +124,12 @@ export function QrCodeModal() {
         setConfigDescription('');
         setSavedConfig(null);
       }}
+      disabled={!hasSelectedProducts}
+      title={
+        hasSelectedProducts
+          ? 'Save your configuration'
+          : 'Select at least one component first'
+      }
     >
       <Save className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
       Save Configuration
@@ -141,6 +151,7 @@ export function QrCodeModal() {
           handleSaveConfiguration={handleSaveConfiguration}
           handleCopyLink={handleCopyLink}
           savedConfig={savedConfig}
+          hasSelectedProducts={hasSelectedProducts}
         />
       </DialogContent>
     </Dialog>
@@ -164,6 +175,7 @@ export function QrCodeModal() {
               handleSaveConfiguration={handleSaveConfiguration}
               handleCopyLink={handleCopyLink}
               savedConfig={savedConfig}
+              hasSelectedProducts={hasSelectedProducts}
             />
           </ScrollArea>
         </div>
@@ -205,6 +217,7 @@ interface ModalContentProps {
   handleSaveConfiguration: () => Promise<void>;
   handleCopyLink: () => void;
   savedConfig: SavePcConfigurationResponse | null;
+  hasSelectedProducts?: boolean;
 }
 
 function ModalBody({
@@ -219,6 +232,7 @@ function ModalBody({
   handleSaveConfiguration,
   handleCopyLink,
   savedConfig,
+  hasSelectedProducts = true,
 }: ModalContentProps) {
   const Close = drawer ? DrawerClose : DialogClose;
 
@@ -297,7 +311,7 @@ function ModalBody({
           <Button
             className="w-full gap-2"
             onClick={handleSaveConfiguration}
-            disabled={loading}
+            disabled={loading || !hasSelectedProducts}
           >
             {loading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -306,6 +320,12 @@ function ModalBody({
             )}
             Save and Generate QR Code
           </Button>
+          {!hasSelectedProducts && (
+            <p className="mt-2 text-center text-xs text-orange-500">
+              <AlertCircle className="mr-1 inline h-3 w-3" />
+              Please select at least one component to save configuration
+            </p>
+          )}
         </div>
       )}
 
