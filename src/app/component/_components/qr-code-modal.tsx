@@ -20,7 +20,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Separator } from '@/components/ui/separator';
-import { Loader2, Save } from 'lucide-react';
+import { Loader2, Save, Check, AlertCircle, Copy } from 'lucide-react';
 import { FaQrcode } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -30,6 +30,7 @@ import { Label } from '@/components/ui/label';
 import { usePCBuilderStore } from '@/lib/store/checkout';
 import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
 import { SavePcConfigurationResponse } from '@/lib/api/services/pc_configuration/type';
+import { toast } from 'sonner';
 
 export function QrCodeModal() {
   const [open, setOpen] = useState(false);
@@ -38,8 +39,6 @@ export function QrCodeModal() {
   const [configDescription, setConfigDescription] = useState('');
   const [savedConfig, setSavedConfig] =
     useState<SavePcConfigurationResponse | null>(null);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
   // Get selected products from store
@@ -48,31 +47,32 @@ export function QrCodeModal() {
 
   const handleSaveConfiguration = async () => {
     try {
-      setLoading(true);
-      setErrorMessage('');
-      setSuccessMessage('');
-
-      // Get component IDs from selected products
+      // Check if there are any selected components
       const componentIds = selectedProducts.map((product) => product.id);
       const setupProductIds = selectedSetupProducts.map(
         (product) => product.id,
       );
 
-      // Check if there are any selected components
       if (componentIds.length === 0 && setupProductIds.length === 0) {
-        setErrorMessage('Please select at least one component before saving.');
-        setLoading(false);
+        toast.error('No components selected', {
+          description: 'Please select at least one component before saving.',
+          icon: <AlertCircle size={18} />,
+        });
 
         return;
       }
 
       // Check if configuration name is provided
       if (!configName.trim()) {
-        setErrorMessage('Please provide a name for your configuration.');
-        setLoading(false);
+        toast.error('Configuration name required', {
+          description: 'Please provide a name for your configuration.',
+          icon: <AlertCircle size={18} />,
+        });
 
         return;
       }
+
+      setLoading(true);
 
       const response = await PcConfiguration.savePcConfiguration({
         name: configName,
@@ -84,12 +84,18 @@ export function QrCodeModal() {
       });
 
       setSavedConfig(response);
-      setSuccessMessage(
-        response.message || 'Your configuration has been saved successfully!',
-      );
+
+      toast.success('Configuration Saved', {
+        description:
+          response.message || 'Your configuration has been saved successfully!',
+        icon: <Check size={18} />,
+      });
     } catch (error) {
       console.error('Failed to save configuration:', error);
-      setErrorMessage('Failed to save your configuration. Please try again.');
+      toast.error('Save Failed', {
+        description: 'Failed to save your configuration. Please try again.',
+        icon: <AlertCircle size={18} />,
+      });
     } finally {
       setLoading(false);
     }
@@ -98,7 +104,10 @@ export function QrCodeModal() {
   const handleCopyLink = () => {
     if (savedConfig?.url) {
       navigator.clipboard.writeText(savedConfig.url);
-      setSuccessMessage('Configuration link copied to clipboard!');
+      toast.success('Link Copied', {
+        description: 'Configuration link copied to clipboard!',
+        icon: <Copy size={18} />,
+      });
     }
   };
 
@@ -110,8 +119,6 @@ export function QrCodeModal() {
         setConfigName('');
         setConfigDescription('');
         setSavedConfig(null);
-        setErrorMessage('');
-        setSuccessMessage('');
       }}
     >
       <Save className="mr-2 h-4 w-4 transition-transform duration-300 group-hover:rotate-12" />
@@ -134,8 +141,6 @@ export function QrCodeModal() {
           handleSaveConfiguration={handleSaveConfiguration}
           handleCopyLink={handleCopyLink}
           savedConfig={savedConfig}
-          errorMessage={errorMessage}
-          successMessage={successMessage}
         />
       </DialogContent>
     </Dialog>
@@ -159,8 +164,6 @@ export function QrCodeModal() {
               handleSaveConfiguration={handleSaveConfiguration}
               handleCopyLink={handleCopyLink}
               savedConfig={savedConfig}
-              errorMessage={errorMessage}
-              successMessage={successMessage}
             />
           </ScrollArea>
         </div>
@@ -202,8 +205,6 @@ interface ModalContentProps {
   handleSaveConfiguration: () => Promise<void>;
   handleCopyLink: () => void;
   savedConfig: SavePcConfigurationResponse | null;
-  errorMessage: string;
-  successMessage: string;
 }
 
 function ModalBody({
@@ -218,25 +219,11 @@ function ModalBody({
   handleSaveConfiguration,
   handleCopyLink,
   savedConfig,
-  errorMessage,
-  successMessage,
 }: ModalContentProps) {
   const Close = drawer ? DrawerClose : DialogClose;
 
   return (
     <div className="space-y-6">
-      {errorMessage && (
-        <div className="border-l-4 border-red-500 bg-red-50 p-4 text-red-700">
-          {errorMessage}
-        </div>
-      )}
-
-      {successMessage && (
-        <div className="border-l-4 border-green-500 bg-green-50 p-4 text-green-700">
-          {successMessage}
-        </div>
-      )}
-
       {savedConfig ? (
         <>
           <motion.div
@@ -279,7 +266,8 @@ function ModalBody({
           </div>
 
           <div className="flex justify-center">
-            <Button size="sm" onClick={handleCopyLink}>
+            <Button size="sm" onClick={handleCopyLink} className="gap-2">
+              <Copy size={16} />
               Copy Link
             </Button>
           </div>
@@ -307,11 +295,15 @@ function ModalBody({
           </div>
 
           <Button
-            className="w-full"
+            className="w-full gap-2"
             onClick={handleSaveConfiguration}
             disabled={loading}
           >
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {loading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save size={16} />
+            )}
             Save and Generate QR Code
           </Button>
         </div>
