@@ -5,6 +5,8 @@ import {
   PcComponentsWithPreset,
   Product,
   ProductCategory,
+  SavePcConfigurationRequest,
+  SavePcConfigurationResponse,
 } from './type';
 
 export const PcConfiguration = {
@@ -64,5 +66,16 @@ export const PcConfiguration = {
     return await apiClient.get(url, {
       next: { tags: ['filtered-products'] },
     });
+  },
+  async savePcConfiguration(
+    configData: SavePcConfigurationRequest,
+  ): Promise<SavePcConfigurationResponse> {
+    return await apiClient.post(
+      endpoints.pc_configuration.savePcConfiguration,
+      configData,
+      {
+        cache: 'no-store',
+      },
+    );
   },
 };

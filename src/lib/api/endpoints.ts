@@ -7,6 +7,7 @@ const endpoints = {
     getProductCategories: '/pc_configuration/rest_api/get-product-categories/',
     submitPcConfiguration:
       '/pc_configuration/rest_api/submit-pc-configuration/',
+    savePcConfiguration: '/pc_configuration/rest_api/submit-pc-configuration/',
     getFilteredProducts: '/pc_configuration/rest_api/filtered-products/',
     getPcComponentsWithPreset:
       '/pc_configuration/rest_api/get-pc-components-with-preset/',
