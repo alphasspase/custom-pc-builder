@@ -1,3 +1,5 @@
+import { Setup_Product } from '../setup_configuration/type';
+
 export interface Product {
   id: number;
   name: string;
@@ -23,6 +25,7 @@ export interface Configuration {
   total_price: string;
   is_preset: boolean;
   components: Product[];
+  setup_products: Setup_Product[];
 }
 
 export interface PcComponentsWithPreset {

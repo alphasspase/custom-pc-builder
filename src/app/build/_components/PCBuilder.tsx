@@ -20,6 +20,7 @@ import { usePCBuilder } from '@/hooks/usePCBuilder';
 import { useEffect, useState } from 'react';
 import { BuildPCProductoptionCard } from './BuildPCProductoptionCard';
 import { DiscoverMoreCard } from './DiscoverMoreCard';
+import { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
 // Helper function to get component icon
 function getComponentIcon(id: string) {
@@ -41,26 +42,38 @@ function getComponentIcon(id: string) {
   }
 }
 
-// Card for the Discover More action
-
 export default function PCBuilder({
   defaultSelectedProducts = [],
+  defaultSelectedSetupProducts = [],
   productCategories: initialProductCategories,
 }: {
   defaultSelectedProducts: Product[];
+  defaultSelectedSetupProducts: Setup_Product[];
   productCategories: ProductCategory[];
 }) {
   const router = useRouter();
-  const { selectedProducts, total, addProduct } = usePCBuilder();
+  const { selectedProducts, total, addProduct, addSetupProduct } =
+    usePCBuilder();
   const [productCategories, setProductCategories] = useState<ProductCategory[]>(
     initialProductCategories,
   );
 
   useEffect(() => {
+    // Add products to store
     defaultSelectedProducts.forEach((product) => {
       addProduct(product);
     });
-  }, [defaultSelectedProducts, addProduct]);
+
+    // Add setup products to store
+    defaultSelectedSetupProducts.forEach((setupProduct) => {
+      addSetupProduct(setupProduct);
+    });
+  }, [
+    defaultSelectedProducts,
+    defaultSelectedSetupProducts,
+    addProduct,
+    addSetupProduct,
+  ]);
 
   const selectOption = (selectedOption: Product) => {
     addProduct(selectedOption);

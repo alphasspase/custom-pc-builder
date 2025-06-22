@@ -10,7 +10,7 @@ import { QrCodeModal } from './qr-code-modal';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
 
 export default function WorkspaceConfigurator() {
-  const { selectedProducts, total } = usePCBuilder();
+  const { selectedProducts, selectedSetupProducts, total } = usePCBuilder();
 
   return (
     <div className="sticky top-20 lg:col-span-1">
@@ -22,18 +22,48 @@ export default function WorkspaceConfigurator() {
       >
         <h2 className="mb-6 text-xl font-bold">Configuration Summary</h2>
         <div className="space-y-4">
-          {Object.entries(selectedProducts).map(([key, product]) => (
-            <div key={key} className="flex items-center justify-between">
-              <span className="font-medium">{product.name}</span>
-              <span className="font-bold">${product.price}</span>
-            </div>
-          ))}
+          {/* Display PC Components */}
+          {selectedProducts.length > 0 && (
+            <>
+              <h3 className="text-md font-semibold text-gray-700">
+                PC Components
+              </h3>
+              {selectedProducts.map((product) => (
+                <div
+                  key={`pc-${product.id}`}
+                  className="flex items-center justify-between"
+                >
+                  <span className="font-medium">{product.name}</span>
+                  <span className="font-bold">${product.price}</span>
+                </div>
+              ))}
+            </>
+          )}
+
+          {/* Display Setup Products */}
+          {selectedSetupProducts.length > 0 && (
+            <>
+              <Separator className="my-4" />
+              <h3 className="text-md font-semibold text-gray-700">
+                Setup Products
+              </h3>
+              {selectedSetupProducts.map((product) => (
+                <div
+                  key={`setup-${product.id}`}
+                  className="flex items-center justify-between"
+                >
+                  <span className="font-medium">{product.name}</span>
+                  <span className="font-bold">${product.price}</span>
+                </div>
+              ))}
+            </>
+          )}
 
           <Separator className="my-4" />
 
           <div className="flex items-center justify-between text-lg">
             <span className="font-bold">Total</span>
-            <span className="font-bold">${total}</span>
+            <span className="font-bold">${total.toFixed(2)}</span>
           </div>
         </div>
 
