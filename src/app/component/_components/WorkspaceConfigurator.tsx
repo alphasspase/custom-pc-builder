@@ -84,16 +84,23 @@ export default function WorkspaceConfigurator() {
         )}
 
         <div className="mt-4 space-y-3">
-          <Button
-            asChild
-            className="group w-full"
-            disabled={noProductsSelected}
-          >
-            <Link href={noProductsSelected ? '#' : URLS.checkout}>
+          {noProductsSelected ? (
+            <Button className="group w-full" disabled={noProductsSelected}>
               Proceed to Checkout
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
+            </Button>
+          ) : (
+            <Button
+              asChild
+              className="group w-full"
+              disabled={noProductsSelected}
+            >
+              <Link href={noProductsSelected ? '#' : URLS.checkout}>
+                Proceed to Checkout
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+          )}
 
           <SupportModal />
 
