@@ -122,7 +122,6 @@ function ModalBody({
         page: pageNumber,
         page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
       });
-      console.log('API response:', response);
 
       if (isNewSearch) {
         setFilteredProducts(response.results);
