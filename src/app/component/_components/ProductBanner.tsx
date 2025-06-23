@@ -145,7 +145,7 @@ function ProductDetails({
 
       <div className="mb-6 flex items-baseline">
         <span className="text-3xl font-bold">${product.price}</span>
-        {Number(product.discount) && (
+        {Boolean(Number(product.discount)) && (
           <span className="text-muted-foreground ml-2 text-lg line-through">
             ${Number(product.price) + Number(product.discount)}
           </span>

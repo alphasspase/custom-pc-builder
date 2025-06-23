@@ -99,7 +99,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <CardContent>
           <div className="mb-1 flex items-baseline">
             <div className="text-3xl font-bold">${product.price}</div>
-            {product.discount && (
+            {Boolean(Number(product.discount)) && (
               <div className="text-muted-foreground ml-2 text-lg line-through">
                 ${Number(product.price) + Number(product.discount)}
               </div>
