@@ -22,7 +22,7 @@ export default function WorkspaceConfigurator() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="rounded-lg border bg-white p-6 shadow-sm"
       >
-        <h2 className="mb-3 text-xl font-bold">Configuration Summary</h2>
+        <h3 className="mb-3 font-bold">Configuration Summary</h3>
 
         {noProductsSelected ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -40,9 +40,9 @@ export default function WorkspaceConfigurator() {
             {/* Display PC Components */}
             {selectedProducts.length > 0 && (
               <>
-                <h3 className="text-md font-semibold text-gray-700">
+                <h4 className="text-md font-semibold text-gray-700">
                   PC Components
-                </h3>
+                </h4>
                 {selectedProducts.map((product) => (
                   <div
                     key={`pc-${product.id}`}
@@ -59,9 +59,9 @@ export default function WorkspaceConfigurator() {
             {selectedSetupProducts.length > 0 && (
               <>
                 <Separator className="my-4" />
-                <h3 className="text-md font-semibold text-gray-700">
+                <h4 className="text-md font-semibold text-gray-700">
                   Setup Products
-                </h3>
+                </h4>
                 {selectedSetupProducts.map((product) => (
                   <div
                     key={`setup-${product.id}`}

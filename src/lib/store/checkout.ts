@@ -28,10 +28,17 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
     total: 0,
 
     selectProduct: (product: Product) => {
+      // Make a clean copy of the product to ensure we have the right format
+      const cleanedProduct = {
+        ...product,
+        // Ensure price is a clean string without $ symbol if it exists
+        price: String(product.price).replace(/^\$/, ''),
+      };
+
       set((state) => {
         // Check if a product with the same category already exists
         const existingProductIndex = state.selectedProducts.findIndex(
-          (item) => item.category === product.category,
+          (item) => item.category === cleanedProduct.category,
         );
 
         let newSelectedProducts;
@@ -40,26 +47,35 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
           // Replace the existing product with the new one
           newSelectedProducts = [
             ...state.selectedProducts.slice(0, existingProductIndex),
-            product,
+            cleanedProduct,
             ...state.selectedProducts.slice(existingProductIndex + 1),
           ];
         } else {
           // Add the new product
-          newSelectedProducts = [...state.selectedProducts, product];
+          newSelectedProducts = [...state.selectedProducts, cleanedProduct];
         }
 
-        // Calculate new total
-        const newTotal = get().calculateTotal();
-
-        return { selectedProducts: newSelectedProducts, total: newTotal };
+        // Update the products in state first
+        return { selectedProducts: newSelectedProducts };
       });
+
+      // Calculate the total as a separate operation after the products are updated
+      const newTotal = get().calculateTotal();
+      set({ total: newTotal });
     },
 
     selectSetupProduct: (product: Setup_Product) => {
+      // Make a clean copy of the product to ensure we have the right format
+      const cleanedProduct = {
+        ...product,
+        // Ensure price is a clean string without $ symbol if it exists
+        price: String(product.price).replace(/^\$/, ''),
+      };
+
       set((state) => {
         // Check if a setup product with the same category already exists
         const existingProductIndex = state.selectedSetupProducts.findIndex(
-          (item) => item.category_name === product.category_name,
+          (item) => item.category_name === cleanedProduct.category_name,
         );
 
         let newSelectedSetupProducts;
@@ -68,22 +84,28 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
           // Replace the existing product with the new one
           newSelectedSetupProducts = [
             ...state.selectedSetupProducts.slice(0, existingProductIndex),
-            product,
+            cleanedProduct,
             ...state.selectedSetupProducts.slice(existingProductIndex + 1),
           ];
         } else {
           // Add the new product
-          newSelectedSetupProducts = [...state.selectedSetupProducts, product];
+          newSelectedSetupProducts = [
+            ...state.selectedSetupProducts,
+            cleanedProduct,
+          ];
         }
 
-        // Calculate new total
-        const newTotal = get().calculateTotal();
-
-        return {
+        // Update the products in state first
+        const updatedState = {
           selectedSetupProducts: newSelectedSetupProducts,
-          total: newTotal,
         };
+
+        return updatedState;
       });
+
+      // Calculate the total as a separate operation after the products are updated
+      const newTotal = get().calculateTotal();
+      set({ total: newTotal });
     },
 
     removeProduct: (productId: number) => {
@@ -92,11 +114,12 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
           (product) => product.id !== productId,
         );
 
-        // Calculate new total
-        const newTotal = get().calculateTotal();
-
-        return { selectedProducts: newSelectedProducts, total: newTotal };
+        return { selectedProducts: newSelectedProducts };
       });
+
+      // Calculate the total as a separate operation
+      const newTotal = get().calculateTotal();
+      set({ total: newTotal });
     },
 
     removeSetupProduct: (productId: number) => {
@@ -105,46 +128,64 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
           (product) => product.id !== productId,
         );
 
-        // Calculate new total
-        const newTotal = get().calculateTotal();
-
-        return {
-          selectedSetupProducts: newSelectedSetupProducts,
-          total: newTotal,
-        };
+        return { selectedSetupProducts: newSelectedSetupProducts };
       });
+
+      // Calculate the total as a separate operation
+      const newTotal = get().calculateTotal();
+      set({ total: newTotal });
     },
 
     clearSelectedProducts: () => {
-      set(() => {
-        return { selectedProducts: [], total: get().calculateTotal() };
-      });
+      // First clear the products
+      set({ selectedProducts: [] });
+
+      // Then recalculate the total
+      const newTotal = get().calculateTotal();
+      set({ total: newTotal });
     },
 
     clearSelectedSetupProducts: () => {
-      set(() => {
-        return { selectedSetupProducts: [], total: get().calculateTotal() };
-      });
+      // First clear the setup products
+      set({ selectedSetupProducts: [] });
+
+      // Then recalculate the total
+      const newTotal = get().calculateTotal();
+      set({ total: newTotal });
     },
 
     calculateTotal: () => {
       const { selectedProducts, selectedSetupProducts } = get();
 
-      // Sum prices from regular products
-      const productTotal = selectedProducts.reduce((acc, product) => {
-        const price = parseFloat(product.price);
+      // Helper function to convert price strings to numbers
+      const parsePrice = (priceStr: string | number | undefined): number => {
+        if (typeof priceStr === 'number') return priceStr;
+        if (!priceStr) return 0;
 
-        return acc + (isNaN(price) ? 0 : price);
-      }, 0);
+        // Remove any currency symbols or non-numeric characters except decimal point
+        const cleanedStr = String(priceStr).replace(/[^0-9.]/g, '');
+        const parsedPrice = parseFloat(cleanedStr);
 
-      // Sum prices from setup products
-      const setupProductTotal = selectedSetupProducts.reduce((acc, product) => {
-        const price = parseFloat(product.price);
+        return isNaN(parsedPrice) ? 0 : parsedPrice;
+      };
 
-        return acc + (isNaN(price) ? 0 : price);
-      }, 0);
+      // Process regular products - use explicit loop for debugging
+      let productTotal = 0;
+      for (const product of selectedProducts) {
+        const price = parsePrice(product.price);
+        productTotal += price;
+      }
+
+      // Process setup products - use explicit loop for debugging
+      let setupProductTotal = 0;
+      for (const product of selectedSetupProducts) {
+        const price = parsePrice(product.price);
+        setupProductTotal += price;
+      }
 
       const newTotal = productTotal + setupProductTotal;
+
+      // Always update the total in the state
       set({ total: newTotal });
 
       return newTotal;
