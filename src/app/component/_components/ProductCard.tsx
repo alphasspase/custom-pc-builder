@@ -98,15 +98,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         <CardContent>
           <div className="mb-1 flex items-baseline">
-            <div className="text-3xl font-bold">
-              $
-              {(Number(product.price) - Number(product.discount || 0)).toFixed(
-                2,
-              )}
-            </div>
+            <div className="text-3xl font-bold">${product.price}</div>
             {product.discount && (
               <div className="text-muted-foreground ml-2 text-lg line-through">
-                ${product.price}
+                ${Number(product.price) + Number(product.discount)}
               </div>
             )}
           </div>

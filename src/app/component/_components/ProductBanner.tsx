@@ -144,12 +144,10 @@ function ProductDetails({
       <p className="mb-4 text-gray-600">{product.description}</p>
 
       <div className="mb-6 flex items-baseline">
-        <span className="text-3xl font-bold">
-          ${(Number(product.price) - Number(product.discount || 0)).toFixed(2)}
-        </span>
+        <span className="text-3xl font-bold">${product.price}</span>
         {Number(product.discount) && (
           <span className="text-muted-foreground ml-2 text-lg line-through">
-            ${product.price}
+            ${Number(product.price) + Number(product.discount)}
           </span>
         )}
       </div>
@@ -159,6 +157,7 @@ function ProductDetails({
         title={title}
         description={description}
         id={categoryId}
+        name={title}
       />
     </div>
   );
