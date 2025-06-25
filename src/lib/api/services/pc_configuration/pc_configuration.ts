@@ -33,7 +33,9 @@ export const PcConfiguration = {
       endpoints.pc_configuration.getPcComponentsWithPreset +
         (id != null ? `?preset_id=${id}` : ''),
       {
-        next: { tags: [`get-pc-components-with-preset-${id}`] },
+        next: {
+          tags: [`get-pc-components-with-preset`],
+        },
       },
     );
   },
