@@ -10,8 +10,8 @@ import { BsPcDisplay, BsCheckCircleFill } from 'react-icons/bs';
 import { FiArrowRight } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { Question, QuestionOptions } from '@/services/demand_assessment/type';
-import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
 import Image from 'next/image';
+import { DemandAssessmentService } from '@/lib/api/services/demand_assessment/demand_assessment';
 
 const WorkTypeSelection = ({ question }: { question: Question }) => {
   const [selectedOption, setSelectedOption] = useState<QuestionOptions | null>(
@@ -23,7 +23,8 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const handleNextQuestion = async (selectedId: number) => {
-    const nextQuestion = await DemandAssessments.getNextQuestion(selectedId);
+    const nextQuestion =
+      await DemandAssessmentService.getNextQuestion(selectedId);
     setQuestionList(nextQuestion);
   };
 
