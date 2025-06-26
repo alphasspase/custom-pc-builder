@@ -7,7 +7,9 @@ interface PCBuilderStore {
   // State
   selectedProducts: Product[];
   selectedSetupProducts: Setup_Product[];
-  total: number;
+  total: number; // Combined total (components + setup)
+  componentsTotal: number; // Components total only
+  setupTotal: number; // Setup total only
 
   // Actions
   selectProduct: (product: Product) => void;
@@ -17,8 +19,13 @@ interface PCBuilderStore {
   clearSelectedProducts: () => void;
   clearSelectedSetupProducts: () => void;
 
+  // Helper function
+  parsePrice: (priceStr: string | number | undefined) => number;
+
   // Computed
-  calculateTotal: () => number;
+  calculateTotal: () => number; // Calculates the combined total
+  calculateComponentsTotal: () => number;
+  calculateSetupTotal: () => number;
 }
 
 export const usePCBuilderStore = create<PCBuilderStore>()(
@@ -26,6 +33,8 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
     selectedProducts: [],
     selectedSetupProducts: [],
     total: 0,
+    componentsTotal: 0,
+    setupTotal: 0,
 
     selectProduct: (product: Product) => {
       // Make a clean copy of the product to ensure we have the right format
@@ -59,9 +68,10 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
         return { selectedProducts: newSelectedProducts };
       });
 
-      // Calculate the total as a separate operation after the products are updated
-      const newTotal = get().calculateTotal();
-      set({ total: newTotal });
+      // Calculate all totals as a separate operation after the products are updated
+      get().calculateComponentsTotal(); // Updates componentsTotal
+      get().calculateSetupTotal(); // Updates setupTotal
+      get().calculateTotal(); // Updates total (combined)
     },
 
     selectSetupProduct: (product: Setup_Product) => {
@@ -103,9 +113,10 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
         return updatedState;
       });
 
-      // Calculate the total as a separate operation after the products are updated
-      const newTotal = get().calculateTotal();
-      set({ total: newTotal });
+      // Calculate all totals as a separate operation after the products are updated
+      get().calculateComponentsTotal(); // Updates componentsTotal
+      get().calculateSetupTotal(); // Updates setupTotal
+      get().calculateTotal(); // Updates total (combined)
     },
 
     removeProduct: (productId: number) => {
@@ -117,9 +128,10 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
         return { selectedProducts: newSelectedProducts };
       });
 
-      // Calculate the total as a separate operation
-      const newTotal = get().calculateTotal();
-      set({ total: newTotal });
+      // Calculate all totals as a separate operation
+      get().calculateComponentsTotal(); // Updates componentsTotal
+      get().calculateSetupTotal(); // Updates setupTotal
+      get().calculateTotal(); // Updates total (combined)
     },
 
     removeSetupProduct: (productId: number) => {
@@ -131,64 +143,90 @@ export const usePCBuilderStore = create<PCBuilderStore>()(
         return { selectedSetupProducts: newSelectedSetupProducts };
       });
 
-      // Calculate the total as a separate operation
-      const newTotal = get().calculateTotal();
-      set({ total: newTotal });
+      // Calculate all totals as a separate operation
+      get().calculateComponentsTotal(); // Updates componentsTotal
+      get().calculateSetupTotal(); // Updates setupTotal
+      get().calculateTotal(); // Updates total (combined)
     },
 
     clearSelectedProducts: () => {
       // First clear the products
       set({ selectedProducts: [] });
 
-      // Then recalculate the total
-      const newTotal = get().calculateTotal();
-      set({ total: newTotal });
+      // Calculate all totals as a separate operation
+      get().calculateComponentsTotal(); // Updates componentsTotal
+      get().calculateSetupTotal(); // Updates setupTotal
+      get().calculateTotal(); // Updates total (combined)
     },
 
     clearSelectedSetupProducts: () => {
       // First clear the setup products
       set({ selectedSetupProducts: [] });
 
-      // Then recalculate the total
-      const newTotal = get().calculateTotal();
-      set({ total: newTotal });
+      // Calculate all totals as a separate operation
+      get().calculateComponentsTotal(); // Updates componentsTotal
+      get().calculateSetupTotal(); // Updates setupTotal
+      get().calculateTotal(); // Updates total (combined)
+    },
+
+    // Helper function to convert price strings to numbers
+    parsePrice: (priceStr: string | number | undefined): number => {
+      if (typeof priceStr === 'number') return priceStr;
+      if (!priceStr) return 0;
+
+      // Remove any currency symbols or non-numeric characters except decimal point
+      const cleanedStr = String(priceStr).replace(/[^0-9.]/g, '');
+      const parsedPrice = parseFloat(cleanedStr);
+
+      return isNaN(parsedPrice) ? 0 : parsedPrice;
+    },
+
+    calculateComponentsTotal: () => {
+      const { selectedProducts } = get();
+      const parsePrice = get().parsePrice;
+
+      // Process regular products
+      let componentsTotal = 0;
+      for (const product of selectedProducts) {
+        const price = parsePrice(product.price);
+        componentsTotal += price;
+      }
+
+      // Update the components total in the state
+      set({ componentsTotal });
+
+      return componentsTotal;
+    },
+
+    calculateSetupTotal: () => {
+      const { selectedSetupProducts } = get();
+      const parsePrice = get().parsePrice;
+
+      // Process setup products
+      let setupTotal = 0;
+      for (const product of selectedSetupProducts) {
+        const price = parsePrice(product.price);
+        setupTotal += price;
+      }
+
+      // Update the setup total in the state
+      set({ setupTotal });
+
+      return setupTotal;
     },
 
     calculateTotal: () => {
-      const { selectedProducts, selectedSetupProducts } = get();
+      // Get the components and setup totals
+      const componentsTotal = get().componentsTotal;
+      const setupTotal = get().setupTotal;
 
-      // Helper function to convert price strings to numbers
-      const parsePrice = (priceStr: string | number | undefined): number => {
-        if (typeof priceStr === 'number') return priceStr;
-        if (!priceStr) return 0;
+      // Calculate the combined total
+      const total = componentsTotal + setupTotal;
 
-        // Remove any currency symbols or non-numeric characters except decimal point
-        const cleanedStr = String(priceStr).replace(/[^0-9.]/g, '');
-        const parsedPrice = parseFloat(cleanedStr);
+      // Update the total in the state
+      set({ total });
 
-        return isNaN(parsedPrice) ? 0 : parsedPrice;
-      };
-
-      // Process regular products - use explicit loop for debugging
-      let productTotal = 0;
-      for (const product of selectedProducts) {
-        const price = parsePrice(product.price);
-        productTotal += price;
-      }
-
-      // Process setup products - use explicit loop for debugging
-      let setupProductTotal = 0;
-      for (const product of selectedSetupProducts) {
-        const price = parsePrice(product.price);
-        setupProductTotal += price;
-      }
-
-      const newTotal = productTotal + setupProductTotal;
-
-      // Always update the total in the state
-      set({ total: newTotal });
-
-      return newTotal;
+      return total;
     },
   })),
 );

@@ -33,7 +33,9 @@ export const PcConfiguration = {
       endpoints.pc_configuration.getPcComponentsWithPreset +
         (id != null ? `?preset_id=${id}` : ''),
       {
-        next: { tags: [`get-pc-components-with-preset-${id}`] },
+        next: {
+          tags: [`get-pc-components-with-preset`],
+        },
       },
     );
   },
@@ -64,7 +66,7 @@ export const PcConfiguration = {
     const url = `${endpoints.pc_configuration.getFilteredProducts}${queryString ? `?${queryString}` : ''}`;
 
     return await apiClient.get(url, {
-      next: { tags: ['filtered-products'] },
+      next: { tags: ['filtered-pc-products'] },
     });
   },
   async savePcConfiguration(

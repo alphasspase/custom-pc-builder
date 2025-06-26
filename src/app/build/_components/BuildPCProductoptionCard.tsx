@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { getBaseUrl } from '@/utils/env';
 import { Product } from '@/services/pc_configuration/type';
 import { Check } from 'lucide-react';
 
@@ -31,9 +30,7 @@ export function BuildPCProductoptionCard({
     >
       <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-md bg-white">
         <Image
-          src={
-            option.image ? `${getBaseUrl()}${option.image}` : '/placeholder.svg'
-          }
+          src={option.image ? option.image : '/placeholder.svg'}
           alt={option.name}
           width={60}
           height={60}

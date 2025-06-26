@@ -20,7 +20,7 @@ export const DemandAssessments = {
       endpoints.demand_assessment.getNextQuestion,
       payload,
       {
-        next: { tags: ['get-next-question'] },
+        next: { tags: [`get-next-question-${id}`] },
       },
     );
 

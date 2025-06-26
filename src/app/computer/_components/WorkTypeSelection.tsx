@@ -12,7 +12,6 @@ import { motion } from 'framer-motion';
 import { Question, QuestionOptions } from '@/services/demand_assessment/type';
 import { DemandAssessments } from '@/services/demand_assessment/demand_assessment';
 import Image from 'next/image';
-import { getBaseUrl } from '@/utils/env';
 
 const WorkTypeSelection = ({ question }: { question: Question }) => {
   const [selectedOption, setSelectedOption] = useState<QuestionOptions | null>(
@@ -234,7 +233,7 @@ const WorkTypeSelection = ({ question }: { question: Question }) => {
                       <Image
                         width={500}
                         height={500}
-                        src={`${getBaseUrl()}${option.icon}`}
+                        src={option.icon}
                         alt={option.option_text}
                         className={`h-full w-full object-cover transition-all duration-500 ${
                           selectedOption?.id === option.id
