@@ -36,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
+import { PcConfigurationService } from '@/lib/api/services/pc_configuration/pc_configuration';
 import { ProductSkeletonCard } from './ProductSkeletonCard';
 
 interface PcComponentModalProps {
@@ -202,14 +202,13 @@ function ModalBody({
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const data = await PcConfiguration.getFilteredProducts({
+        const data = await PcConfigurationService.getFilteredProducts({
           category: categoryName,
           search: debouncedSearchQuery,
           min_price: debouncedMinPrice,
           max_price: debouncedMaxPrice,
           sort_by: sortOption,
         });
-        console.log('data', data);
 
         setProducts(data);
       } catch (error) {

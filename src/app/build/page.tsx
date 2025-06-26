@@ -5,7 +5,7 @@ import CategoryNavigation from './_components/CategoryNavigation';
 import { GamepadIcon, Laptop, Monitor } from 'lucide-react';
 import { FaComputer } from 'react-icons/fa6';
 import PCBuilder from './_components/PCBuilder';
-import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
+import { PcConfigurationService } from '@/lib/api/services/pc_configuration/pc_configuration';
 import { SearchParams } from '@/lib/api/services/setup_configuration/type';
 
 const categoriesTab = [
@@ -37,10 +37,11 @@ const categoriesTab = [
 
 const buildPage = async (props: { searchParams: SearchParams }) => {
   const searchParams = await props.searchParams;
-  const combinedCategories = await PcConfiguration.getPcComponentsWithPreset(
-    searchParams.id ? Number(searchParams.id) : undefined,
-  );
-  console.log('combinedCategories ---->', combinedCategories);
+  const combinedCategories =
+    await PcConfigurationService.getPcComponentsWithPreset(
+      searchParams.id ? Number(searchParams.id) : undefined,
+    );
+
   const defaultSelectedProducts = combinedCategories?.preset_configuration;
   const categories = combinedCategories?.product_categories;
 

@@ -28,7 +28,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { usePCBuilderStore } from '@/lib/store/checkout';
-import { PcConfiguration } from '@/lib/api/services/pc_configuration/pc_configuration';
+import { PcConfigurationService } from '@/lib/api/services/pc_configuration/pc_configuration';
 import { SavePcConfigurationResponse } from '@/lib/api/services/pc_configuration/type';
 import { toast } from 'sonner';
 
@@ -78,7 +78,7 @@ export function QrCodeModal() {
 
       setLoading(true);
 
-      const response = await PcConfiguration.savePcConfiguration({
+      const response = await PcConfigurationService.savePcConfiguration({
         name: configName,
         description: configDescription || 'Custom PC Configuration',
         total_price: total.toString(),

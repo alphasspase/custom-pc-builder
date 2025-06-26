@@ -25,61 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const url =
-  //   process.env.NEXT_PUBLIC_API_BASE_URL + endpoints.kitchen.getKitchen;
-  // const url = {`${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoints.}`;};
-  // const url = `${process.env.NEXT_PUBLIC_API_BASE_URL_1}${endpoints.todo.getTodo}`;
-  // console.log('url', url);
-  // const options = { method: 'GET', headers: { accept: 'application/json' } };
-
-  // const response = await fetch(url, options);
-  // const text = await response.text();
-  // console.log('Raw Response:', text);
-
-  // try {
-  //   const data = JSON.parse(text);
-  //   console.log('Parsed Data:', data);
-  // } catch (err) {
-  //   console.error('Failed to parse JSON:', err);
-  // }
-  // interface Todo {
-  //   id: string;
-  //   title: string;
-  //   description: string;
-  //   completed: boolean;
-  // }
-  // const data: Todo = {
-  //   description: 'Free API for testing',
-  //   completed: false,
-  //   title: 'Test Todo',
-  // };
-
-  // const a = await apiClient.get(endpoints.demand_assessment.getFirstQuestion, {
-  //   cache: 'no-store',
-  //   next: { tags: ['todo'] },
-  // });
-
-  // const a = await apiClient.post<Todo>(endpoints.todo.createTodo, data, {});
-
-  // const a = await apiClient.get<Todo>(
-  //   endpoints.todo.getTodoById('6803ec6093243eb7af506ab6'),
-  //   { cache: 'no-store' },
-  // );
-
-  // const a = await apiClient.patch<Todo>(
-  //   endpoints.todo.updateTodoById('6803ec6093243eb7af506ab6'),
-  //   data,
-  // );
-
-  // const a = await apiClient.delete(
-  //   endpoints.todo.getTodoById('6803ec6093243eb7af506ab6'),
-  //   {
-  //     cache: 'no-cache',
-  //   },
-  // );
-
-  // console.log('data', a);
-
   return (
     <html lang="en">
       <body
