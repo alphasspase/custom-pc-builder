@@ -15,7 +15,9 @@ export function usePCBuilder() {
     // State
     selectedProducts: store.selectedProducts,
     selectedSetupProducts: store.selectedSetupProducts,
-    total: store.total,
+    total: store.total, // Combined total of components and setup
+    componentsTotal: store.componentsTotal, // Total price of components only
+    setupTotal: store.setupTotal, // Total price of setup products only
 
     // Actions
     addProduct: store.selectProduct,

@@ -52,7 +52,7 @@ export default function PCBuilder({
   productCategories: ProductCategory[];
 }) {
   const router = useRouter();
-  const { selectedProducts, total, addProduct, addSetupProduct } =
+  const { selectedProducts, componentsTotal, addProduct, addSetupProduct } =
     usePCBuilder();
   const [productCategories, setProductCategories] = useState<ProductCategory[]>(
     initialProductCategories,
@@ -220,13 +220,13 @@ export default function PCBuilder({
         <div className="mb-2 flex items-center justify-between">
           <span className="text-gray-500">incl. VAT plus shipping</span>
           <motion.span
-            key={total}
+            key={componentsTotal}
             initial={{ scale: 1.2, color: '#4F46E5' }}
             animate={{ scale: 1, color: '#1F2937' }}
             transition={{ duration: 0.5 }}
             className="text-xl font-bold"
           >
-            {total.toFixed(2)} €
+            {componentsTotal.toFixed(2)} €
           </motion.span>
         </div>
         <div className="mb-6 flex items-center justify-between">
