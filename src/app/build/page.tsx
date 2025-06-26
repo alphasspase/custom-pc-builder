@@ -41,7 +41,7 @@ const buildPage = async (props: { searchParams: SearchParams }) => {
     await PcConfigurationService.getPcComponentsWithPreset(
       searchParams.id ? Number(searchParams.id) : undefined,
     );
-  console.log('combinedCategories ---->', combinedCategories);
+
   const defaultSelectedProducts = combinedCategories?.preset_configuration;
   const categories = combinedCategories?.product_categories;
 

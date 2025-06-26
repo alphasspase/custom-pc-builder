@@ -126,7 +126,6 @@ function ModalBody({
   ); // Handle initial load and filter changes
 
   const loadMore = useCallback(() => {
-    console.log('loadMore called, fetching page:', page + 1);
     setLoading(true);
     const nextPage = page + 1;
 

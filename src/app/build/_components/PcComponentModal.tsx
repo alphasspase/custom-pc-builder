@@ -209,7 +209,6 @@ function ModalBody({
           max_price: debouncedMaxPrice,
           sort_by: sortOption,
         });
-        console.log('data', data);
 
         setProducts(data);
       } catch (error) {
