@@ -2,12 +2,12 @@ import HeroHighlightSection from '@/components/global/HeroHighlightSection';
 import React from 'react';
 import ProductCarousel from './_components/ProductCarousel';
 import WorkspaceConfigurator from './_components/WorkspaceConfigurator';
-import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
+import { SetupConfigurationService } from '@/lib/api/services/setup_configuration/setup_configuration';
 
 const ComponentPage = async () => {
   // Fetch all product sections with error handling
   const productSectionsData =
-    await SetupConfiguration.getCategoriesWithProduct();
+    await SetupConfigurationService.getCategoriesWithProduct();
 
   return (
     <div className="relative">

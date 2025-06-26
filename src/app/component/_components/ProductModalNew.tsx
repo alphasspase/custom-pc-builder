@@ -3,7 +3,7 @@
 
 import { JSX, useState, useCallback, useEffect } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { SetupConfiguration } from '@/lib/api/services/setup_configuration/setup_configuration';
+import { SetupConfigurationService } from '@/lib/api/services/setup_configuration/setup_configuration';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {
   Dialog,
@@ -87,15 +87,16 @@ function ModalBody({
     async (pageNumber: number, isNewSearch = false) => {
       setLoading(true);
       try {
-        const response = await SetupConfiguration.getSetupProductByFilters({
-          category,
-          search: searchQuery,
-          sort_by: sortOption,
-          min_price: minPrice,
-          max_price: maxPrice,
-          page: pageNumber,
-          page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
-        });
+        const response =
+          await SetupConfigurationService.getSetupProductByFilters({
+            category,
+            search: searchQuery,
+            sort_by: sortOption,
+            min_price: minPrice,
+            max_price: maxPrice,
+            page: pageNumber,
+            page_size: PAGE_SIZE, // Use the constant instead of hardcoded value
+          });
 
         if (isNewSearch) {
           setFilteredProducts(response.results);
