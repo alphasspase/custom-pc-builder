@@ -22,6 +22,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import Image from 'next/image';
+// Direct Stripe integration removed - now using Stripe Checkout
 
 export default function ConfirmPayment() {
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -160,9 +161,14 @@ export default function ConfirmPayment() {
                       <div className="flex items-center space-x-2 pt-2">
                         <Checkbox id="save-card" />
                         <Label htmlFor="save-card" className="text-sm">
-                          Save my card for future reservations
+                          Save my card for future payments
                         </Label>
                       </div>
+
+                      <p className="text-muted-foreground text-sm">
+                        Note: This is a display form only. Actual payment will
+                        be processed through Stripe&apos;s secure checkout.
+                      </p>
                     </motion.div>
                   </TabsContent>
 
@@ -208,50 +214,53 @@ export default function ConfirmPayment() {
               Terms and Conditions, Privacy Policy and COVID-19 Safety
               Requirements.
             </div>
-            <Button
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
-            >
-              {isSubmitting ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center"
-                >
-                  <svg
-                    className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+            {/* Since we are now using the Stripe form for payments, we can use this as a fallback for non-card payment methods */}
+            {paymentMethod !== 'card' && (
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
+              >
+                {isSubmitting ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex items-center"
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Processing...
-                </motion.div>
-              ) : (
-                <motion.div
-                  className="flex items-center"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-                >
-                  Confirm and pay
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </motion.div>
-              )}
-            </Button>
+                    <svg
+                      className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Processing...
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    className="flex items-center"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                  >
+                    Confirm and pay
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </motion.div>
+                )}
+              </Button>
+            )}
           </CardFooter>
         </Card>
       </motion.div>

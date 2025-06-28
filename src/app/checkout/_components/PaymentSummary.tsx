@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import { URLS } from '@/utils/urls';
+import { redirectToStripeCheckout } from '@/lib/stripe-helpers';
+import { useState } from 'react';
 
 interface PaymentSummaryProps {
   componentsTotal: number;
@@ -27,6 +27,23 @@ export function PaymentSummary({
   deliveryFee,
   grandTotal,
 }: PaymentSummaryProps) {
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      // This will redirect to Stripe's checkout page
+      await redirectToStripeCheckout(grandTotal, 'Custom PC Build');
+
+      // The following code will only run if the redirection fails
+      console.log('Stripe redirection failed');
+      setIsProcessing(false);
+    } catch (error) {
+      console.error('Payment error:', error);
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="h-fit space-y-8 lg:sticky lg:top-8 lg:col-span-1 lg:self-start">
       {/* Payment Method Card */}
@@ -114,11 +131,14 @@ export function PaymentSummary({
             <span className="font-medium">Total</span>
             <span className="text-xl font-bold">${grandTotal}</span>
           </div>
-          <Link href={URLS.paymentInformation}>
-            <Button className="mt-4 w-full" size="lg">
-              Proceed to payment
-            </Button>
-          </Link>
+          <Button
+            className="mt-4 w-full"
+            size="lg"
+            onClick={handlePayment}
+            disabled={isProcessing}
+          >
+            {isProcessing ? 'Processing...' : 'Proceed to payment'}
+          </Button>
         </CardContent>
       </Card>
     </div>
