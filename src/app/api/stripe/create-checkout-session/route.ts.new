@@ -1,42 +1,4 @@
-import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
-import { ProductItem, SetupProductItem } from './types';
-
-// Initialize Stripe with your secret key
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-if (!stripeSecretKey) {
-  console.error('Missing STRIPE_SECRET_KEY environment variable');
-}
-
-// Initialize Stripe without specifying API version to use the default
-const stripe = new Stripe(stripeSecretKey || '');
-
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const {
-      amount,
-      productName,
-      selectedProducts = [],
-      selectedSetupProducts = [],
-    } = body;
-
-    if (!amount) {
-      return NextResponse.json(
-        { error: 'Amount is required' },
-        { status: 400 },
-      );
-    }
-
-    // Create line items for individual PC components if we have any
-    const lineItems = [];
-
-    // Add PC components if available
-    if (selectedProducts && selectedProducts.length > 0) {
-      selectedProducts.forEach((product: ProductItem) => {
-        lineItems.push({
-          price_data: {
-            currency: 'usd',
+import { NextResponse } from 'next/server';import Stripe from 'stripe';// Define product types directly in the file to avoid import issuestype ProductItem = {  name: string;  category: string;  price: string | number;  description?: string;  image?: string;};type SetupProductItem = {  name: string;  category_name: string;  price: string | number;  description?: string;  image?: string;};// Initialize Stripe with your secret keyconst stripeSecretKey = process.env.STRIPE_SECRET_KEY;if (!stripeSecretKey) {  console.error('Missing STRIPE_SECRET_KEY environment variable');}// Initialize Stripe without specifying API version to use the defaultconst stripe = new Stripe(stripeSecretKey || '');export async function POST(req: Request) {  try {    const body = await req.json();    const {      amount,      productName,      selectedProducts = [],      selectedSetupProducts = [],    } = body;    if (!amount) {      return NextResponse.json(        { error: 'Amount is required' },        { status: 400 },      );    }    // Create line items for individual PC components if we have any    const lineItems = [];    // Add PC components if available    if (selectedProducts && selectedProducts.length > 0) {      selectedProducts.forEach((product: ProductItem) => {        lineItems.push({          price_data: {            currency: 'usd',
             product_data: {
               name: `${product.name} (${product.category})`,
             },
