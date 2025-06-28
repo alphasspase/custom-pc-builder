@@ -3,9 +3,14 @@
 import { loadStripe } from '@stripe/stripe-js';
 
 // Make sure to use a publishable key for the frontend
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder',
-);
+const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+if (!publishableKey) {
+  console.warn(
+    'Missing NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY environment variable',
+  );
+}
+
+const stripePromise = loadStripe(publishableKey || 'pk_test_placeholder');
 
 export const redirectToStripeCheckout = async (
   amount: number,
@@ -30,7 +35,9 @@ export const redirectToStripeCheckout = async (
       }),
     });
 
-    const { sessionId, url } = await response.json();
+    const data = await response.json();
+    console.log('Response data:', data);
+    const { sessionId, url } = data;
 
     if (!sessionId) {
       throw new Error('Failed to create checkout session');
@@ -51,6 +58,12 @@ export const redirectToStripeCheckout = async (
     }
   } catch (error) {
     console.error('Error redirecting to Stripe Checkout:', error);
-    alert('Failed to initialize payment. Please try again.');
+    // Make the error more descriptive for debugging
+    if (error instanceof Error) {
+      alert(`Payment error: ${error.message}`);
+    } else {
+      alert('Failed to initialize payment. Please try again.');
+    }
+    throw error; // Re-throw so the calling code can handle it
   }
 };

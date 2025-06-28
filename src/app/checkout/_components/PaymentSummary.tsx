@@ -29,8 +29,11 @@ export function PaymentSummary({
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
   const handlePayment = async () => {
     setIsProcessing(true);
+    setPaymentError(null);
     try {
       // This will redirect to Stripe's checkout page
       await redirectToStripeCheckout(grandTotal, 'Custom PC Build');
@@ -41,6 +44,11 @@ export function PaymentSummary({
     } catch (error) {
       console.error('Payment error:', error);
       setIsProcessing(false);
+      if (error instanceof Error) {
+        setPaymentError(error.message);
+      } else {
+        setPaymentError('An unknown error occurred. Please try again.');
+      }
     }
   };
 
@@ -131,6 +139,9 @@ export function PaymentSummary({
             <span className="font-medium">Total</span>
             <span className="text-xl font-bold">${grandTotal}</span>
           </div>
+          {paymentError && (
+            <div className="mt-2 text-sm text-red-600">{paymentError}</div>
+          )}
           <Button
             className="mt-4 w-full"
             size="lg"

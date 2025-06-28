@@ -2,9 +2,13 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 // Initialize Stripe with your secret key
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-05-28.basil', // Using the latest API version
-});
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+if (!stripeSecretKey) {
+  console.error('Missing STRIPE_SECRET_KEY environment variable');
+}
+
+// Initialize Stripe without specifying API version to use the default
+const stripe = new Stripe(stripeSecretKey || '');
 
 export async function POST(req: Request) {
   try {
