@@ -2,88 +2,50 @@
 
 import { useState } from 'react';
 
-import { ShoppingCart, CreditCard, Truck, User, Info } from 'lucide-react';
+import { Truck, User, Info, Laptop, Monitor } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
 import { ProductCard } from './ProductCard';
+import { SetupProductCard } from './SetupProductCard';
 import { DeliveryOptionCard } from './DeliveryOptionCard';
+import { PaymentSummary } from './PaymentSummary';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
-import Link from 'next/link';
-import { URLS } from '@/utils/urls';
 
 export default function Checkout() {
-  // const [products, setProducts] = useState<Product[]>([
-  //   {
-  //     id: '1',
-  //     name: 'Wireless Gaming Mouse',
-  //     price: 79.99,
-  //     quantity: 1,
-  //     image: '/peripherals/mouse.jpg',
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Mechanical Keyboard RGB',
-  //     price: 129.99,
-  //     quantity: 1,
-  //     image: '/peripherals/keyboard.jpg',
-  //   },
-  //   {
-  //     id: '3',
-  //     name: 'Ergonomic Office Chair',
-  //     price: 249.99,
-  //     quantity: 1,
-  //     image: '/chairs/chair.jpg',
-  //   },
-  //   {
-  //     id: '4',
-  //     name: 'Laptop Stand Adjustable',
-  //     price: 39.99,
-  //     quantity: 2,
-  //     image: '/desk/desk1.webp',
-  //   },
-  //   {
-  //     id: '5',
-  //     name: 'Noise Cancelling Headphones',
-  //     price: 199.99,
-  //     quantity: 1,
-  //     image: '/peripherals/usb.jpg',
-  //   },
-  // ]);
-  const { selectedProducts, total, removeProduct } = usePCBuilder();
+  const {
+    selectedProducts,
+    selectedSetupProducts,
+    total,
+    componentsTotal,
+    setupTotal,
+    removeProduct,
+    removeSetupProduct,
+  } = usePCBuilder();
 
   const [deliveryMethod, setDeliveryMethod] = useState('ups');
   const [deliverySpeed, setDeliverySpeed] = useState('express');
 
-  // const subtotal = products.reduce(
-  //   (acc, product) => acc + product.price * product.quantity,
-  //   0,
-  // );
   const discount = 15;
   const deliveryFee = deliverySpeed === 'express' ? 22 : 12;
   const grandTotal = total - discount + deliveryFee;
-
-  // const removeProduct = (id: string) =>
-  //   setProducts(products.filter((product) => product.id !== id));
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
       <h1 className="mb-8 text-3xl font-bold">Checkout</h1>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="relative grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-8 lg:col-span-2">
-          {/* Order Summary */}
+          {/* PC Components Order Summary */}
           <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                <CardTitle>Order summary</CardTitle>
+                <Laptop className="mr-2 h-5 w-5" />
+                <CardTitle>PC Components</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
@@ -92,13 +54,59 @@ export default function Checkout() {
                 <div>Price</div>
               </div>
               <Separator className="mb-4" />
-              {selectedProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onRemove={() => removeProduct(product.id)}
-                />
-              ))}
+              {selectedProducts.length > 0 ? (
+                selectedProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onRemove={() => removeProduct(product.id)}
+                  />
+                ))
+              ) : (
+                <p className="text-muted-foreground py-2">
+                  No PC components selected
+                </p>
+              )}
+              {selectedProducts.length > 0 && (
+                <div className="mt-4 flex justify-end">
+                  <p className="font-medium">Subtotal: ${componentsTotal}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Setup Products Order Summary */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center">
+                <Monitor className="mr-2 h-5 w-5" />
+                <CardTitle>Setup Products</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-2 grid grid-cols-10 gap-4 text-sm font-medium md:text-base">
+                <div className="col-span-8">Name</div>
+                <div>Price</div>
+              </div>
+              <Separator className="mb-4" />
+              {selectedSetupProducts.length > 0 ? (
+                selectedSetupProducts.map((product) => (
+                  <SetupProductCard
+                    key={product.id}
+                    product={product}
+                    onRemove={() => removeSetupProduct(product.id)}
+                  />
+                ))
+              ) : (
+                <p className="text-muted-foreground py-2">
+                  No setup products selected
+                </p>
+              )}
+              {selectedSetupProducts.length > 0 && (
+                <div className="mt-4 flex justify-end">
+                  <p className="font-medium">Subtotal: ${setupTotal}</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -208,89 +216,14 @@ export default function Checkout() {
         </div>
 
         {/* Payment Summary */}
-        <div className="space-y-8">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center">
-                <CreditCard className="mr-2 h-5 w-5" />
-                <CardTitle>Payment method</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Button
-                variant="outline"
-                className="text-muted-foreground mb-4 w-full justify-start"
-              >
-                Change payment methods
-              </Button>
-
-              <Card>
-                <CardContent className="flex items-center justify-between p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-muted flex h-8 w-8 items-center justify-center rounded-md">
-                      <CreditCard className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-medium">Mastercard</p>
-                    </div>
-                  </div>
-                  <p className="font-medium">•••• 5987</p>
-                </CardContent>
-              </Card>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle>Voucher</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <Input placeholder="$15 OFF" />
-                <Button variant="outline">Apply</Button>
-              </div>
-
-              <div className="mt-3">
-                <Badge variant="secondary" className="py-1.5 text-sm">
-                  $15 Off
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center">
-                <ShoppingCart className="mr-2 h-5 w-5" />
-                <CardTitle>Summary</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">${total}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Discount</span>
-                <span className="font-medium text-green-600">-${discount}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Delivery Fee</span>
-                <span className="font-medium">${deliveryFee}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span className="font-medium">Total</span>
-                <span className="text-xl font-bold">${grandTotal}</span>
-              </div>
-              <Link href={URLS.paymentInformation}>
-                <Button className="mt-4 w-full" size="lg">
-                  Proceed to payment
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+        <PaymentSummary
+          componentsTotal={componentsTotal}
+          setupTotal={setupTotal}
+          total={total}
+          discount={discount}
+          deliveryFee={deliveryFee}
+          grandTotal={grandTotal}
+        />
       </div>
     </div>
   );
