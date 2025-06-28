@@ -1,6 +1,8 @@
 'use client';
 
 import { loadStripe } from '@stripe/stripe-js';
+import type { Product } from '@/services/pc_configuration/type';
+import type { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
 // Make sure to use a publishable key for the frontend
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -15,6 +17,8 @@ const stripePromise = loadStripe(publishableKey || 'pk_test_placeholder');
 export const redirectToStripeCheckout = async (
   amount: number,
   productName = 'Custom PC Build',
+  selectedProducts: Product[] = [],
+  selectedSetupProducts: Setup_Product[] = [],
 ) => {
   try {
     // Initialize Stripe
@@ -32,6 +36,8 @@ export const redirectToStripeCheckout = async (
       body: JSON.stringify({
         amount,
         productName,
+        selectedProducts,
+        selectedSetupProducts,
       }),
     });
 

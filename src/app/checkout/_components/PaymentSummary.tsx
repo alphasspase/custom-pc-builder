@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { redirectToStripeCheckout } from '@/lib/stripe-helpers';
 import { useState } from 'react';
+import { usePCBuilder } from '@/hooks/usePCBuilder';
 
 interface PaymentSummaryProps {
   componentsTotal: number;
@@ -28,15 +29,28 @@ export function PaymentSummary({
   grandTotal,
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
-
   const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  // Get selected products from the PCBuilder hook
+  const { selectedProducts, selectedSetupProducts } = usePCBuilder();
 
   const handlePayment = async () => {
     setIsProcessing(true);
     setPaymentError(null);
     try {
-      // This will redirect to Stripe's checkout page
-      await redirectToStripeCheckout(grandTotal, 'Custom PC Build');
+      // Create a descriptive name based on selected products
+      const productSummary =
+        selectedProducts.length > 0
+          ? `Custom PC: ${selectedProducts.map((p) => p.name).join(', ')}`
+          : 'Custom PC Build';
+
+      // This will redirect to Stripe's checkout page with all selected products
+      await redirectToStripeCheckout(
+        grandTotal,
+        productSummary,
+        selectedProducts,
+        selectedSetupProducts,
+      );
 
       // The following code will only run if the redirection fails
       console.log('Stripe redirection failed');
