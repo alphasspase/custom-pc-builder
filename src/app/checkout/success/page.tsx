@@ -42,6 +42,14 @@ export default function PaymentSuccessPage() {
           throw new Error(data.error || 'Failed to verify payment');
         }
 
+        // Log the successful payment verification on client-side
+        console.log('📢 Payment verification successful:', {
+          sessionId,
+          paymentStatus: data.session.payment_status,
+          amount: data.orderDetails.amount,
+          orderId: data.orderDetails.orderId,
+        });
+
         // Format the order data
         setOrderDetails({
           orderId: data.orderDetails.orderId,

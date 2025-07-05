@@ -41,6 +41,12 @@ export const redirectToStripeCheckout = async (
       }),
     });
 
+    // Check if the response is OK
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to create checkout session');
+    }
+
     const data = await response.json();
     console.log('Response data:', data);
     const { sessionId, url } = data;
@@ -51,6 +57,14 @@ export const redirectToStripeCheckout = async (
 
     // If we have a direct URL, use it (Stripe Checkout hosted page)
     if (url) {
+      console.log('🚀 Redirecting to Stripe Checkout:', {
+        sessionId,
+        url,
+        amount,
+        productName,
+        totalProducts: selectedProducts.length + selectedSetupProducts.length,
+      });
+
       window.location.href = url;
 
       return;

@@ -19,11 +19,16 @@ export async function GET(req: Request) {
     }
 
     // Retrieve the checkout session
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['payment_intent', 'line_items'],
+    });
 
     if (!session) {
       return NextResponse.json({ error: 'Session not found' }, { status: 404 });
     }
+
+    // Log payment success information
+    console.log('🔰 PAYMENT SUCCESS 🔰', session);
 
     // Here you would typically:
     // 1. Update order status in your database
