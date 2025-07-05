@@ -1,12 +1,12 @@
 'use client';
 
-import { ShoppingCart, CreditCard } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+
 import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
+
 import { redirectToStripeCheckout } from '@/lib/stripe-helpers';
 import { useState } from 'react';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
@@ -15,8 +15,6 @@ interface PaymentSummaryProps {
   componentsTotal: number;
   setupTotal: number;
   total: number;
-  discount: number;
-  deliveryFee: number;
   grandTotal: number;
 }
 
@@ -24,8 +22,7 @@ export function PaymentSummary({
   componentsTotal,
   setupTotal,
   total,
-  discount,
-  deliveryFee,
+
   grandTotal,
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -69,7 +66,7 @@ export function PaymentSummary({
   return (
     <div className="h-fit space-y-8 lg:sticky lg:top-8 lg:col-span-1 lg:self-start">
       {/* Payment Method Card */}
-      <Card>
+      {/* <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center">
             <CreditCard className="mr-2 h-5 w-5" />
@@ -98,10 +95,10 @@ export function PaymentSummary({
             </CardContent>
           </Card>
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Voucher Card */}
-      <Card>
+      {/* <Card>
         <CardHeader className="pb-3">
           <CardTitle>Voucher</CardTitle>
         </CardHeader>
@@ -117,7 +114,7 @@ export function PaymentSummary({
             </Badge>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       {/* Summary Card */}
       <Card>
@@ -140,13 +137,13 @@ export function PaymentSummary({
             <span className="text-muted-foreground">Subtotal</span>
             <span className="font-medium">${total}</span>
           </div>
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <span className="text-muted-foreground">Discount</span>
             <span className="font-medium text-green-600">-${discount}</span>
-          </div>
+          </div> */}
           <div className="flex justify-between">
             <span className="text-muted-foreground">Delivery Fee</span>
-            <span className="font-medium">${deliveryFee}</span>
+            <span className="font-medium">Free</span>
           </div>
           <Separator />
           <div className="flex justify-between">

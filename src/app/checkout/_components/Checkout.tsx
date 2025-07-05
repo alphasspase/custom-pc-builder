@@ -1,18 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-
-import { Truck, User, Info, Laptop, Monitor } from 'lucide-react';
-
+import { User, Info, Laptop, Monitor } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ProductCard } from './ProductCard';
 import { SetupProductCard } from './SetupProductCard';
-import { DeliveryOptionCard } from './DeliveryOptionCard';
+// import { DeliveryOptionCard } from './DeliveryOptionCard';
 import { PaymentSummary } from './PaymentSummary';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
 
@@ -27,12 +23,12 @@ export default function Checkout() {
     removeSetupProduct,
   } = usePCBuilder();
 
-  const [deliveryMethod, setDeliveryMethod] = useState('ups');
-  const [deliverySpeed, setDeliverySpeed] = useState('express');
+  // const [deliveryMethod, setDeliveryMethod] = useState('ups');
+  // const [deliverySpeed, setDeliverySpeed] = useState('express');
 
-  const discount = 15;
-  const deliveryFee = deliverySpeed === 'express' ? 22 : 12;
-  const grandTotal = total - discount + deliveryFee;
+  // const discount = 15;
+  // const deliveryFee = deliverySpeed === 'express' ? 22 : 12;
+  // const grandTotal = total - discount + deliveryFee;
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
@@ -111,7 +107,7 @@ export default function Checkout() {
           </Card>
 
           {/* Delivery Options */}
-          <Card>
+          {/* <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center">
                 <Truck className="mr-2 h-5 w-5" />
@@ -161,7 +157,7 @@ export default function Checkout() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Recipient Information */}
           <Card>
@@ -220,9 +216,7 @@ export default function Checkout() {
           componentsTotal={componentsTotal}
           setupTotal={setupTotal}
           total={total}
-          discount={discount}
-          deliveryFee={deliveryFee}
-          grandTotal={grandTotal}
+          grandTotal={total}
         />
       </div>
     </div>
