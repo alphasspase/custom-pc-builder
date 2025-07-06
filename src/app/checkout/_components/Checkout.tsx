@@ -1,20 +1,43 @@
 'use client';
 
-import { useState } from 'react';
-
-import { Truck, User, Info, Laptop, Monitor } from 'lucide-react';
-
+import { User, Info, Laptop, Monitor } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ProductCard } from './ProductCard';
 import { SetupProductCard } from './SetupProductCard';
-import { DeliveryOptionCard } from './DeliveryOptionCard';
+// import { DeliveryOptionCard } from './DeliveryOptionCard';
 import { PaymentSummary } from './PaymentSummary';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
+
+// React Hook Form + Zod
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+// Define the form schema with Zod
+const recipientFormSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, { message: 'Full name must be at least 2 characters.' }),
+  phoneNumber: z
+    .string()
+    .min(10, { message: 'Please enter a valid phone number.' }),
+  address: z
+    .string()
+    .min(5, { message: 'Address must be at least 5 characters.' }),
+  addressLine2: z.string().optional(),
+  city: z.string().min(2, { message: 'City is required.' }),
+  state: z.string().min(2, { message: 'State is required.' }),
+  postalCode: z.string().min(5, { message: 'Postal code is required.' }),
+  country: z.string().min(2, { message: 'Country is required.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  deliveryNote: z.string().optional(),
+});
+
+// Create a type from the schema
+type RecipientFormValues = z.infer<typeof recipientFormSchema>;
 
 export default function Checkout() {
   const {
@@ -27,12 +50,40 @@ export default function Checkout() {
     removeSetupProduct,
   } = usePCBuilder();
 
-  const [deliveryMethod, setDeliveryMethod] = useState('ups');
-  const [deliverySpeed, setDeliverySpeed] = useState('express');
+  // Initialize React Hook Form with Zod validation
+  const form = useForm<RecipientFormValues>({
+    resolver: zodResolver(recipientFormSchema),
+    defaultValues: {
+      fullName: '',
+      phoneNumber: '',
+      address: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: '',
+      email: '',
+      deliveryNote: '',
+    },
+    mode: 'onBlur', // Validate on blur for better UX
+  });
 
-  const discount = 15;
-  const deliveryFee = deliverySpeed === 'express' ? 22 : 12;
-  const grandTotal = total - discount + deliveryFee;
+  // Destructure needed properties from form
+  const {
+    register,
+    formState: { errors },
+    watch,
+  } = form;
+
+  // Watch all form values for use in the PaymentSummary component
+  const formValues = watch();
+
+  // const [deliveryMethod, setDeliveryMethod] = useState('ups');
+  // const [deliverySpeed, setDeliverySpeed] = useState('express');
+
+  // const discount = 15;
+  // const deliveryFee = deliverySpeed === 'express' ? 22 : 12;
+  // const grandTotal = total - discount + deliveryFee;
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8">
@@ -111,7 +162,8 @@ export default function Checkout() {
           </Card>
 
           {/* Delivery Options */}
-          <Card>
+
+          {/* <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center">
                 <Truck className="mr-2 h-5 w-5" />
@@ -161,7 +213,7 @@ export default function Checkout() {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Recipient Information */}
           <Card>
@@ -175,38 +227,115 @@ export default function Checkout() {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full name</Label>
-                  <Input id="fullName" defaultValue="Amway Dunne" />
+                  <Input
+                    placeholder="Amway Dunne"
+                    id="fullName"
+                    {...register('fullName')}
+                  />
+                  {errors.fullName && (
+                    <p className="text-sm text-red-500">
+                      {errors.fullName.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber">Phone number</Label>
-                  <Input id="phoneNumber" defaultValue="732-123-4567" />
+                  <Input
+                    placeholder="732-123-4567"
+                    id="phoneNumber"
+                    {...register('phoneNumber')}
+                  />
+                  {errors.phoneNumber && (
+                    <p className="text-sm text-red-500">
+                      {errors.phoneNumber.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="address">Address</Label>
                   <Input
+                    placeholder="4706 Street, New Jersey(NJ)"
                     id="address"
-                    defaultValue="4706  Street, , New Jersey(NJ)"
+                    {...register('address')}
                   />
+                  {errors.address && (
+                    <p className="text-sm text-red-500">
+                      {errors.address.message}
+                    </p>
+                  )}
                 </div>
-              </div>
 
-              <div className="mt-4 flex items-center space-x-2">
-                <Checkbox id="saveDefault" defaultChecked />
-                <Label
-                  htmlFor="saveDefault"
-                  className="text-sm leading-none font-medium"
-                >
-                  Save as default
-                </Label>
+                <div className="space-y-2">
+                  <Label htmlFor="city">City</Label>
+                  <Input
+                    placeholder="New Jersey"
+                    id="city"
+                    {...register('city')}
+                  />
+                  {errors.city && (
+                    <p className="text-sm text-red-500">
+                      {errors.city.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">State</Label>
+                  <Input placeholder="NJ" id="state" {...register('state')} />
+                  {errors.state && (
+                    <p className="text-sm text-red-500">
+                      {errors.state.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="postalCode">Postal Code</Label>
+                  <Input
+                    placeholder="07001"
+                    id="postalCode"
+                    {...register('postalCode')}
+                  />
+                  {errors.postalCode && (
+                    <p className="text-sm text-red-500">
+                      {errors.postalCode.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="country">Country</Label>
+                  <Input
+                    placeholder="US"
+                    id="country"
+                    {...register('country')}
+                  />
+                  {errors.country && (
+                    <p className="text-sm text-red-500">
+                      {errors.country.message}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    placeholder="amway.dunne@example.com"
+                    id="email"
+                    {...register('email')}
+                  />
+                  {errors.email && (
+                    <p className="text-sm text-red-500">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div className="mt-6 space-y-2">
                 <Label htmlFor="deliveryNote">Delivery note</Label>
                 <div className="relative">
                   <Input
+                    placeholder="Leave at the front door."
                     id="deliveryNote"
                     className="pl-9"
-                    defaultValue="Leave at the front door."
+                    {...register('deliveryNote')}
                   />
                   <Info className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                 </div>
@@ -220,9 +349,9 @@ export default function Checkout() {
           componentsTotal={componentsTotal}
           setupTotal={setupTotal}
           total={total}
-          discount={discount}
-          deliveryFee={deliveryFee}
-          grandTotal={grandTotal}
+          grandTotal={total}
+          recipientInfo={formValues}
+          form={form}
         />
       </div>
     </div>

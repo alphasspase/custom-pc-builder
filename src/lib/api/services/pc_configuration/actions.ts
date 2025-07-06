@@ -77,8 +77,5 @@ export async function savePcConfiguration(
   return await apiClient.post(
     endpoints.pc_configuration.savePcConfiguration,
     configData,
-    {
-      cache: 'no-store',
-    },
   );
 }

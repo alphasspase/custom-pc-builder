@@ -22,6 +22,9 @@ const endpoints = {
   assistance: {
     submitRequest: '/assistance/rest_api/request/',
   },
+  checkout: {
+    createCheckoutSession: '/payments/rest_api/create-checkout-session/',
+  },
 } as const;
 
 export default endpoints;
