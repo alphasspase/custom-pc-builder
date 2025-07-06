@@ -15,14 +15,26 @@ interface PaymentSummaryProps {
   setupTotal: number;
   total: number;
   grandTotal: number;
+  recipientInfo: {
+    fullName: string;
+    phoneNumber: string;
+    address: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    email: string;
+    deliveryNote: string;
+  };
 }
 
 export function PaymentSummary({
   componentsTotal,
   setupTotal,
   total,
-
   grandTotal,
+  recipientInfo,
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -48,23 +60,24 @@ export function PaymentSummary({
       //   selectedProducts,
       //   selectedSetupProducts,
       // );
+      // Now we have all the recipient information directly from the form
       const payload = {
         amount: grandTotal.toString(),
         product_name: productSummary,
         selected_products: selectedProducts.map((p) => ({ ...p })),
         selected_setup_products: selectedSetupProducts.map((p) => ({ ...p })),
-        billing_name: 'John Doe',
-        billing_email: 'john.doe@example.com',
-        billing_phone: '+1234567890',
-        billing_address_line1: '123 Main St',
-        billing_address_line2: '77',
-        billing_city: 'San Francisco',
-        billing_state: 'CA',
-        billing_postal_code: '94105',
-        billing_country: 'US',
-        success_url: `http://localhost:3000/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url:
-          'http://localhost:3000/checkout/cancel?session_id={CHECKOUT_SESSION_ID}',
+        billing_name: recipientInfo.fullName,
+        billing_email: recipientInfo.email,
+        billing_phone: recipientInfo.phoneNumber,
+        billing_address_line1: recipientInfo.address,
+        billing_address_line2: recipientInfo.addressLine2,
+        billing_city: recipientInfo.city,
+        billing_state: recipientInfo.state,
+        billing_postal_code: recipientInfo.postalCode,
+        billing_country: recipientInfo.country,
+        billing_delivery_note: recipientInfo.deliveryNote,
+        success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${window.location.origin}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
       };
       const response = await createCheckoutSession(payload);
       const { sessionId, url } = response;

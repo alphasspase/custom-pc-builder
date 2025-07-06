@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ProductCard } from './ProductCard';
 import { SetupProductCard } from './SetupProductCard';
 // import { DeliveryOptionCard } from './DeliveryOptionCard';
 import { PaymentSummary } from './PaymentSummary';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
+import { useState, ChangeEvent } from 'react';
 
 export default function Checkout() {
   const {
@@ -22,6 +22,29 @@ export default function Checkout() {
     removeProduct,
     removeSetupProduct,
   } = usePCBuilder();
+
+  // Add state for recipient information
+  const [recipientInfo, setRecipientInfo] = useState({
+    fullName: '',
+    phoneNumber: '',
+    address: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    country: '',
+    email: '',
+    deliveryNote: '',
+  });
+
+  // Handle input changes
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setRecipientInfo((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
 
   // const [deliveryMethod, setDeliveryMethod] = useState('ups');
   // const [deliverySpeed, setDeliverySpeed] = useState('express');
@@ -107,6 +130,7 @@ export default function Checkout() {
           </Card>
 
           {/* Delivery Options */}
+
           {/* <Card>
             <CardHeader className="pb-3">
               <div className="flex items-center">
@@ -171,38 +195,88 @@ export default function Checkout() {
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full name</Label>
-                  <Input id="fullName" defaultValue="Amway Dunne" />
+                  <Input
+                    placeholder="Amway Dunne"
+                    id="fullName"
+                    value={recipientInfo.fullName}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber">Phone number</Label>
-                  <Input id="phoneNumber" defaultValue="732-123-4567" />
+                  <Input
+                    placeholder="732-123-4567"
+                    id="phoneNumber"
+                    value={recipientInfo.phoneNumber}
+                    onChange={handleInputChange}
+                  />
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="address">Address</Label>
                   <Input
+                    placeholder="4706 Street, New Jersey(NJ)"
                     id="address"
-                    defaultValue="4706  Street, , New Jersey(NJ)"
+                    value={recipientInfo.address}
+                    onChange={handleInputChange}
                   />
                 </div>
-              </div>
 
-              <div className="mt-4 flex items-center space-x-2">
-                <Checkbox id="saveDefault" defaultChecked />
-                <Label
-                  htmlFor="saveDefault"
-                  className="text-sm leading-none font-medium"
-                >
-                  Save as default
-                </Label>
+                <div className="space-y-2">
+                  <Label htmlFor="city">City</Label>
+                  <Input
+                    placeholder="NJ"
+                    id="city"
+                    value={recipientInfo.city}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="state">State</Label>
+                  <Input
+                    placeholder="New Jersey"
+                    id="state"
+                    value={recipientInfo.state}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="postalCode">Postal Code</Label>
+                  <Input
+                    placeholder="07001"
+                    id="postalCode"
+                    value={recipientInfo.postalCode}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="country">Country</Label>
+                  <Input
+                    placeholder="US"
+                    id="country"
+                    value={recipientInfo.country}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    placeholder="amway.dunne@example.com"
+                    id="email"
+                    value={recipientInfo.email}
+                    onChange={handleInputChange}
+                  />
+                </div>
               </div>
 
               <div className="mt-6 space-y-2">
                 <Label htmlFor="deliveryNote">Delivery note</Label>
                 <div className="relative">
                   <Input
+                    placeholder="Leave at the front door."
                     id="deliveryNote"
                     className="pl-9"
-                    defaultValue="Leave at the front door."
+                    value={recipientInfo.deliveryNote}
+                    onChange={handleInputChange}
                   />
                   <Info className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                 </div>
@@ -217,6 +291,7 @@ export default function Checkout() {
           setupTotal={setupTotal}
           total={total}
           grandTotal={total}
+          recipientInfo={recipientInfo}
         />
       </div>
     </div>
