@@ -38,14 +38,69 @@ export function PaymentSummary({
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({});
   const router = useRouter();
 
   // Get selected products from the PCBuilder hook
   const { selectedProducts, selectedSetupProducts } = usePCBuilder();
 
   const handlePayment = async () => {
-    setIsProcessing(true);
+    // Clear previous errors
     setPaymentError(null);
+    setValidationErrors({});
+
+    // Validate required fields
+    const errors: Record<string, string> = {};
+    const requiredFields: Array<{
+      field: keyof typeof recipientInfo;
+      label: string;
+    }> = [
+      { field: 'fullName', label: 'Full name' },
+      { field: 'phoneNumber', label: 'Phone number' },
+      { field: 'address', label: 'Address' },
+      { field: 'city', label: 'City' },
+      { field: 'state', label: 'State' },
+      { field: 'postalCode', label: 'Postal code' },
+      { field: 'country', label: 'Country' },
+      { field: 'email', label: 'Email' },
+    ];
+
+    // Check for empty fields
+    requiredFields.forEach(({ field, label }) => {
+      if (!recipientInfo[field]?.trim()) {
+        errors[field] = `${label} is required`;
+      }
+    });
+
+    // Validate email format
+    if (
+      recipientInfo.email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientInfo.email)
+    ) {
+      errors['email'] = 'Please enter a valid email address';
+    }
+
+    // Validate if products are selected
+    if (selectedProducts.length === 0 && selectedSetupProducts.length === 0) {
+      setPaymentError(
+        'Please select at least one product before proceeding to payment',
+      );
+
+      return;
+    }
+
+    // If there are validation errors, show them and don't proceed
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      setPaymentError('Please fill in all required fields correctly');
+
+      return;
+    }
+
+    setIsProcessing(true);
+
     try {
       // Create a descriptive name based on selected products
       const productSummary =
@@ -194,7 +249,16 @@ export function PaymentSummary({
             <span className="text-xl font-bold">${grandTotal}</span>
           </div>
           {paymentError && (
-            <div className="mt-2 text-sm text-red-600">{paymentError}</div>
+            <div className="mt-2 text-sm text-red-600">
+              {paymentError}
+              {Object.keys(validationErrors).length > 0 && (
+                <ul className="mt-1 list-disc pl-5">
+                  {Object.entries(validationErrors).map(([field, error]) => (
+                    <li key={field}>{error}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
           )}
           <Button
             className="mt-4 w-full"
