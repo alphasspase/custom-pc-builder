@@ -9,85 +9,31 @@ import { usePCBuilder } from '@/hooks/usePCBuilder';
 import { createCheckoutSession } from '@/lib/api/services/checkout/actions';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
-import { useForm } from 'react-hook-form';
-
-// Define the type for the form values
-type RecipientFormValues = {
-  fullName: string;
-  phoneNumber: string;
-  address: string;
-  addressLine2?: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  email: string;
-  deliveryNote?: string;
-};
 
 interface PaymentSummaryProps {
   componentsTotal: number;
   setupTotal: number;
   total: number;
   grandTotal: number;
-  recipientInfo: RecipientFormValues;
-  form: ReturnType<typeof useForm<RecipientFormValues>>;
 }
 
 export function PaymentSummary({
   componentsTotal,
   setupTotal,
   total,
+
   grandTotal,
-  recipientInfo,
-  form,
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
   const router = useRouter();
 
   // Get selected products from the PCBuilder hook
   const { selectedProducts, selectedSetupProducts } = usePCBuilder();
 
   const handlePayment = async () => {
-    // Clear previous errors
-    setPaymentError(null);
-    setValidationErrors({});
-
-    // Validate if products are selected
-    if (selectedProducts.length === 0 && selectedSetupProducts.length === 0) {
-      setPaymentError(
-        'Please select at least one product before proceeding to payment',
-      );
-
-      return;
-    }
-
-    // Trigger form validation using React Hook Form
-    const isValid = await form.trigger();
-    if (!isValid) {
-      // Extract validation errors from form state
-      const formErrors = form.formState.errors;
-      const errors: Record<string, string> = {};
-
-      // Map form errors to our format
-      Object.entries(formErrors).forEach(([field, error]) => {
-        if (error?.message) {
-          errors[field] = error.message as string;
-        }
-      });
-
-      setValidationErrors(errors);
-      setPaymentError('Please fill in all required fields correctly');
-
-      return;
-    }
-
     setIsProcessing(true);
-
+    setPaymentError(null);
     try {
       // Create a descriptive name based on selected products
       const productSummary =
@@ -102,26 +48,25 @@ export function PaymentSummary({
       //   selectedProducts,
       //   selectedSetupProducts,
       // );
-      // Now we have all the recipient information directly from the form
       const payload = {
         amount: grandTotal.toString(),
         product_name: productSummary,
         selected_products: selectedProducts.map((p) => ({ ...p })),
         selected_setup_products: selectedSetupProducts.map((p) => ({ ...p })),
-        billing_name: recipientInfo.fullName,
-        billing_email: recipientInfo.email,
-        billing_phone: recipientInfo.phoneNumber,
-        billing_address_line1: recipientInfo.address,
-        billing_address_line2: recipientInfo.addressLine2 || '', // Ensure it's not undefined
-        billing_city: recipientInfo.city,
-        billing_state: recipientInfo.state,
-        billing_postal_code: recipientInfo.postalCode,
-        billing_country: recipientInfo.country,
-        billing_delivery_note: recipientInfo.deliveryNote || '', // Ensure it's not undefined
+        billing_name: 'John Doe',
+        billing_email: 'john.doe@example.com',
+        billing_phone: '+1234567890',
+        billing_address_line1: '123 Main St',
+        billing_address_line2: '77',
+        billing_city: 'San Francisco',
+        billing_state: 'CA',
+        billing_postal_code: '94105',
+        billing_country: 'US',
         success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${window.location.origin}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
       };
       const response = await createCheckoutSession(payload);
+      console.log('Creating checkout session with payload:', response);
       const { sessionId, url } = response;
 
       if (!sessionId) {
@@ -236,16 +181,7 @@ export function PaymentSummary({
             <span className="text-xl font-bold">${grandTotal}</span>
           </div>
           {paymentError && (
-            <div className="mt-2 text-sm text-red-600">
-              {paymentError}
-              {Object.keys(validationErrors).length > 0 && (
-                <ul className="mt-1 list-disc pl-5">
-                  {Object.entries(validationErrors).map(([field, error]) => (
-                    <li key={field}>{error}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <div className="mt-2 text-sm text-red-600">{paymentError}</div>
           )}
           <Button
             className="mt-4 w-full"
