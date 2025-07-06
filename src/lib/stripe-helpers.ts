@@ -32,7 +32,7 @@ export const redirectToStripeCheckout = async (
       billing_email: 'john.doe@example.com',
       billing_phone: '+1234567890',
       billing_address_line1: '123 Main St',
-      billing_address_line2: '',
+      billing_address_line2: '77',
       billing_city: 'San Francisco',
       billing_state: 'CA',
       billing_postal_code: '94105',

@@ -4,12 +4,11 @@ import { ShoppingCart } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-import { Separator } from '@/components/ui/separator';
-
-import { redirectToStripeCheckout } from '@/lib/stripe-helpers';
 import { useState } from 'react';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
+import { createCheckoutSession } from '@/lib/api/services/checkout/actions';
+import { useRouter } from 'next/navigation';
+import { Separator } from '@/components/ui/separator';
 
 interface PaymentSummaryProps {
   componentsTotal: number;
@@ -27,6 +26,7 @@ export function PaymentSummary({
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
+  const router = useRouter();
 
   // Get selected products from the PCBuilder hook
   const { selectedProducts, selectedSetupProducts } = usePCBuilder();
@@ -42,12 +42,42 @@ export function PaymentSummary({
           : 'Custom PC Build';
 
       // This will redirect to Stripe's checkout page with all selected products
-      await redirectToStripeCheckout(
-        grandTotal,
-        productSummary,
-        selectedProducts,
-        selectedSetupProducts,
-      );
+      // await redirectToStripeCheckout(
+      //   grandTotal,
+      //   productSummary,
+      //   selectedProducts,
+      //   selectedSetupProducts,
+      // );
+      const payload = {
+        amount: grandTotal.toString(),
+        product_name: productSummary,
+        selected_products: selectedProducts.map((p) => ({ ...p })),
+        selected_setup_products: selectedSetupProducts.map((p) => ({ ...p })),
+        billing_name: 'John Doe',
+        billing_email: 'john.doe@example.com',
+        billing_phone: '+1234567890',
+        billing_address_line1: '123 Main St',
+        billing_address_line2: '77',
+        billing_city: 'San Francisco',
+        billing_state: 'CA',
+        billing_postal_code: '94105',
+        billing_country: 'US',
+        success_url: `http://localhost:3000/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url:
+          'http://localhost:3000/checkout/cancel?session_id={CHECKOUT_SESSION_ID}',
+      };
+      const response = await createCheckoutSession(payload);
+      const { sessionId, url } = response;
+
+      if (!sessionId) {
+        throw new Error('Failed to create checkout session');
+      }
+
+      // If we have a direct URL, use it (Stripe Checkout hosted page)
+      if (url) {
+        router.push(url);
+      }
+      console.log('Checkout session created:', response);
 
       // The following code will only run if the redirection fails
       console.log('Stripe redirection failed');
