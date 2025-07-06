@@ -13,6 +13,9 @@ if (!publishableKey) {
 
 // const stripePromise = loadStripe(publishableKey || 'pk_test_placeholder');
 
+import { Checkout } from '@/lib/api/services/checkout/checkout';
+import { CheckoutSessionRequest } from '@/lib/api/services/checkout/type';
+
 export const redirectToStripeCheckout = async (
   amount: number,
   productName = 'Custom PC Build',
@@ -20,31 +23,26 @@ export const redirectToStripeCheckout = async (
   selectedSetupProducts: Setup_Product[] = [],
 ) => {
   try {
-    const response = await fetch(
-      'http://127.0.0.1:8000/payments/rest_api/create-checkout-session/',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount,
-          productName,
-          selectedProducts,
-          selectedSetupProducts,
-          success_url: `http://localhost:3000/checkout/success`,
-          cancel_url: 'http://localhost:3000//checkout/cancel',
-        }),
-      },
-    );
-    console.log('Response data:', response);
-    // Check if the response is OK
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to create checkout session');
-    }
+    const checkoutData: CheckoutSessionRequest = {
+      amount: amount.toString(),
+      product_name: productName,
+      selected_products: selectedProducts.map((p) => ({ ...p })),
+      selected_setup_products: selectedSetupProducts.map((p) => ({ ...p })),
+      billing_name: 'John Doe',
+      billing_email: 'john.doe@example.com',
+      billing_phone: '+1234567890',
+      billing_address_line1: '123 Main St',
+      billing_address_line2: '',
+      billing_city: 'San Francisco',
+      billing_state: 'CA',
+      billing_postal_code: '94105',
+      billing_country: 'US',
+      success_url: `http://localhost:3000/checkout/success`,
+      cancel_url: 'http://localhost:3000/checkout/cancel',
+    };
 
-    const data = await response.json();
+    console.log('Creating checkout session with data:', checkoutData);
+    const data = await Checkout.createCheckoutSession(checkoutData);
     console.log('Response data:', data);
     const { sessionId, url } = data;
 
