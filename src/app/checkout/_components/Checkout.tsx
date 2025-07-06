@@ -10,7 +10,34 @@ import { SetupProductCard } from './SetupProductCard';
 // import { DeliveryOptionCard } from './DeliveryOptionCard';
 import { PaymentSummary } from './PaymentSummary';
 import { usePCBuilder } from '@/hooks/usePCBuilder';
-import { useState, ChangeEvent } from 'react';
+
+// React Hook Form + Zod
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+// Define the form schema with Zod
+const recipientFormSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, { message: 'Full name must be at least 2 characters.' }),
+  phoneNumber: z
+    .string()
+    .min(10, { message: 'Please enter a valid phone number.' }),
+  address: z
+    .string()
+    .min(5, { message: 'Address must be at least 5 characters.' }),
+  addressLine2: z.string().optional(),
+  city: z.string().min(2, { message: 'City is required.' }),
+  state: z.string().min(2, { message: 'State is required.' }),
+  postalCode: z.string().min(5, { message: 'Postal code is required.' }),
+  country: z.string().min(2, { message: 'Country is required.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  deliveryNote: z.string().optional(),
+});
+
+// Create a type from the schema
+type RecipientFormValues = z.infer<typeof recipientFormSchema>;
 
 export default function Checkout() {
   const {
@@ -23,28 +50,33 @@ export default function Checkout() {
     removeSetupProduct,
   } = usePCBuilder();
 
-  // Add state for recipient information
-  const [recipientInfo, setRecipientInfo] = useState({
-    fullName: '',
-    phoneNumber: '',
-    address: '',
-    addressLine2: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    country: '',
-    email: '',
-    deliveryNote: '',
+  // Initialize React Hook Form with Zod validation
+  const form = useForm<RecipientFormValues>({
+    resolver: zodResolver(recipientFormSchema),
+    defaultValues: {
+      fullName: '',
+      phoneNumber: '',
+      address: '',
+      addressLine2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: '',
+      email: '',
+      deliveryNote: '',
+    },
+    mode: 'onBlur', // Validate on blur for better UX
   });
 
-  // Handle input changes
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setRecipientInfo((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
+  // Destructure needed properties from form
+  const {
+    register,
+    formState: { errors },
+    watch,
+  } = form;
+
+  // Watch all form values for use in the PaymentSummary component
+  const formValues = watch();
 
   // const [deliveryMethod, setDeliveryMethod] = useState('ups');
   // const [deliverySpeed, setDeliverySpeed] = useState('express');
@@ -198,73 +230,101 @@ export default function Checkout() {
                   <Input
                     placeholder="Amway Dunne"
                     id="fullName"
-                    value={recipientInfo.fullName}
-                    onChange={handleInputChange}
+                    {...register('fullName')}
                   />
+                  {errors.fullName && (
+                    <p className="text-sm text-red-500">
+                      {errors.fullName.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="phoneNumber">Phone number</Label>
                   <Input
                     placeholder="732-123-4567"
                     id="phoneNumber"
-                    value={recipientInfo.phoneNumber}
-                    onChange={handleInputChange}
+                    {...register('phoneNumber')}
                   />
+                  {errors.phoneNumber && (
+                    <p className="text-sm text-red-500">
+                      {errors.phoneNumber.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="address">Address</Label>
                   <Input
                     placeholder="4706 Street, New Jersey(NJ)"
                     id="address"
-                    value={recipientInfo.address}
-                    onChange={handleInputChange}
+                    {...register('address')}
                   />
+                  {errors.address && (
+                    <p className="text-sm text-red-500">
+                      {errors.address.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="city">City</Label>
                   <Input
-                    placeholder="NJ"
+                    placeholder="New Jersey"
                     id="city"
-                    value={recipientInfo.city}
-                    onChange={handleInputChange}
+                    {...register('city')}
                   />
+                  {errors.city && (
+                    <p className="text-sm text-red-500">
+                      {errors.city.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="state">State</Label>
-                  <Input
-                    placeholder="New Jersey"
-                    id="state"
-                    value={recipientInfo.state}
-                    onChange={handleInputChange}
-                  />
+                  <Input placeholder="NJ" id="state" {...register('state')} />
+                  {errors.state && (
+                    <p className="text-sm text-red-500">
+                      {errors.state.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="postalCode">Postal Code</Label>
                   <Input
                     placeholder="07001"
                     id="postalCode"
-                    value={recipientInfo.postalCode}
-                    onChange={handleInputChange}
+                    {...register('postalCode')}
                   />
+                  {errors.postalCode && (
+                    <p className="text-sm text-red-500">
+                      {errors.postalCode.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="country">Country</Label>
                   <Input
                     placeholder="US"
                     id="country"
-                    value={recipientInfo.country}
-                    onChange={handleInputChange}
+                    {...register('country')}
                   />
+                  {errors.country && (
+                    <p className="text-sm text-red-500">
+                      {errors.country.message}
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
                     placeholder="amway.dunne@example.com"
                     id="email"
-                    value={recipientInfo.email}
-                    onChange={handleInputChange}
+                    {...register('email')}
                   />
+                  {errors.email && (
+                    <p className="text-sm text-red-500">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -275,8 +335,7 @@ export default function Checkout() {
                     placeholder="Leave at the front door."
                     id="deliveryNote"
                     className="pl-9"
-                    value={recipientInfo.deliveryNote}
-                    onChange={handleInputChange}
+                    {...register('deliveryNote')}
                   />
                   <Info className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
                 </div>
@@ -291,7 +350,8 @@ export default function Checkout() {
           setupTotal={setupTotal}
           total={total}
           grandTotal={total}
-          recipientInfo={recipientInfo}
+          recipientInfo={formValues}
+          form={form}
         />
       </div>
     </div>

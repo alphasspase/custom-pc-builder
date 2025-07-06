@@ -9,24 +9,29 @@ import { usePCBuilder } from '@/hooks/usePCBuilder';
 import { createCheckoutSession } from '@/lib/api/services/checkout/actions';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
+import { useForm } from 'react-hook-form';
+
+// Define the type for the form values
+type RecipientFormValues = {
+  fullName: string;
+  phoneNumber: string;
+  address: string;
+  addressLine2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  email: string;
+  deliveryNote?: string;
+};
 
 interface PaymentSummaryProps {
   componentsTotal: number;
   setupTotal: number;
   total: number;
   grandTotal: number;
-  recipientInfo: {
-    fullName: string;
-    phoneNumber: string;
-    address: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
-    email: string;
-    deliveryNote: string;
-  };
+  recipientInfo: RecipientFormValues;
+  form: ReturnType<typeof useForm<RecipientFormValues>>;
 }
 
 export function PaymentSummary({
@@ -35,6 +40,7 @@ export function PaymentSummary({
   total,
   grandTotal,
   recipientInfo,
+  form,
 }: PaymentSummaryProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -51,37 +57,6 @@ export function PaymentSummary({
     setPaymentError(null);
     setValidationErrors({});
 
-    // Validate required fields
-    const errors: Record<string, string> = {};
-    const requiredFields: Array<{
-      field: keyof typeof recipientInfo;
-      label: string;
-    }> = [
-      { field: 'fullName', label: 'Full name' },
-      { field: 'phoneNumber', label: 'Phone number' },
-      { field: 'address', label: 'Address' },
-      { field: 'city', label: 'City' },
-      { field: 'state', label: 'State' },
-      { field: 'postalCode', label: 'Postal code' },
-      { field: 'country', label: 'Country' },
-      { field: 'email', label: 'Email' },
-    ];
-
-    // Check for empty fields
-    requiredFields.forEach(({ field, label }) => {
-      if (!recipientInfo[field]?.trim()) {
-        errors[field] = `${label} is required`;
-      }
-    });
-
-    // Validate email format
-    if (
-      recipientInfo.email &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientInfo.email)
-    ) {
-      errors['email'] = 'Please enter a valid email address';
-    }
-
     // Validate if products are selected
     if (selectedProducts.length === 0 && selectedSetupProducts.length === 0) {
       setPaymentError(
@@ -91,8 +66,20 @@ export function PaymentSummary({
       return;
     }
 
-    // If there are validation errors, show them and don't proceed
-    if (Object.keys(errors).length > 0) {
+    // Trigger form validation using React Hook Form
+    const isValid = await form.trigger();
+    if (!isValid) {
+      // Extract validation errors from form state
+      const formErrors = form.formState.errors;
+      const errors: Record<string, string> = {};
+
+      // Map form errors to our format
+      Object.entries(formErrors).forEach(([field, error]) => {
+        if (error?.message) {
+          errors[field] = error.message as string;
+        }
+      });
+
       setValidationErrors(errors);
       setPaymentError('Please fill in all required fields correctly');
 
@@ -125,12 +112,12 @@ export function PaymentSummary({
         billing_email: recipientInfo.email,
         billing_phone: recipientInfo.phoneNumber,
         billing_address_line1: recipientInfo.address,
-        billing_address_line2: recipientInfo.addressLine2,
+        billing_address_line2: recipientInfo.addressLine2 || '', // Ensure it's not undefined
         billing_city: recipientInfo.city,
         billing_state: recipientInfo.state,
         billing_postal_code: recipientInfo.postalCode,
         billing_country: recipientInfo.country,
-        billing_delivery_note: recipientInfo.deliveryNote,
+        billing_delivery_note: recipientInfo.deliveryNote || '', // Ensure it's not undefined
         success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${window.location.origin}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
       };
