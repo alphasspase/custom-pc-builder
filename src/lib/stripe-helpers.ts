@@ -1,6 +1,5 @@
 'use client';
 
-import { loadStripe } from '@stripe/stripe-js';
 import type { Product } from '@/services/pc_configuration/type';
 import type { Setup_Product } from '@/lib/api/services/setup_configuration/type';
 
@@ -12,7 +11,7 @@ if (!publishableKey) {
   );
 }
 
-const stripePromise = loadStripe(publishableKey || 'pk_test_placeholder');
+// const stripePromise = loadStripe(publishableKey || 'pk_test_placeholder');
 
 export const redirectToStripeCheckout = async (
   amount: number,
@@ -21,26 +20,24 @@ export const redirectToStripeCheckout = async (
   selectedSetupProducts: Setup_Product[] = [],
 ) => {
   try {
-    // Initialize Stripe
-    const stripe = await stripePromise;
-    if (!stripe) {
-      throw new Error('Stripe failed to initialize');
-    }
-
-    // Create a checkout session on the server
-    const response = await fetch('/api/stripe/create-checkout-session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'http://127.0.0.1:8000/payments/rest_api/create-checkout-session/',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          amount,
+          productName,
+          selectedProducts,
+          selectedSetupProducts,
+          success_url: `http://localhost:3000/checkout/success`,
+          cancel_url: 'http://localhost:3000//checkout/cancel',
+        }),
       },
-      body: JSON.stringify({
-        amount,
-        productName,
-        selectedProducts,
-        selectedSetupProducts,
-      }),
-    });
-
+    );
+    console.log('Response data:', response);
     // Check if the response is OK
     if (!response.ok) {
       const errorData = await response.json();
@@ -71,11 +68,11 @@ export const redirectToStripeCheckout = async (
     }
 
     // Otherwise use the session ID for redirectToCheckout
-    const { error } = await stripe.redirectToCheckout({ sessionId });
+    // const { error } = await stripe.redirectToCheckout({ sessionId });
 
-    if (error) {
-      throw new Error(error.message);
-    }
+    // if (error) {
+    //   throw new Error(error.message);
+    // }
   } catch (error) {
     console.error('Error redirecting to Stripe Checkout:', error);
     // Make the error more descriptive for debugging
