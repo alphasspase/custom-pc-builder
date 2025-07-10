@@ -27,41 +27,12 @@ function buildQueryString(
   return query.toString();
 }
 
-// async function handleResponse<T>(response: Response): Promise<T> {
-//   if (!response.ok) {
-//     let errorText = '';
-
-//     try {
-//       errorText = await response.text();
-//       const parsedError = JSON.parse(errorText);
-//       throw Object.assign(new Error('API Error'), {
-//         response,
-//         body: parsedError,
-//       });
-//     } catch {
-//       const error = new Error(
-//         `Request failed: ${response.status} ${response.statusText}`,
-//       );
-//       throw Object.assign(error, { response, body: errorText });
-//     }
-//   }
-
-//   return response.json();
-// }
-
 async function apiRequest<T>(
   endpoint: string,
   method: HttpMethod,
   options: ApiClientOptions = {},
 ): Promise<T> {
-  const {
-    params,
-    bodyData,
-    cache = 'force-cache',
-    next,
-    headers,
-    ...rest
-  } = options;
+  const { params, bodyData, cache, next, headers, ...rest } = options;
 
   const queryString = buildQueryString(params);
   const url = `${API_BASE_URL}${endpoint}${queryString ? `?${queryString}` : ''}`;
@@ -76,6 +47,7 @@ async function apiRequest<T>(
     headers: headersData,
     ...(bodyData && method !== 'GET' ? { body: JSON.stringify(bodyData) } : {}),
     ...(cache && { cache }),
+    ...(method === 'GET' && !cache && { cache: 'force-cache' }),
     ...(next && { next }),
     ...rest,
   };
