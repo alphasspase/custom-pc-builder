@@ -2,7 +2,16 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Cpu, Monitor, HardDrive, Layers, Plug } from 'lucide-react';
+import {
+  Cpu,
+  Monitor,
+  HardDrive,
+  Layers,
+  Plug,
+  Box,
+  Fan,
+  HelpCircle,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -37,8 +46,12 @@ function getComponentIcon(id: string) {
       return <HardDrive className="size-5" />;
     case 'power supply':
       return <Plug className="size-5" />;
+    case 'case':
+      return <Box className="size-5" />;
+    case 'cooler':
+      return <Fan className="size-5" />;
     default:
-      return null;
+      return <HelpCircle className="size-5" />;
   }
 }
 
