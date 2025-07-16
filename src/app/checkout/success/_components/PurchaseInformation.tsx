@@ -1,4 +1,4 @@
-import { Calendar, CreditCard, Download } from 'lucide-react';
+import { Calendar, CreditCard, Download, DollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -53,6 +53,7 @@ export function PurchaseInformation({
           </div>
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
+              <DollarSign className="h-4 w-4 text-slate-500" />
               <span className="text-sm font-medium text-slate-700">
                 Total Amount
               </span>
