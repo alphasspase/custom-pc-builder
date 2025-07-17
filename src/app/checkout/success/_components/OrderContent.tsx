@@ -75,11 +75,12 @@ export default function OrderContent() {
       <OrderSummary />
       <PurchaseInformation orderDetails={orderDetails} />
       <ContactInformation customerInfo={orderDetails.customerInfo} />
-      <OrderTotal total={orderDetails.total} />
-      <ConfigurationDetails
+      <OrderTotal
+        total={orderDetails.total}
         orderId={orderDetails.orderId}
         customerInfo={orderDetails.customerInfo}
       />
+
       <ActionButtons />
     </div>
   );
