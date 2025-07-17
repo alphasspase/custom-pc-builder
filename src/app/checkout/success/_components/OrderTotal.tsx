@@ -19,7 +19,7 @@ export function OrderTotal({ total, orderId, customerInfo }: OrderTotalProps) {
     <Card className="border-slate-200 shadow-sm">
       <CardContent className="p-6">
         <div className="space-y-6 lg:flex-row lg:space-y-0">
-          <h3 className="mb-2 mb-5 text-3xl font-bold text-slate-900">
+          <h3 className="mb-5 text-3xl font-bold text-slate-900">
             Order Total: <span className="text-green-600">{total}</span>
           </h3>
 
