@@ -7,13 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "spellcheck": "cspell \"**/*.{js,ts,tsx,md,json}\" --no-must-find-files"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx,mjs,cjs}": [
       "prettier --write .",
       "npx eslint --fix",
-      "npx cspell \"**/*.{js,ts,tsx}\" --no-error-on-unmatched-glob"
+      "npx cspell --no-must-find-files"
     ],
     "**/*.{md,json}": [
       "prettier --write"
