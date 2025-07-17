@@ -4,10 +4,8 @@ import { OrderSummary } from '@/app/checkout/success/_components/OrderSummary';
 import { PurchaseInformation } from '@/app/checkout/success/_components/PurchaseInformation';
 import { ContactInformation } from '@/app/checkout/success/_components/ContactInformation';
 import { OrderTotal } from '@/app/checkout/success/_components/OrderTotal';
-import { ConfigurationDetails } from '@/app/checkout/success/_components/ConfigurationDetails';
 import { LoadingSkeleton } from '@/app/checkout/success/_components/LoadingSkeleton';
 import { ErrorMessage } from '@/app/checkout/success/_components/ErrorMessage';
-import { ActionButtons } from '@/app/checkout/success/_components/ActionButtons';
 
 interface OrderDetails {
   orderId: string;
@@ -80,8 +78,6 @@ export default function OrderContent() {
         orderId={orderDetails.orderId}
         customerInfo={orderDetails.customerInfo}
       />
-
-      <ActionButtons />
     </div>
   );
 }
