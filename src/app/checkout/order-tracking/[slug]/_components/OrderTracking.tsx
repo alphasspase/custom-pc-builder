@@ -108,47 +108,33 @@ export default function OrderTracking() {
                 {products.map((product) => (
                   <div
                     key={product.id}
-                    className="from-primary-50 border-primary-100 hover:border-primary-300 group flex items-center gap-4 rounded-lg border bg-gradient-to-r to-white p-4 transition-all duration-300 hover:shadow-md"
+                    className="from-primary-50 border-primary-100 hover:border-primary-400 group flex items-center gap-4 rounded-lg border bg-gradient-to-r to-white p-4 transition-all duration-300 hover:shadow-xl"
                   >
-                    <div className="from-primary-100 to-primary-200 group-hover:from-primary-200 group-hover:to-primary-300 flex h-20 w-20 items-center justify-center rounded-lg bg-gradient-to-br transition-all duration-300">
-                      <div className="bg-primary-400 flex h-12 w-12 items-center justify-center rounded shadow-lg">
-                        <Package className="h-6 w-6 text-white" />
-                      </div>
+                    <div className="from-primary-100 to-primary-200 group-hover:from-primary-200 group-hover:to-primary-300 border-primary-100 hover:border-primary-300 relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border bg-gradient-to-br shadow-md transition-all duration-300">
+                      <div className="group-hover:border-primary-200 pointer-events-none absolute inset-0 rounded-xl border-2 border-white/60 transition-all duration-300" />
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="h-16 w-16 object-contain drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
+                        style={{
+                          background:
+                            'linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%)',
+                          borderRadius: '0.75rem',
+                        }}
+                      />
                     </div>
                     <div className="flex-1">
-                      <h3 className="group-hover:text-primary-700 mb-1 font-medium text-gray-900 transition-colors">
+                      <h3 className="group-hover:text-primary-500 mb-1 font-medium text-gray-900 transition-colors">
                         {product.name}
                       </h3>
-                      <p className="flex items-center gap-1 text-gray-600">
-                        <span className="text-primary-500 font-medium">
-                          Quantity:
-                        </span>{' '}
-                        {product.quantity}
-                      </p>
                     </div>
                     <div className="text-right">
-                      <p className="from-primary-600 to-primary-500 bg-gradient-to-r bg-clip-text text-xl font-semibold text-transparent">
+                      <p className="from-primary-400 to-primary-500 bg-gradient-to-r bg-clip-text text-xl font-semibold text-transparent">
                         ${product.price}
                       </p>
                     </div>
                   </div>
                 ))}
-              </div>
-
-              {/* Order Summary */}
-              <div className="border-primary-200 mt-6 border-t pt-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-semibold text-gray-900">
-                    Total Amount:
-                  </span>
-                  <span className="from-primary-600 to-primary-500 bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent">
-                    $
-                    {products.reduce(
-                      (sum, product) => sum + product.price * product.quantity,
-                      0,
-                    )}
-                  </span>
-                </div>
               </div>
             </div>
 
