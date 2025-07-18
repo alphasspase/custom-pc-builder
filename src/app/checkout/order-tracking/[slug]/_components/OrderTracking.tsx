@@ -6,10 +6,8 @@ import {
   Phone,
   Package,
   CreditCard,
-  Eye,
   Sparkles,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export default function OrderTracking() {
   const trackingSteps = [
@@ -75,39 +73,26 @@ export default function OrderTracking() {
     <div className="from-primary-gray-200 to-primary-100/30 min-h-screen bg-gradient-to-br via-white">
       <div className="container mx-auto max-w-7xl px-6 py-8">
         {/* Header */}
-        <div className="mb-12 flex items-start justify-between">
-          <div className="relative">
-            <div className="from-primary-500 to-primary-400 absolute -inset-2 rounded-xl bg-gradient-to-r opacity-30 blur-lg"></div>
-            <div className="border-primary-300 ring-primary-100/50 relative rounded-xl border-2 bg-white p-8 shadow-2xl ring-4">
-              <div className="mb-4 flex items-center gap-3">
-                <div className="from-primary-500 to-primary-600 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br shadow-lg">
-                  <Package className="h-7 w-7 text-white" />
-                </div>
-                <div className="from-primary-300 to-primary-500 h-8 w-px bg-gradient-to-b"></div>
-                <h1 className="via-primary-700 bg-gradient-to-r from-slate-800 to-slate-900 bg-clip-text text-4xl font-extrabold text-transparent drop-shadow-sm">
-                  Order Tracking
-                </h1>
-              </div>
-              <div className="border-primary-200 from-primary-50 rounded-lg border bg-gradient-to-r to-white p-4">
-                <p className="flex items-center gap-3 text-lg font-medium text-slate-700">
-                  <div className="bg-primary-100 flex h-8 w-8 items-center justify-center rounded-full">
-                    <Package className="text-primary-600 h-4 w-4" />
-                  </div>
-                  <span className="text-slate-600">Order number:</span>
-                  <span className="from-primary-600 to-primary-700 bg-gradient-to-r bg-clip-text font-bold text-transparent">
-                    #586789963
-                  </span>
-                </p>
-              </div>
+        <div className="mb-12 flex flex-col items-center justify-center">
+          <div className="mb-6 flex items-center gap-4">
+            <div className="bg-primary/10 flex h-16 w-16 items-center justify-center rounded-2xl">
+              <Package className="text-primary h-9 w-9" />
+            </div>
+            <h1 className="text-5xl font-black drop-shadow-sm md:text-6xl">
+              Order Tracking
+            </h1>
+          </div>
+          <div className="mx-auto w-full max-w-md">
+            <div className="border-primary bg-primary/5 rounded-lg border p-4">
+              <p className="text-primary flex items-center justify-center gap-3 text-lg font-medium">
+                <span className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full">
+                  <Package className="text-primary h-4 w-4" />
+                </span>
+                <span>Order number:</span>
+                <span className="text-primary font-bold">#586789963</span>
+              </p>
             </div>
           </div>
-          <Button
-            variant="outline"
-            className="text-primary-700 hover:bg-primary-500 border-primary-400 hover:border-primary-600 flex h-auto items-center gap-2 rounded-xl border-2 p-4 font-semibold shadow-xl transition-all duration-300 hover:scale-105 hover:text-white hover:shadow-2xl"
-          >
-            <Eye className="h-5 w-5" />
-            View invoice
-          </Button>
         </div>
 
         <div className="grid gap-16 lg:grid-cols-2">
