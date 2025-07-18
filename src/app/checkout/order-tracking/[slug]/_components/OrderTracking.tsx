@@ -96,7 +96,123 @@ export default function OrderTracking() {
         </div>
 
         <div className="grid gap-16 lg:grid-cols-2">
-          {/* Left Column */}
+          {/* Right Column - Tracking Timeline */}
+          <div className="border-primary-200 rounded-xl border bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+            <h2 className="mb-8 flex items-center gap-2 text-xl font-semibold text-gray-900">
+              <Truck className="text-primary-500 h-6 w-6" />
+              Track your package
+            </h2>
+            <div className="relative">
+              {trackingSteps.map((step, index) => {
+                const Icon = step.icon;
+                const isCompleted = step.status === 'completed';
+                const isCurrent = step.status === 'current';
+
+                return (
+                  <div key={index} className="relative pb-12 last:pb-0">
+                    {/* Left line */}
+                    {index < trackingSteps.length - 1 && (
+                      <div
+                        className={`absolute top-14 left-7 h-16 w-1 rounded-full transition-all duration-500 ${
+                          isCompleted
+                            ? 'from-primary-500 to-primary-400 bg-gradient-to-b shadow-lg'
+                            : isCurrent
+                              ? 'from-primary-400 to-primary-200 bg-gradient-to-b'
+                              : 'from-primary-200 to-primary-100 bg-gradient-to-b'
+                        }`}
+                      />
+                    )}
+
+                    {/* Timeline item */}
+                    <div
+                      className={`flex gap-6 transition-all duration-500 hover:scale-[1.02] hover:transform ${
+                        isCurrent ? 'animate-pulse' : ''
+                      }`}
+                    >
+                      {/* Icon */}
+                      <div
+                        className={`relative z-10 flex h-14 w-14 items-center justify-center rounded-xl shadow-lg transition-all duration-500 ${
+                          isCompleted
+                            ? 'from-primary-500 to-primary-600 shadow-primary-200 ring-primary-100 bg-gradient-to-br text-white ring-4'
+                            : isCurrent
+                              ? 'from-primary-400 to-primary-500 shadow-primary-200 ring-primary-200 animate-pulse bg-gradient-to-br text-white ring-4'
+                              : 'from-primary-100 to-primary-200 text-primary-400 shadow-primary-100 bg-gradient-to-br'
+                        }`}
+                      >
+                        <Icon
+                          className={`transition-all duration-300 ${
+                            isCompleted || isCurrent ? 'h-7 w-7' : 'h-6 w-6'
+                          }`}
+                        />
+                        {isCompleted && (
+                          <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 shadow-lg">
+                            <Check className="h-3 w-3 text-white" />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Content */}
+                      <div
+                        className={`flex-1 pt-3 transition-all duration-300 ${
+                          isCurrent ? 'translate-x-1 transform' : ''
+                        }`}
+                      >
+                        <div
+                          className={`mb-3 rounded-lg p-4 transition-all duration-300 ${
+                            isCompleted || isCurrent
+                              ? 'from-primary-50 border-primary-200 border bg-gradient-to-r to-white'
+                              : 'border border-gray-200 bg-gradient-to-r from-gray-50 to-white'
+                          }`}
+                        >
+                          <div className="mb-2 flex items-center gap-4">
+                            <span
+                              className={`inline-flex rounded-full px-3 py-1 text-sm font-medium transition-all duration-300 ${
+                                isCompleted
+                                  ? 'bg-primary-100 text-primary-700 shadow-sm'
+                                  : isCurrent
+                                    ? 'bg-primary-200 text-primary-800 animate-pulse shadow-md'
+                                    : 'bg-gray-100 text-gray-600'
+                              }`}
+                            >
+                              {step.date}
+                            </span>
+                            <h3
+                              className={`text-lg font-semibold transition-all duration-300 ${
+                                isCompleted
+                                  ? 'text-primary-700'
+                                  : isCurrent
+                                    ? 'text-primary-800'
+                                    : 'text-gray-500'
+                              }`}
+                            >
+                              {step.title}
+                            </h3>
+                            {isCurrent && (
+                              <div className="flex items-center gap-1">
+                                <div className="bg-primary-500 h-2 w-2 animate-ping rounded-full"></div>
+                                <div className="bg-primary-400 h-2 w-2 animate-pulse rounded-full"></div>
+                              </div>
+                            )}
+                          </div>
+                          <p
+                            className={`text-sm leading-relaxed transition-all duration-300 ${
+                              isCompleted || isCurrent
+                                ? 'text-gray-700'
+                                : 'text-gray-500'
+                            }`}
+                          >
+                            {step.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right Column */}
           <div className="space-y-12">
             {/* Products */}
             <div className="border-primary-200 rounded-xl border bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -199,122 +315,6 @@ export default function OrderTracking() {
                   <span className="text-gray-700">Visa ****64</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Right Column - Tracking Timeline */}
-          <div className="border-primary-200 rounded-xl border bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
-            <h2 className="mb-8 flex items-center gap-2 text-xl font-semibold text-gray-900">
-              <Truck className="text-primary-500 h-6 w-6" />
-              Track your package
-            </h2>
-            <div className="relative">
-              {trackingSteps.map((step, index) => {
-                const Icon = step.icon;
-                const isCompleted = step.status === 'completed';
-                const isCurrent = step.status === 'current';
-
-                return (
-                  <div key={index} className="relative pb-12 last:pb-0">
-                    {/* Vertical line */}
-                    {index < trackingSteps.length - 1 && (
-                      <div
-                        className={`absolute top-14 left-7 h-16 w-1 rounded-full transition-all duration-500 ${
-                          isCompleted
-                            ? 'from-primary-500 to-primary-400 bg-gradient-to-b shadow-lg'
-                            : isCurrent
-                              ? 'from-primary-400 to-primary-200 bg-gradient-to-b'
-                              : 'from-primary-200 to-primary-100 bg-gradient-to-b'
-                        }`}
-                      />
-                    )}
-
-                    {/* Timeline item */}
-                    <div
-                      className={`flex gap-6 transition-all duration-500 hover:scale-[1.02] hover:transform ${
-                        isCurrent ? 'animate-pulse' : ''
-                      }`}
-                    >
-                      {/* Icon */}
-                      <div
-                        className={`relative z-10 flex h-14 w-14 items-center justify-center rounded-xl shadow-lg transition-all duration-500 ${
-                          isCompleted
-                            ? 'from-primary-500 to-primary-600 shadow-primary-200 ring-primary-100 bg-gradient-to-br text-white ring-4'
-                            : isCurrent
-                              ? 'from-primary-400 to-primary-500 shadow-primary-200 ring-primary-200 animate-pulse bg-gradient-to-br text-white ring-4'
-                              : 'from-primary-100 to-primary-200 text-primary-400 shadow-primary-100 bg-gradient-to-br'
-                        }`}
-                      >
-                        <Icon
-                          className={`transition-all duration-300 ${
-                            isCompleted || isCurrent ? 'h-7 w-7' : 'h-6 w-6'
-                          }`}
-                        />
-                        {isCompleted && (
-                          <div className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-green-500 shadow-lg">
-                            <Check className="h-3 w-3 text-white" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div
-                        className={`flex-1 pt-3 transition-all duration-300 ${
-                          isCurrent ? 'translate-x-1 transform' : ''
-                        }`}
-                      >
-                        <div
-                          className={`mb-3 rounded-lg p-4 transition-all duration-300 ${
-                            isCompleted || isCurrent
-                              ? 'from-primary-50 border-primary-200 border bg-gradient-to-r to-white'
-                              : 'border border-gray-200 bg-gradient-to-r from-gray-50 to-white'
-                          }`}
-                        >
-                          <div className="mb-2 flex items-center gap-4">
-                            <span
-                              className={`inline-flex rounded-full px-3 py-1 text-sm font-medium transition-all duration-300 ${
-                                isCompleted
-                                  ? 'bg-primary-100 text-primary-700 shadow-sm'
-                                  : isCurrent
-                                    ? 'bg-primary-200 text-primary-800 animate-pulse shadow-md'
-                                    : 'bg-gray-100 text-gray-600'
-                              }`}
-                            >
-                              {step.date}
-                            </span>
-                            <h3
-                              className={`text-lg font-semibold transition-all duration-300 ${
-                                isCompleted
-                                  ? 'text-primary-700'
-                                  : isCurrent
-                                    ? 'text-primary-800'
-                                    : 'text-gray-500'
-                              }`}
-                            >
-                              {step.title}
-                            </h3>
-                            {isCurrent && (
-                              <div className="flex items-center gap-1">
-                                <div className="bg-primary-500 h-2 w-2 animate-ping rounded-full"></div>
-                                <div className="bg-primary-400 h-2 w-2 animate-pulse rounded-full"></div>
-                              </div>
-                            )}
-                          </div>
-                          <p
-                            className={`text-sm leading-relaxed transition-all duration-300 ${
-                              isCompleted || isCurrent
-                                ? 'text-gray-700'
-                                : 'text-gray-500'
-                            }`}
-                          >
-                            {step.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
             </div>
           </div>
         </div>
