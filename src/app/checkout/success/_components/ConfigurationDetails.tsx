@@ -1,4 +1,4 @@
-import { Mail, User, Package, Sparkles } from 'lucide-react';
+import { Mail, User, Package, Sparkles, QrCode } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';

@@ -8,6 +8,7 @@ import {
   CreditCard,
   Sparkles,
 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function OrderTracking() {
   const trackingSteps = [
@@ -112,7 +113,7 @@ export default function OrderTracking() {
                   >
                     <div className="from-primary-100 to-primary-200 group-hover:from-primary-200 group-hover:to-primary-300 border-primary-100 hover:border-primary-300 relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border bg-gradient-to-br shadow-md transition-all duration-300">
                       <div className="group-hover:border-primary-200 pointer-events-none absolute inset-0 rounded-xl border-2 border-white/60 transition-all duration-300" />
-                      <img
+                      <Image
                         src={product.image}
                         alt={product.name}
                         className="h-16 w-16 object-contain drop-shadow-lg transition-transform duration-300 group-hover:scale-105"
